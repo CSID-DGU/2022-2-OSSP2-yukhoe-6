@@ -21,16 +21,16 @@ var mysql = require('mysql') ;   //import mysql
 
 
 //routers.
-//const homeRouter = require('./routes/homeRouter');
+const homeRouter = require('./routes/homeRouter');
 //const loginRouter = require('./routes/loginRouter');
-const boardRouter = require('./routes/boardRouter');
+const postRouter = require('./routes/postRouter');
 
 
 //homeRouter.js는 앞으로 '/'경로로 오는 라우터를 관리할 것이다. 
-//app.use('/', homeRouter);
+app.use('/', homeRouter);
 //app.use('/login', loginRouter);
 //app.use('/community', communityRouter);
-app.use('/board', boardRouter)
+app.use('/posts', postRouter)
 
 
 const port = 3000;
@@ -40,6 +40,22 @@ const server = app.listen(port, function() { //서버 실행
     
 });
 app.get("/", function(req, res){
-    res.send("Hello world!")
+    res.send("fxxk you world!")
 });
 
+//mongodb와 node.js 연동
+const mongoose = require('mongoose');
+mongoose
+  .connect(
+    'mongodb+srv://coogle:1234@cluster0.q4juxmy.mongodb.net/?retryWrites=true&w=majority',
+    {
+      // useNewUrlPaser: true,
+      // useUnifiedTofology: true,
+      // useCreateIndex: true,
+      // useFindAndModify: false,
+    }
+  )
+  .then(() => console.log('MongoDB conected'))
+  .catch((err) => {
+    console.log(err);
+  });
