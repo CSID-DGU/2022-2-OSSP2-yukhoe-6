@@ -29,7 +29,7 @@
           <% posts.forEach(function(post) { %>
             <tr>
               <td>
-                <a href="/posts/<%= post._id %>"><div class="ellipsis"><%= post.title %></div></a>
+                <a href="/posts/<%= post._id %>"><div class="ellipsis"><%= post.title %></div></a> <!-- 1 -->
               </td>
               <td class="date">
                 <span data-date="<%= post.createdAt %>"></span> <!-- 1 -->
@@ -41,7 +41,7 @@
       </table>
 
       <div>
-        <a class="btn btn-primary" href="/posts/new">New</a>
+        <a class="btn btn-primary" href="/posts/new">New</a><!-- 1 -->
       </div>
 
     </div>

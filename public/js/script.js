@@ -1,4 +1,4 @@
-
+// 작성 날짜를 'yyyy-mm-dd'형태로 변환하기 위한 자바 스크립트 코드 
 $(function(){
     function get2digits (num){
       return ('0' + num).slice(-2);

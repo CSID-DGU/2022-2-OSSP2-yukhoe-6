@@ -28,6 +28,8 @@ router.post('/', function(req, res){
 });
 
 // show
+//route ':' 사용 -> 해당 위치의 값을 받아 req.params에 넣게 됨. 
+//findOne 메소드는 DB에서 해당 model의 document을 찾는 함수 (id가 매개변수와 일치하는 object 리턴)
 router.get('/:id', function(req, res){
   Post.findOne({_id:req.params.id}, function(err, post){
     if(err) return res.json(err);

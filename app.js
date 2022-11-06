@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-app.use(express.static(__dirname + '')); //해당 디렉터리에 있는 데이터들을 요청에 따라 제공할 수 있다.
+app.use(express.static(__dirname + '/public')); //해당 디렉터리에 있는 데이터들을 요청에 따라 제공할 수 있다.
 
 //body-parser || use() 메소드는 모든 요청을 받아들임.
 var bodyParser = require('body-parser');
@@ -14,7 +14,10 @@ app.use(cookieParser());
 //화면 engine을 ejs로 설정
 app.set('view engine', 'ejs');
 
-//socket
+// _method의 query로 들어오는 값으로 HTTP method를 바꾼다. 
+// ex: http://example.com/category/id?_method=delete를 받으면 해당 requestdml HTTP method를 delete로 바꿈
+var methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 
 //mysql
 var mysql = require('mysql') ;   //import mysql
