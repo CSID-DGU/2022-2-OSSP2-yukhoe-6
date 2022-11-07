@@ -23,15 +23,29 @@ app.use(methodOverride('_method'));
 var mysql = require('mysql') ;   //import mysql
 
 
+//--------------------세션등록---------------------// 
+//session
+var expressSession = require('express-session');
+//세션 환경 세팅
+//세션은 서버쪽에 저장하는 것을 말하는데, 파일로 저장 할 수도 있고 레디스라고 하는 메모리DB등 다양한 저장소에 저장 할 수가 있는데
+app.use(expressSession({
+  secret: 'my key',           //이때의 옵션은 세션에 세이브 정보를 저장할때 할때 파일을 만들꺼냐
+                              //아니면 미리 만들어 놓을꺼냐 등에 대한 옵션들임
+  resave: true,
+  saveUninitialized:true
+}));
+//--------------------세션등록---------------------//
+
+
 //routers.
 const homeRouter = require('./routes/homeRouter');
-//const loginRouter = require('./routes/loginRouter');
+const loginRouter = require('./routes/loginRouter');
 const postRouter = require('./routes/postRouter');
 
 
 //homeRouter.js는 앞으로 '/'경로로 오는 라우터를 관리할 것이다. 
 app.use('/', homeRouter);
-//app.use('/login', loginRouter);
+app.use('/', loginRouter);
 //app.use('/community', communityRouter);
 app.use('/posts', postRouter)
 
@@ -45,6 +59,8 @@ const server = app.listen(port, function() { //서버 실행
 app.get("/", function(req, res){
     res.send("fxxk you world!")
 });
+
+
 
 //mongodb와 node.js 연동
 const mongoose = require('mongoose');
