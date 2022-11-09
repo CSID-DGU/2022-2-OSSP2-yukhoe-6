@@ -1,0 +1,21 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>공모전 글 수정</h1>
+    <!-- 1. 절대경로
+    2. 맨앞에 /를 써주면 / 이전은 localhost:3000 즉 서버 경로부터 시작함 -->
+    <!-- put 메소드로 요청 보냄 -->
+    <form action="/competitions/edit/<%= competition._id %>?_method=put" method="post">
+        title : <input type="text" name="title" value="<%= competition.title %>"><br>
+        deadLine : <input type="date" name="deadLine" value="<%= competition.deadLine %>"><br>
+        내용 : <input type="text" name="content" value="<%= competition.content %>"><br>
+        공모전 url : <input type="text" name="url" value="<%= competition.url %>"><br>
+        <button type="submit">수정완료</button>
+    </form>
+</body>
+</html>

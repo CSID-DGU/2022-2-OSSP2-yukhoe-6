@@ -1,0 +1,30 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>공모전 글 자세히보기</h1> <a href="/competitions">뒤로가기</a><br><hr>
+    <% console.log(competition); %>
+    공모전 이름 :  <%= competition[0].title %> <br>
+        공모전 기한 :  <%= competition[0].deadLine %> <br>
+        조회수 :  <%= competition[0].viewCount %> <br>
+        공모전 링크 :  <%= competition[0].url %> <br>
+        내용 :  <%= competition[0].content %> <br> <hr><hr>
+
+        <!-- 공모전 수정하는 폼으로 넘어가기 -->
+        <form action="/competitions/edit/<%= competition[0]._id %>" method="post">
+            <button type="submit">공모전 수정하기</button>
+        </form><br><br>
+
+
+
+        <!-- delete 요청 보내기 -->
+        <form action="/competitions/delete/<%= competition[0]._id %>?_method=delete" method="post">
+            <button type="submit">공모전 삭제하기</button>
+        </form>
+        <!-- <a href="/competitions/delete/<%= competition[0]._id %>_method=delete">공모전 삭제하기</a> -->
+</body>
+</html>
