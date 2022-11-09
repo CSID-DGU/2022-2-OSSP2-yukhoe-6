@@ -1,23 +1,4 @@
-<<<<<<< HEAD
-// var expressSession = require(`express-session`);
-// var express = require(`express`);
-// //라우터
-// var router = express.Router();
 
-// //스키마 객체 
-// var Competition = require(`../model/Competition`);
-
-
-// //coogle/competitions
-
-// router.get(`/`,function(req,res){
-//     Competition.find({});
-
-// });
-
-
-// module.exports(router);
-=======
 // routes/posts.js
 
 var express  = require('express');
@@ -86,6 +67,18 @@ router.get(`/:id`,function(req,res){
         console.log(`확인한 개별 데이터`);
         console.log(comp);
         //competiton이란 이름으로 ejs파일에 보냄 
+
+        //공모전 자세히보기 하고 나면 조회수를 1 올려주자 
+        comp[0].viewCount = comp[0].viewCount+1;
+
+        Competition.findOneAndUpdate({_id:req.params.id},comp[0],function(err,comp){
+            if (err){
+                console.log(`조회수 올리다가 예외발생`);
+            }
+            console.log(`조회수 올리기 성공`);
+        });
+
+
         res.render(`competitions/show`,{competition:comp});
     });
 });
@@ -140,4 +133,4 @@ router.delete(`/delete/:id`,function(req,res){
 
 
 module.exports = router;
->>>>>>> master
+

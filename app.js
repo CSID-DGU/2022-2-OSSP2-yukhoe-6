@@ -44,14 +44,12 @@ app.use(expressSession({
 const homeRouter = require('./routes/homeRouter');
 const loginRouter = require('./routes/loginRouter');
 const postRouter = require('./routes/postRouter');
-<<<<<<< HEAD
-const competitionRouter = require(`./routes/competitionRouter`);
-=======
+
 
 //공모전라우터 
 const competitionRouter = require(`./routes/competitionRouter`);
 
->>>>>>> master
+
 
 //homeRouter.js는 앞으로 '/'경로로 오는 라우터를 관리할 것이다. 
 app.use('/', homeRouter);
