@@ -1,7 +1,7 @@
 {
   "name": "codingstudying",
   "version": "1.0.0",
-  "description": "",
+  "description": "온라인 코딩 웹스터디",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,6 +14,7 @@
     "body-parser": "^1.20.1",
     "bootstrap": "^5.1.1",
     "cheerio": "^1.0.0-rc.12",
+    "cjs": "^0.0.11",
     "cookie-parser": "^1.4.6",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
@@ -22,5 +23,14 @@
     "mongoose": "^6.7.1",
     "mysql": "^2.18.1",
     "serve-static": "^1.15.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CSID-DGU/2022-2-OSSP2-yukhoe-6.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/CSID-DGU/2022-2-OSSP2-yukhoe-6/issues"
+  },
+  "homepage": "https://github.com/CSID-DGU/2022-2-OSSP2-yukhoe-6#readme"
 }
