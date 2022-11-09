@@ -1,0 +1,17 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>크롤링해온 공모전 목록</h1> <a href="/competitions">뒤로가기</a><hr>
+    <% competitions.forEach(function(competition){ %>
+        제목 : <%= competition.title %> <br>
+        url : <a href="<%= competition.url %>">이동하기</a> <br>
+        <hr>
+        <% }); %>
+    
+</body>
+</html>

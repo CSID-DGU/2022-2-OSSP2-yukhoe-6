@@ -17,13 +17,13 @@ const getHtml = async () => {
 //
 
 
-getHtml()
+var crawl = getHtml()
   .then(html => {
     let ulList = [];
     //사이트에서 html을 가져와서 cheerio 객체로 반환 
     const $ = cheerio.load(html.data);
-    //cheerio 객채에서 클래스가 tit인 div의 자손 a태그의 배열을 반환함 bodyList  
-    const $bodyList = $("div.tit").children("a");
+    //cheerio 객채에서 클래스가 bg인 li의 자손중 클래스가 tit인 div 반환 
+    const $bodyList = $('li.bg').children('div.tit');
 
     //each로 bodyList의 각 요소에 대해 콜백함수를 실행함 
     $bodyList.each(function(i, elem) {
@@ -32,12 +32,15 @@ getHtml()
       ulList[i] = {
         //find의 인자로 html selector를 받아서 해당 태그를 반환함 
           title: $(this).find('a').text(),
-          url: $(this).find('a').attr('href'),
-
+          url: `https://www.wevity.com/`+$(this).find('a').attr('href'),
       };
     });
+    //console.log(ulList);
 
     const data = ulList.filter(n => n.title);
+    console.log(data);
     return data;
-  })
-  .then(res => log(res));
+  });
+  // .then(res => log(res));
+
+  module.exports=crawl;

@@ -26,13 +26,29 @@ router.get(`/`,function(req,res){
 });
 
 
+//크롤링 함수 import
+const crawl = require(`../crawling`);
+//크롤링한 공모전 목록으로 이동 
+router.get(`/crawling`,function(req,res){
+    console.log(`크롤링한 공모전 리스트로 이동`);
+    //crawl은 crawling.js의 함수를 실행하고 Promise 객체를 반환함
+    //Promise 객체는 비동기 처리를 위한 객체로 객채에 then으로 받고 나서 처리를 해줘야함 
+    //then(콜백함수(비동기처리완료된객체){..실행내옹}) 
+    //즉 나는 비동기로 크롤링하는데 크롤링 완료된 데이터를 data 변수에 받아서 competitions라는 이름으로 crawl.ejs로 넘긴것임 
+    crawl.then(function(data){
+        res.render(`competitions/crawl`,{competitions:data})
+    });
+
+    //res.render(`competitions/crawl`,{competitions:crawledCompData});
+});
+
+
 
 //공모전 글 생성 버튼 눌러서 넘어온 페이지 /competitions/create
 router.get('/create',function(req,res){
     console.log(`공모전 생성 입력폼`);
     res.render('competitions/create');
 });
-
 
 
 //공모전 글 생성 폼에 데이터 입력하고 나서 넘어간 페이지 /compettions/creatae/input
