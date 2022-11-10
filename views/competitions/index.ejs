@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1> 공모전 목록 </h1> <a href="/competitions/crawling"><h3>크롤링한 공모전 목록보기</h3></a>
+
+     <% if(competitions == null || competitions.length == 0){ %>
+        <h2>현재 공모전 정보가 없습니다</h2> <br> <% } %>
+    <% competitions.forEach(function(competition){ %>
+        공모전 이름 :  <%= competition.title %> <br>
+        공모전 기한 :  <%= competition.deadLine %> <br>
+        조회수 :  <%= competition.viewCount %> <br>
+        공모전 링크 :  <%= competition.url %> <br>
+        내용 :  <%= competition.content %> <br> 
+        <a href="/competitions/<%= competition._id %>">자세히보기</a>
+        <!-- <a href="/competitions/<% competition._id %>">자세히보기</a> -->
+        <hr><hr>
+    <% }); %>
+    <br>
+
+    <a href="/competitions/create">공모전 글 쓰기</a>
+
+
+</body>
+</html>
