@@ -3,7 +3,7 @@
 
 var express  = require('express');
 var router = express.Router();
-var Competition = require('../model/Competition');
+var Competition = require('../models/Competition');
 var DateChanger = require('../public/js/getCurrentDate');
 
 
