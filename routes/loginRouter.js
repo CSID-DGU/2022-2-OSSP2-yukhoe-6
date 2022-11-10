@@ -1,10 +1,11 @@
 // routes/posts.js
 var alert = require('alert');
+const { reverse } = require('dns');
 var express  = require('express');
 var router = express.Router();
 
 //session
-var expressSession = require('express-session');
+var session = require('express-session');
 
 //스키마 객체 가져옴 
 var Member = require('../model/LoginMongo');
@@ -13,7 +14,25 @@ var Member = require('../model/LoginMongo');
 
 //홈페이지
 // 3000/coogle : get 
-router.route(`/coogle`).get(
+router.route(`/home`).get(
+    function(req,res){
+  
+        if (req.session.user)  //세션에 유저가 있다면 : 로그인 한 상태 
+        {
+            console.log('homepage_authorized');
+            res.render('logins/homepage_authorized');
+            //res.sendFile('../views/logins/homepage_authorized.html');
+        }
+        else // 로그인 하지 않은 상태 
+        {
+            console.log('homepage');
+            res.render('logins/homepage');
+            //res.sendFile('../views/logins/homepage.html');
+        }
+  
+    }
+  )
+router.route(`/`).get(
     function(req,res){
 
         if (req.session.user)  //세션에 유저가 있다면 : 로그인 한 상태 
@@ -35,7 +54,7 @@ router.route(`/coogle`).get(
 
 //회원가입페이지 
 // 3000/coogle/signUp : get 
-router.route(`/coogle/signUp`).get(
+router.route(`/signUp`).get(
     function(req,res){
 
         console.log('signUp');
@@ -47,7 +66,7 @@ router.route(`/coogle/signUp`).get(
 
 //회원가입폼에 입력해서 넘어간 페이지 
 // 3000/coogle/signUp : post
-router.route(`/coogle/signUp/create`).post(
+router.route(`/signUp/create`).post(
     function(req,res){
         console.log('create');
         console.log(req.body);
@@ -61,56 +80,60 @@ router.route(`/coogle/signUp/create`).post(
         });
 
         //홈페이지로 리다이렉트 
-        res.redirect(`/coogle`);
+        res.redirect(`/`);
 
     }
 )
 
 
 //로그인 폼에 정보 입력해서 넘어간 페이지 
-router.route(`/coogle/login`).post(
+router.route(`/`).post(
     function(req,res){
         console.log('login');
         console.log(req.body);
         
         //폼 입력 데이터 변수에 저장 , 로그인할때는 id, pw만 폼에 입력함  
-        const inputId = req.body.id;
-        const inputPassword = req.body.password;
+        var inputId = req.body.id;
+        var inputPassword = req.body.password;
 
 
         //입력받은 id값을 이용해 db에서 데이터를 찾음 
+        Member.find({id:inputId})
         Member.findOne({id:inputId},function(err,member){
             if (err){
                 
                 console.log(`로그인 도중 예외발생`);
                 throw err;
+                res.redirect(`/home`);
             }
-            
+           
             //테이블에 존재하지 않는 id 입력시 null 반환 
             if (member===null){
                 alert(`존재하지 않는 id`);
                 console.log(`존재하지 않는 id 입력`);
-                
+                res.redirect(`/login`);
 
             }
             //id는 맞게 입력했는데 pw가 틀릴 경우
             else if (member.password!=inputPassword){
                 console.log(`pw가 일치하지 않습니다`);
+                console.log(member.username);
+                res.redirect(`/login`);
             }
             else {
                 console.log(`로그인에 성공하여 세션에 데이터 저장`);
                 //로그인 성공, 세션에 데이터 입력
+                req.session.id =inputId;
+                
                 req.session.user =
                 {
                     id: inputId,
                     pw: inputPassword,
                     authorized: true
                 };
-                console.log(req.session.user);
-            }
+                res.redirect(`/login/home`);
 
-        
-            res.redirect(`/coogle`);
+            }
             
         });
     }
@@ -118,7 +141,7 @@ router.route(`/coogle/login`).post(
 
 
 //로그아웃
-router.route(`/coogle/logout`).get(
+router.route(`/logout`).get(
     function(req,res){
         console.log('logout');
             //세션 데이터 삭제 
@@ -129,34 +152,35 @@ router.route(`/coogle/logout`).get(
                         throw(err);
                     }
                     console.log('로그아웃 성공');
+                    alert(`로그아웃되었습니다.`);
 
                     //홈페이지로 리다이렉트 
-                    res.redirect('/coogle');
+                    res.redirect('/home');
                 }
             );
     }
 );
 
 //마이페이지를 눌렀을 때 
-router.route(`/coogle/mypage`).get(
+router.route(`/mypage`).get(
     function(req,res){
         console.log(`마이페이지`);
         //로그인 했을 경우 
         if (req.session.user){
             const id = req.session.user.id;
-            res.redirect(`/coogle/mypage/${id}`);
+            res.redirect(`/login/mypage/${id}`);
 
         }
         else {
             //로그인하지 않았는데 주소창에 쳐서 마이페이지에 접근하려고 하면 홈페이지로 리다이렉트 
-            res.redirect(`/coogle`);
+            res.redirect(`/`);
         }
     }
 )
 
 //마이페이지를 누르고 나서 로그인 한 상태면 여기로 리다이렉트 
 // :id는 url의 해당 위치 값을 req.params에 id로 저장한다 
-router.route('/coogle/mypage/:id').get(function(req,res){
+router.route('/mypage/:id').get(function(req,res){
     Member.findOne({id:req.params.id},function(err,member){
         if (err) throw err; //예외처리 
 

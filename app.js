@@ -52,8 +52,8 @@ const competitionRouter = require(`./routes/competitionRouter`);
 
 
 //homeRouter.js는 앞으로 '/'경로로 오는 라우터를 관리할 것이다. 
-app.use('/', homeRouter);
-app.use('/', loginRouter);
+app.use('/home', homeRouter);
+app.use('/login', loginRouter);
 //app.use('/community', communityRouter);
 app.use('/posts', postRouter)
 //app.use('/coogle/competitions',competitionRouter);
@@ -68,10 +68,6 @@ const server = app.listen(port, function() { //서버 실행
     console.log('server is running')
     
 });
-app.get("/", function(req, res){
-    res.send("fxxk you world!")
-});
-
 
 
 //mongodb와 node.js 연동

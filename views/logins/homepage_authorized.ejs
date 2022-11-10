@@ -1,25 +1,18 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Coogle 홈페이지</h1><br>
-    
-    <!-- 로그인 했으니까 이거지움 -->
-    <!-- <a href="/coogle/signUp">회원가입하기^^ /singUp으로 넘어감</a><br> -->
-    <!-- 로그인을 위한 폼 -->
-    <!-- <form action="/coogle/login" method="POST">
-        로그인<br>
-        id <input type="text" name="id"><br>
-        pw <input type="password" name="password"><br>
-        <button type="submit">로그인</button>
-    </form> -->
-    
-    <a href="/coogle/mypage">마이페이지</a><br><br>
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <%- include('../partials/navAfterLogin') %>
 
-    <a href="/coogle/logout">로그아웃</a>
-</body>
+    <div class="container mb-3">
+
+      <div class="jumbotron">
+        <h1>My Website</h1>
+        <P>제 웹사이트를 방문해 주셔서 감사합니다!</p>
+      </div>
+
+    </div>
+  </body>
 </html>
