@@ -3,8 +3,8 @@
 
 var express  = require('express');
 var router = express.Router();
-var Competition = require('../model/Competition');
-var DateChanger = require('../public/js/getCurrentDate');
+var Competition = require('../models/Competition');
+//var DateChanger = require('../public/js/getCurrentDate');
 
 
 //redirect : /competitions  (서버주소 앞에 깔고시작)
