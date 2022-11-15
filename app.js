@@ -7,8 +7,13 @@ var session = require('express-session');
 var passport = require('./config/passport');
 var util = require('./util');
 var app = express();
-var http = require(`http`);
-var WebSocket = require("ws");
+
+app.use("/public", express.static(__dirname + "/public"));
+app.set("views", __dirname + "/views"); // 디렉토리 설정
+
+
+
+
 
 //mongodb와 node.js 연동
 mongoose
@@ -58,46 +63,34 @@ app.use('/files', require('./routes/files'));
 app.use(`/competitions`,require(`./routes/competitionRouter`));
 app.use('/studies',require('./routes/studyRoom'));
 
-//3000번 포트와 연결 
+
+
+
+
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+const http = require(`http`);
+const WebSocket = require('ws');
+const SocketIO = require('socket.io');
+const {doesNotMatch} = require('assert');
+
 const handleListen = () => console.log(`Listening on http://localhost:3000`)
+// app.listen(3000, handleListen); // 3000번 포트와 연결
 
-//서버생성 
-const server = http.createServer(app)
-//http 서버 위에 webSocket 서버 생성 
-const wss = new WebSocket.Server({ server });
+const httpServer = http.createServer(app); // app은 requestlistener 경로 - express application으로부터 서버 생성
+const wsServer = SocketIO(httpServer); // localhost:3000/socket.io/socket.io.js로 연결 가능 (socketIO는 websocket의 부가기능이 아니다!!)
 
+// websocket에 비해 개선점 : 1. 어떤 이벤트든지 전달 가능 2. JS Object를 보낼 수 있음
+wsServer.on("connection", socket => {
+    socket.on("enter_room", (roomName, done) => {
+        console.log(roomName);
+        setTimeout(()=>{
+            done("hello from the backend"); // 여기 있는 done 함수는 여기서 실행하지 않는다 - 사용자로부터 함수를 받아서 사용하면 보안문제가 생길 수 있기 때문에
+        }, 15000);
+    });
+})
 
-// 임시로 만든 함수
-function handleConnection(socket) { // 여기서 socket은 연결된 브라우저
-  console.log(socket) // 여기 있는 소켓이 frontend와 real-time으로 소통할 수 있다!
-};
-
-
-// on method에서는 event가 발동되는 것을 기다린다
-// event가 connection / 뒤에 오는 함수는 event가 일어나면 작동
-// 그리고 on method는 backend에 연결된 사람의 정보를 제공 - 그게 socket에서 옴
-wss.on("connection", socket => { // 여기의 socket이라는 매개변수는 새로운 브라우저를 뜻함!! (wss는 전체 서버, socket은 하나의 연결이라고 생각!!)
-  console.log("Connected to Browser ✅");
-  socket.on("close", () => console.log("Disconnected to Server ❌")); // 서버를 끄면 동작
-  socket.on("message", message => {
-      const utf8message = message.toString("utf8"); // 버퍼 형태로 전달되기 때문에 toString 메서드를 이용해서 utf8로 변환 필요!
-      console.log(utf8message);
-  }); // 프론트엔드로부터 메시지가 오면 콘솔에 출력
-  socket.send("hello!!!"); // hello 메시지 보내기 - send는 socket의 전송용 메서드!!
-}) // socket을 callback으로 받는다! webSocket은 서버와 브라우저 사이의 연결!!!
-
-
-
-server.listen(3000, handleListen); // 서버는 ws, http 프로토콜 모두 이해할 수 있게 된다!
-
-
-
-
-
-
-// Port setting
-// var port = 3000;
-// app.listen(port, function(){
-//   console.log('server on! http://localhost:'+port);
-// });
+httpServer.listen(3000,handleListen);
+// 서버는 ws, http 프로토콜 모두 이해할 수 있게 된다!
 
