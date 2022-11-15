@@ -93,9 +93,11 @@ router.post('/', util.isLoggedin, upload.single('attachment'), async function(re
   }
   req.body.attachment = attachment;
   req.body.author = req.user._id;
+  console.log(req.body)
   Post.create(req.body, function(err, post){
     if(err){
       req.flash('post', req.body);
+      //util.js의 parseError로 에러메세지 전달 
       req.flash('errors', util.parseError(err));
       return res.redirect('/posts/new'+res.locals.getPostQueryString());
     }

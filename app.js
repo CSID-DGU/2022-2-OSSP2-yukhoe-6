@@ -35,8 +35,8 @@ app.use(flash());
 app.use(session({secret:'MySecret', resave:true, saveUninitialized:true}));
 
 // Passport
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize()); //passport 초기화 
+app.use(passport.session()); //passport랑 session 연결 
 
 // Custom Middlewares
 app.use(function(req,res,next){
@@ -46,6 +46,7 @@ app.use(function(req,res,next){
   next();
 });
 
+
 // Routes
 app.use('/', require('./routes/home'));
 app.use('/posts', util.getPostQueryString, require('./routes/posts'));
@@ -53,6 +54,7 @@ app.use('/users', require('./routes/users'));
 app.use('/comments', util.getPostQueryString, require('./routes/comments'));
 app.use('/files', require('./routes/files'));
 app.use(`/competitions`,require(`./routes/competitionRouter`));
+
 
 // Port setting
 var port = 3000;
