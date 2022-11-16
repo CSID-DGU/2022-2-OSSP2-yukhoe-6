@@ -1,0 +1,32 @@
+//- home.pug
+
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Noom
+        //- 덜 못생기게 만들어주는 요소
+        link(rel="stylesheet", href="https://unpkg.com/mvp.css") 
+    body 
+        header
+            h1 Noom
+        main
+            div#myStream
+                //- playsline은 모바일기기에서 전체화면 안되게 해주는 속성 
+                video#myFace(autoplay,playsinline,width="400",height="400")
+                button#mute Mute 
+                button#camera Turn Camera Off
+                //- 사용자에게 카메라 목록 보여주고 선택받기 위함 
+                select#cameras
+                    option(value="device") Face Camera
+
+        
+        //- 프론트엔드에 웹소켓 설치
+        script(src="/socket.io/socket.io.js") 
+        script(src="/public/js/clientServer.js")
+
+
+        
+

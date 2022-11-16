@@ -33,7 +33,15 @@ mongoose
 
 
 // Other settings
+
+//multiple template engine 
+var cons = require('consolidate');
+app.engine('ejs',cons.ejs);
+app.engine('pug',cons.pug);
+//set ejs as default 
 app.set('view engine', 'ejs');
+
+
 app.use(express.static(__dirname+'/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -72,24 +80,18 @@ app.use('/studies',require('./routes/studyRoom'));
 
 const http = require(`http`);
 const WebSocket = require('ws');
-const SocketIO = require('socket.io');
-const {doesNotMatch} = require('assert');
+const {Server} = require('socket.io');
+//import { instrument } from "@socket.io/admin-ui";
+
+
+
 
 const handleListen = () => console.log(`Listening on http://localhost:3000`)
 // app.listen(3000, handleListen); // 3000번 포트와 연결
 
 const httpServer = http.createServer(app); // app은 requestlistener 경로 - express application으로부터 서버 생성
-const wsServer = SocketIO(httpServer); // localhost:3000/socket.io/socket.io.js로 연결 가능 (socketIO는 websocket의 부가기능이 아니다!!)
+const wsServer = new Server(httpServer); // localhost:3000/socket.io/socket.io.js로 연결 가능 (socketIO는 websocket의 부가기능이 아니다!!)
 
-// websocket에 비해 개선점 : 1. 어떤 이벤트든지 전달 가능 2. JS Object를 보낼 수 있음
-wsServer.on("connection", socket => {
-    socket.on("enter_room", (roomName, done) => {
-        console.log(roomName);
-        setTimeout(()=>{
-            done("hello from the backend"); // 여기 있는 done 함수는 여기서 실행하지 않는다 - 사용자로부터 함수를 받아서 사용하면 보안문제가 생길 수 있기 때문에
-        }, 15000);
-    });
-})
 
 httpServer.listen(3000,handleListen);
 // 서버는 ws, http 프로토콜 모두 이해할 수 있게 된다!
