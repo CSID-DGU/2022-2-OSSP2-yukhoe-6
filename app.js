@@ -92,7 +92,25 @@ const handleListen = () => console.log(`Listening on http://localhost:3000`)
 const httpServer = http.createServer(app); // app은 requestlistener 경로 - express application으로부터 서버 생성
 const wsServer = new Server(httpServer); // localhost:3000/socket.io/socket.io.js로 연결 가능 (socketIO는 websocket의 부가기능이 아니다!!)
 
+//받아온 input_value를 이용해서 소켓에 접속함 
+wsServer.on(`connection`,socket=>{
+  //클라이언트 사이드에서 등록한 이벤트 처리 , join_room이벤트, 받아온 roomName, done은 함수 받아온거같은데 정확하지않음
+  socket.on(`join_room`,(roomName,done)=>{
+    socket.join(roomName);
+    done(); //done을 이용해서 받아온 함수 호출한듯??
+
+    //특정 룸에 welcome 이벤트 보내기 
+    socket.to(roomName).emit(`welcome`);
+  })
+
+  //서버에서 offer를 처리하는 코드 
+  socket.on(`offer`,(offer,roomName)=>{
+    //offer 이벤트가 발생하면 roomName의 사람들에게 offer 이벤트(이벤트명) 발생, offer (초대장)담아서 보냄 
+    socket.to(roomName).emit(`offer`,offer);
+  });
+})
 
 httpServer.listen(3000,handleListen);
 // 서버는 ws, http 프로토콜 모두 이해할 수 있게 된다!
+
 

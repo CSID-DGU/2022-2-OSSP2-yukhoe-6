@@ -13,11 +13,11 @@
       </ul>
       <ul class="navbar-nav ml-auto">
         <% if(isAuthenticated){ %>
-          <li class="nav-item"><a href="/users/<%= currentUser.username %>" class="nav-link">My Account</a></li>
-          <li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+          <li class="nav-item"><a href="/users/<%= currentUser.username %>" class="nav-link">계정관리</a></li>
+          <li class="nav-item"><a href="/logout" class="nav-link">로그아웃</a></li>
         <% } else { %>
-          <li class="nav-item"><a href="/users/new" class="nav-link">Sign Up</a></li>
-          <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+          <li class="nav-item"><a href="/users/new" class="nav-link">회원가입</a></li>
+          <li class="nav-item"><a href="/login" class="nav-link">로그인</a></li>
         <% } %>
       </ul>
     </div>
