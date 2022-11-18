@@ -1,5 +1,4 @@
 
-
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -64,7 +63,7 @@ app.use(`/competitions`,require(`./routes/competitionRouter`));
 var port = 3000;
 
 var io = require('socket.io')(server);
-app.get('/chats', (req, res) => {
+app.get('/chat', (req, res) => {
   res.render('chat');    // index.ejs을 사용자에게 전달
 })
 
