@@ -94,21 +94,41 @@ const wsServer = new Server(httpServer); // localhost:3000/socket.io/socket.io.j
 
 //받아온 input_value를 이용해서 소켓에 접속함 
 wsServer.on(`connection`,socket=>{
-  //클라이언트 사이드에서 등록한 이벤트 처리 , join_room이벤트, 받아온 roomName, done은 함수 받아온거같은데 정확하지않음
+
+  console.log(`시작응애!!!!!!!!!!!`);
+
+  
+  //클라이언트 사이드에서 등록한 이벤트 처리 , join_room이벤트, 받아온 roomName, done은 startMedia 함수 받아온것 
   socket.on(`join_room`,(roomName,done)=>{
+    console.log(`방에 이름 입력하고 제출해서 join_room 이벤트 발생 후 처리! -> welcome 이벤트 발생!`);
     socket.join(roomName);
+    console.log(`before done`);
     done(); //done을 이용해서 받아온 함수 호출한듯??
 
     //특정 룸에 welcome 이벤트 보내기 
     socket.to(roomName).emit(`welcome`);
-  })
+  });
 
   //서버에서 offer를 처리하는 코드 
   socket.on(`offer`,(offer,roomName)=>{
     //offer 이벤트가 발생하면 roomName의 사람들에게 offer 이벤트(이벤트명) 발생, offer (초대장)담아서 보냄 
     socket.to(roomName).emit(`offer`,offer);
   });
+
+
+  //서버에서 answer 이벤트를 처리하기 위한 부분 
+  socket.on(`answer`,(answer,roomName)=>{
+    socket.to(roomName).emit(`answer`,answer);
+  })
+
+  //서버에서 ice 이벤트처리, roomName의 모든 사용자들에게 ice 이벤트에 ice 담아서 전송 
+  socket.on(`ice`,(ice,roomName)=>{
+    socket.to(roomName).emit(`ice`,ice);
+  })
+
 })
+
+
 
 httpServer.listen(3000,handleListen);
 // 서버는 ws, http 프로토콜 모두 이해할 수 있게 된다!

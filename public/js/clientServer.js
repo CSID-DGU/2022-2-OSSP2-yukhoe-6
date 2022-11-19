@@ -145,7 +145,7 @@ async function startMedia(){
     await getMedia();
     console.log('getMedia 탈출');
     
-    //RTC 연결해주는 함수 
+    //RTC 연결해주는 함수  
     makeConnection();
 
 }
@@ -153,6 +153,8 @@ async function startMedia(){
 //입력한 방 이름을 서버로 보내는 작업 
 function handleWelcomeSubmit(event){
     
+    console.log(`방 이름 입력 후 제출함!`);
+
     //default 동작을 수행하는 것을 방지함 
     //예를들어 form의 버튼을 submit하면 페이지가 넘어가거나 새로고침되는데 그것을 막음 
     event.preventDefault();
@@ -184,15 +186,20 @@ welcomeForm.addEventListener('submit',handleWelcomeSubmit);
 call.hidden = true;
 
 
-//누군가 접속하면 welcome 이벤트를 방 접속자에게 전달하도록 만든다 
-socket.on(`welcome`,()=>{
-    console.log(`someone joined`);
-})
+//누군가 접속하면 welcome 이벤트를 방 접속자에게 전달하도록 만든다  -- 주석처리 
+// socket.on(`welcome`,()=>{
+//     console.log(`someone joined`);
+// })
 
 //RTC code 
 function makeConnection(){
     //peerConnection을 각각의 브라우저에 생성함 
     myPeerConnection = new RTCPeerConnection();
+    console.log(`makeConnection`);
+    console.log(myPeerConnection);
+
+    //icecandidate 이벤트 리스너 등록 
+    myPeerConnection.addEventListener(`icecandidate`,handleIce);
 
     //myPeerConnection에 영상, 음성 트랙을 추가함 : P2P 연결 
     //>>>>> Error : myStream = undefined : async랑 await 제대로 안써줘서 myStream이 초기화되기 전에 가져옴 
@@ -201,7 +208,10 @@ function makeConnection(){
 }
 
 socket.on(`welcome`,async()=>{
+    console.log(`welcome 이벤트처리!!`);
     const offer = await myPeerConnection.createOffer(); //다른 사용자를 초대하기 위한 초대장 (내가 누구인지를 알려주는 내용 포함)
+    console.log(`offer 생성`);
+    console.log(offer);
     myPeerConnection.setLocalDescription(offer); //myPeerConnection에 내 초대장의 위치 정보를 연결해주는 과정 
     console.log(`sent the offer`);
     //offer 이벤트 등록 
@@ -209,12 +219,46 @@ socket.on(`welcome`,async()=>{
 })
 
 //offer 이벤트 처리 
-socket.on(`offer`,offer=>{
-    console.log(`offer 수신함`);
+socket.on(`offer`, async (offer)=>{
+    console.log(`received the offer`);
     console.log(offer);
+    
+    makeConnection();
+    
+    console.log(myPeerConnection); // = undefined 
+
+
+
+    //>>>> Error : myPeerConnection = undefined 
+    //다른 브라우저의 위치를 myPeerConnection에 연결해 주는 과정 
+    myPeerConnection.setRemoteDescription(offer); //받은 offer를 remote에 위치시킴 
+
+    //offer를 수신하고 나서 브라우저의 정보를 담은 answer를 만든다 
+    const answer = await myPeerConnection.createAnswer();
+
+    //현재 브라우저에서 생성한 answer를 현재 브라우저의 LocalDescription으로 등록 
+    myPeerConnection.setLocalDescription(answer);
+
+    //answer 이벤트를 발생시켜 서버로 answer를 보낸다 
+    socket.emit(`anwer`,answer,roomName);
+
+});
+
+//브라우저에서 answer 이벤트 처리 , answer를 ReomteDescription에 넣어줌 
+socket.on(`answer`,answer=>{
+    console.log(`received the answer`);
+    myPeerConnection.setRemoteDescription(answer);
+});
+
+// data의 candidate 부분을 roomName의 모든 사용자들에게 전송하기 위함 
+function handleIce(data){
+    socket.emit(`ice`,data.candidate,roomName);
+}
+
+//ice 이벤트 처리 , myPeerConnection에 수신한 candidate를 추가함 
+socket.on(`ice`,ice=>{
+    myPeerConnection.addIceCandidate(ice);
 })
-
-
 
 //버튼에 이벤트 등록 
 muteBtn.addEventListener("click",handleMuteClick);
