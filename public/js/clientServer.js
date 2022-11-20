@@ -20,6 +20,7 @@ let muted = false; // 처음에는 음성을 받음
 let cameraOff = false; // 처음에는 영상을 받음
 let roomName;
 let myPeerConnection; // 누군가 getMedia함수를 불렀을 때와 똑같이 stream을 공유하기 위한 변수
+let myDataChannel; //데이터채널 저장용 변수 
 
 async function getCameras(){
     try {
@@ -91,8 +92,21 @@ function handleCameraClick() {
     }
 }
 
+
 async function handleCameraChange() {
+    // getMedia로 바꾼 카메라로 스트림 변경 
     await getMedia(camerasSelect.value);
+
+    // 변경된 내용을 peer에게도 알려주기위함 
+    if (myPeerConnection){
+        const videoTrack = myStream.getVideoTracks()[0];
+
+        //sender의 track.kind가 video인 부분을 replaceTrack으로 바꿔줌 
+        const videoSender = myPeerConnection
+            .getSenders()
+            .find(sender=>sender.track.kind=="video");
+        videoSender.replaceTrack(videoTrack);
+    }
 }
 
 muteBtn.addEventListener("click", handleMuteClick);
@@ -137,6 +151,13 @@ welcomeForm.addEventListener("submit", handleWelcomeSubmit);
 // Socket Code
 
 socket.on("welcome", async () => {
+    
+    //offer를 만드는 peer가 DataChannel 만듬 
+    myDataChannel = myPeerConnection.createDataChannel(`chat`);
+    //메세지를 받으면 이벤트처리 (콘솔에출력)
+    myDataChannel.addEventListener(`message`,event=>console.log(event.data));
+    console.log(`made data channel`);
+
     const offer = await myPeerConnection.createOffer(); // 다른 사용자를 초대하기 위한 초대장!! (내가 누구인지를 알려주는 내용이 들어있음!)
     myPeerConnection.setLocalDescription(offer); // myPeerConnection에 내 초대장의 위치 정보를 연결해 주는 과정 https://developer.mozilla.org/ko/docs/Web/API/RTCPeerConnection/setLocalDescription
     console.log("sent the offer");
@@ -144,6 +165,15 @@ socket.on("welcome", async () => {
 })
 
 socket.on("offer", async (offer) => {
+
+    //offer를 받는 쪽에서는 새로운 dataChannel이 있을 때 eventListener 추가함 
+    myPeerConnection.addEventListener(`datachannel`,event=>{
+        myDataChannel = event.channel;
+        myDataChannel.addEventListener(`message`,event=>console.log(event.data)); //메세지 받을 때 이벤트처리 (콘솔에출력)
+    });
+
+
+
     console.log("received the offer");
     myPeerConnection.setRemoteDescription(offer); // 다른 브라우저의 위치를 myPeerConnection에 연결해 주는 과정
     const answer = await myPeerConnection.createAnswer();
