@@ -6,6 +6,11 @@ var router = express.Router();
 var Competition = require('../models/Competition');
 //var DateChanger = require('../public/js/getCurrentDate');
 
+//로그인 
+var passport = require(`../config/passport`);
+//공용으로 사용하는 함수들 
+var util = require('../util');
+
 
 //redirect : /competitions  (서버주소 앞에 깔고시작)
 //render : competitions/index (앞에 / 없이 views 아래 디렉토리부터)
@@ -16,6 +21,7 @@ var Competition = require('../models/Competition');
 router.get(`/`,function(req,res){
     console.log(`공모전 리스트`);
     Competition.find({})
+    .populate(`author`) //relationship이 형성된 항목의 값을 생성해줌
     .sort('-deadLine') //deadLine 역순으로 sort 
     .exec(function(err,comp){ //정렬 후 콜백함수로 처리 comp에 데이터 받아옴 
         if (err) {console.log(`예외발생`);}
@@ -45,20 +51,26 @@ router.get(`/crawling`,function(req,res){
 
 
 //공모전 글 생성 버튼 눌러서 넘어온 페이지 /competitions/create
-router.get('/create',function(req,res){
+//인자로 isLoggedin 전달해서 로그인 한 경우에만 가능 
+router.get('/create',util.isLoggedin,function(req,res){
     console.log(`공모전 생성 입력폼`);
     res.render('competitions/create');
 });
 
 
 //공모전 글 생성 폼에 데이터 입력하고 나서 넘어간 페이지 /compettions/creatae/input
-router.post('/create/submit',function(req,res){
+router.post('/create/submit',util.isLoggedin,function(req,res){
     console.log(`공모전 생성 입력폼 제출`)
-    console.log(`변환 전`);
-    console.log(req.body);
+   // console.log(`변환 전`);
+
     //req.body에 입력받은 deadLine은 deadLine : '2023-02-10' 으로 표시됨 
-    req.body.deadLine = DateChanger(req.body.deadLine);
-    console.log(`변환 후`);
+    //req.body.deadLine = DateChanger(req.body.deadLine);
+    //console.log(`변환 후`);
+    //console.log(req.body);
+
+    //로그인을 하면 passpport에서 req.user를 만듬 
+    //id를 가져와서 author값으로 지정해줌 
+    req.body.author = req.user._id;
     console.log(req.body);
 
     Competition.create(req.body,function(err,competition){
@@ -76,7 +88,9 @@ router.post('/create/submit',function(req,res){
 router.get(`/:id`,function(req,res){
     console.log(`자세히보기 접근`);
     //find로 검색해서 하나만 찾아도 [] 리스트에 담아옴 
-    Competition.find({_id:req.params.id},function(err,comp){
+    Competition.find({_id:req.params.id})
+    .populate('author') //relationship이 있는 필드 생성 
+    .exec(function(err,comp){
         if (err){
             console.log(`공모전 개별 데이터 불러오는 과정에서 예외발생`);
         }
@@ -101,7 +115,7 @@ router.get(`/:id`,function(req,res){
 
 
 //공모전 수정하기 버튼 눌러서 공모전 수정 폼 띄우기 
-router.post(`/edit/:id`,function(req,res){
+router.post(`/edit/:id`,util.isLoggedin,checkPermission,function(req,res){
     console.log(`공모전 수정 폼으로 이동`);
     //findOne으로가져옴
     Competition.findOne({_id:req.params.id},function(err,comp){
@@ -117,7 +131,7 @@ router.post(`/edit/:id`,function(req,res){
 });
 
 //공모전 수정 폼에 데이터 입력하고 제출 put요청으로 받음
-router.put(`/edit/:id`,function(req,res){
+router.put(`/edit/:id`,util.isLoggedin,checkPermission,function(req,res){
     //findOneAndUpdate로 _id에 해당하는 공모전 정보 가져와서 req.body에 있는 내용 가져와서 수정함 
     Competition.findOneAndUpdate({_id:req.params.id},req.body,function(err,comp){
         if (err){
@@ -132,7 +146,7 @@ router.put(`/edit/:id`,function(req,res){
 
 
 //공모전 글 삭제 
-router.delete(`/delete/:id`,function(req,res){
+router.delete(`/delete/:id`,util.isLoggedin,checkPermission,function(req,res){
     console.log(`공모전 데이터 삭제하기`);
     Competition.deleteOne({_id:req.params.id},function(err){
         if (err){
@@ -146,6 +160,15 @@ router.delete(`/delete/:id`,function(req,res){
 });
 
 
+// 로그인 한 id와 글 작성자가 같아야 수정, 삭제 가능하게 하는 함수  
+function checkPermission(req, res, next){
+    Competition.findOne({_id:req.params.id}, function(err, comp){
+      if(err) return res.json(err);
+      if(comp.author != req.user.id) return util.noPermission(req, res);
+  
+      next();
+    });
+}
 
 
 module.exports = router;

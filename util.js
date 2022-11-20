@@ -1,5 +1,7 @@
+//공통으로 사용할 함수들 모듈화함 
 var util = {};
 
+//에러처리를위한함수 
 util.parseError = function(errors){
   var parsed = {};
   if(errors.name == 'ValidationError'){
@@ -17,6 +19,7 @@ util.parseError = function(errors){
   return parsed;
 }
 
+//접근제한을위한함수 
 util.isLoggedin = function(req, res, next){
   if(req.isAuthenticated()){
     next();

@@ -2,30 +2,18 @@
 <html>
   <head>
     <%- include('../partials/head') %>
-    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
   </head>
   <body>
     <%- include('../partials/nav') %>
+
     <div class="container mb-3">
 
       <div class="jumbotron">
         <h1>Coogle</h1>
         <P>WELCOME TO COOGLE</p>
-      </div>
-      <div>
-        <button class="nav-item"><a href="/chat" class="nav-link">채팅방 입장하기</a></button>
+        <p><a href="/studies">move to Study Room</a></p>
       </div>
 
     </div>
   </body>
-  <script>
-    //script(src="/socket.io/socket.io.js") 
-        script(src="app.js")
-    const socket = io();
-    socket.on("서버에서 받을 신호", (데이터) => {
-    // 특정 신호를 받으면 실행할 코드
-  })
-    
-    socket.emit("서버로 보낼 신호", 데이터);
-</script>
 </html>

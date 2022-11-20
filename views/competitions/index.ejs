@@ -12,6 +12,7 @@
         <h2>현재 공모전 정보가 없습니다</h2> <br> <% } %>
     <% competitions.forEach(function(competition){ %>
         공모전 이름 :  <%= competition.title %> <br>
+        작성자 : <%= competition.author.username %><br>
         공모전 기한 :  <%= competition.deadLine %> <br>
         조회수 :  <%= competition.viewCount %> <br>
         공모전 링크 :  <%= competition.url %> <br>
