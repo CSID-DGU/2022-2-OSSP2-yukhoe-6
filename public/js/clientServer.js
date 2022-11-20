@@ -2,107 +2,75 @@
 
 const socket = io(); // io function은 알아서 socket.io를 실행하고 있는 서버를 찾을 것이다!
 
-//video 요소 가져옴 
-const myFace = document.getElementById('myFace');
-const muteBtn = document.getElementById(`mute`);
-const cameraBtn = document.getElementById(`camera`);
-//카메라 목록 선택하는 요소 
-const camerasSelect = document.getElementById('cameras');
+const myFace = document.getElementById("myFace");
+const muteBtn = document.getElementById("mute");
+const cameraBtn = document.getElementById("camera");
+const camerasSelect = document.getElementById("cameras");
 
-//stream : 비디오와 오디오가 결합된 것 
+
+const call = document.getElementById("call");
+
+call.hidden = true;
+
+
+// stream받기 : stream은 비디오와 오디오가 결합된 것
 let myStream;
-//처음에 화면 키면 기본으로 음성, 영상 받게 설정 
-let muted = false;
-let cameraOff =false;
 
-//유저의 유저미디어 string을 받음 
-// async function getMedia(){
-//     try {
-//         //스트림 받아옴( api 사용해서 유저미디어의 string을 받아옴) 
-//         myStream = await navigator.mediaDevices.getUserMedia({
-//             audio:true,
-//             video:true,
-//         })
-//         // video 요소에 넣어줌 
-//         myFace.srcObject = myStream;
-//         //getCameras await로 비동기 호출 
-//         await getCameras();
-//     } catch(e){
-//         console.log(e);
-//     }
-// }
+let muted = false; // 처음에는 음성을 받음
+let cameraOff = false; // 처음에는 영상을 받음
+let roomName;
+let myPeerConnection; // 누군가 getMedia함수를 불렀을 때와 똑같이 stream을 공유하기 위한 변수
 
-//유저의 유저미디어 string 받기 
+async function getCameras(){
+    try {
+        const devices = await navigator.mediaDevices.enumerateDevices(); // 장치 리스트 가져오기
+        const cameras = devices.filter(device => device.kind === "videoinput"); // 비디오인풋만 가져오기
+        const currentCamera = myStream.getVideoTracks()[0]; // 비디오 트랙의 첫 번째 track 가져오기 : 이게 cameras에 있는 label과 같다면 그 label은 선택된 것이다!
+
+        cameras.forEach(camera => {
+            const option = document.createElement("option"); // 새로운 옵션 생성
+            option.value = camera.deviceId; // 카메라의 고유 값을 value에 넣기
+            option.innerText = camera.label; // 사용자가 선택할 때는 label을 보고 선택할 수 있게 만들기
+            if(currentCamera.label === camera.label) { // 현재 선택된 카메라 체크하기
+                option.selected = true;
+            }
+            camerasSelect.appendChild(option); // 카메라의 정보들을 option항목에 넣어주기
+        })
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+// https://developer.mozilla.org/ko/docs/Web/API/MediaDevices/getUserMedia 사용 : 유저의 유저미디어 string을 받기위함
 async function getMedia(deviceId){
-    const initalConstraints = { //deviceId가 없을 때 
-        audio : true,
-        video : {facingMode : "user"}, //카메라가 전, 후면에 둘다 있을 경우 전면 카메라를 선택, 후면은 "environment"
-    }
-    const cameraConstraints = { // cameraConstraints는 deviceId가 있을 때 실행 
-        audio : true,
-        video : {deviceId : {exact:deviceId}}, //exact를 쓰면 받아온 deviceId가 아니면 출력 X
-    }
+    const initialConstraints = { // initialConstraints는 deviceId가 없을 때 실행
+        audio: true,
+        video: {facingMode: "user"}, // 카메라가 전후면에 달려있을 경우 전면 카메라의 정보를 받음 (후면의 경우 "environment")
+    };
+    const cameraConstraints = { // CameraConstraints는 deviceId가 있을 때 실행
+        audio: true,
+        video: {deviceId: {exact: deviceId}}, // exact를 쓰면 받아온 deviceId가 아니면 출력하지 않는다
+    };
 
-    try{
-        //getUserMedai에 constraint 객체를 전달함. constraint객체는 video와 audio로 구성 
-        //요청할 미디어 유형에 대해 설명함 
-        //카메라 정보를 얻어왔으니 video를 설정해주기 위함 
-  
-        myStream = await navigator.mediaDevices.getUserMedia( 
-            //deviceId가 있는지에 따라 
-            deviceId ? cameraConstraints : initalConstraints
+    try {
+        myStream = await navigator.mediaDevices.getUserMedia(
+            deviceId ? cameraConstraints : initialConstraints
         )
-       
-        
-        myFace.srcObject = myStream; //가져온 video 정보로 뷰페이저의 video 요소 지정 
-        if (!deviceId){ // 맨 처음 접속할 때만 (맨 처음 getMedia를 호출할 때)
+        myFace.srcObject = myStream;
+        if (!deviceId) { // 처음 딱 1번만 실행! 우리가 맨 처음 getMedia를 할 때만 실행됨!!
             await getCameras();
         }
         
-    }
-
-    catch(e){
+        
+    } catch (e) {
         console.log(e);
     }
 }
 
-//사용자 장치 받아오기 
-async function getCameras(){
-    try {
-        //장치 리스트 가져오기 
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        //비디오만 골라오기 
-        const cameras = devices.filter(device=>device.kind=="videoinput");
-        // 카메라 목록을 pug파일에 표시하기 위함 
-        cameras.forEach(camera=>{
-            const option =document.createElement("option"); //새로운 옵션 생성 
-            option.value=camera.deviceId; //카메라의 deviceId를 value로 설정 
-            option.innerText = camera.label; //사용자가 선택할 때는 label을 보고 선택 (label이 보기는 더좋지만 고유하지는 않아서 value는 deviceId로 해줘야함)
-            camerasSelect.appendChild(option); //카메라의 정보들을 option 항목에 넣어줌 
-        })
-    }
-    catch (e){
-        console.log(e);
-    }
-}
-
-//사용자가 카메라를 선택하면 바꿔주기 위한 함수 
-async function handleCameraChange(){
-    //선택한 카메라의 고유 값이 value 에 담겨있고 getMedia 에 인자로 전달 
-    await getMedia(camerasSelect.value);
-}
-
-
-//음소거버튼클릭 
-function handleMuteClick(){
-    //스트림의 오디오의 enabled를 true->false , false->true로 바꿔줌 
-
-    //예외발생
-    myStream.getAudioTracks().forEach(track=>track.enabled = !track.enabled);
-
-    //버튼 텍스트랑 오디오 상태 변수 바꾸기 
-    if(!muted){
-        muteBtn.innerText = "UnMute";
+function handleMuteClick() {
+    myStream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
+    if(!muted) {
+        muteBtn.innerText = "Unmute";
         muted = true;
     }
     else {
@@ -111,160 +79,108 @@ function handleMuteClick(){
     }
 }
 
-//카메라버튼클릭 
-function handleCameraClick(){
-    //스트림의 비디오이 enabled를 true->false , false->true로 바꿔줌 
-    myStream.getVideoTracks().forEach(track=>track.enabled = !track.enabled);
-
-    //버튼 텍스트랑 카메라 상태 변수 바꾸기 
-    if (cameraOff){
+function handleCameraClick() {
+    myStream.getVideoTracks().forEach(track => track.enabled = !track.enabled);
+    if(cameraOff) {
         cameraBtn.innerText = "Turn Camera Off";
         cameraOff = false;
     }
-    else{
+    else {
         cameraBtn.innerText = "Turn Camera On";
         cameraOff = true;
     }
-
 }
 
-//방 입력폼 welcome이랑 방을 표시할 call을 뷰페이져에서 가져옴 
-const welcome = document.getElementById(`welcome`);
-const call = document.getElementById(`call`);
-//방 입력 폼 가져옴 
-const welcomeForm = welcome.querySelector(`form`);
-let roomName; //방 이름 
-let myPeerConnection; //누군가 getMedia 함수를 불렀을 때와 똑같이 stream을 공유하기 위한 함수 
+async function handleCameraChange() {
+    await getMedia(camerasSelect.value);
+}
+
+muteBtn.addEventListener("click", handleMuteClick);
+cameraBtn.addEventListener("click", handleCameraClick);
+
+// 카메라 변경 확인
+camerasSelect.addEventListener("input", handleCameraChange);
 
 
-//방 이름을 입력했으면 입력 폼을 숨기고 방을 보여준다 
-async function startMedia(){
+
+// Welcome Form (join a room)
+
+const welcome = document.getElementById("welcome");
+const welcomeForm = welcome.querySelector("form");
+
+
+async function initCall(){
+    // 방 입력란은 숨기고 화면 표시란은 보여지게 한다
     welcome.hidden = true;
     call.hidden = false;
-
+    
     await getMedia();
-    console.log('getMedia 탈출');
-    
-    //RTC 연결해주는 함수  
     makeConnection();
-
 }
 
-//입력한 방 이름을 서버로 보내는 작업 
-function handleWelcomeSubmit(event){
-    
-    console.log(`방 이름 입력 후 제출함!`);
-
-    //default 동작을 수행하는 것을 방지함 
-    //예를들어 form의 버튼을 submit하면 페이지가 넘어가거나 새로고침되는데 그것을 막음 
+//클라이언트가 방 이름 입력해서 접속 -> 
+async function handleWelcomeSubmit(event){
     event.preventDefault();
+    const input = welcomeForm.querySelector("input");
 
-    //입력 폼의 input 요소 가져옴 
-    const input = welcomeForm.querySelector(`input`);
+    await initCall();
 
-    //emit으로 이벤트 등록, join_room 이벤트, input.value랑 startMedia 함수를 같이보냄 
-    //서버로 사용자가 입력한 방 이름을 보낸다, startMedia 함수를 같이 보내서 폼을 숨기고 방을 보여줌 
-    socket.emit(`join_room`,input.value,startMedia);
-    //방 이름을 받아옴 
-    roomName = input.value;
-
-    input.value=``;
-
+    //join_room 이벤트 발생시킴, 
+    socket.emit("join_room", input.value, ); // 서버로 input value를 보내는 과정!! initCall 함수도 같이 보내준다!
+    roomName = input.value; // 방에 참가했을 때 나중에 쓸 수 있도록 방 이름을 변수에 저장
+    input.value = "";
 }
 
-//방 이름 입력 폼에 이벤트리스너 등록 
-welcomeForm.addEventListener('submit',handleWelcomeSubmit);
+welcomeForm.addEventListener("submit", handleWelcomeSubmit);
 
 
+// Socket Code
 
-
-//방에 접속하고 나서 보여야 하니까 주석처리해줌 
-//getMedia();
-
-
-//일단 방은 숨김 
-call.hidden = true;
-
-
-//누군가 접속하면 welcome 이벤트를 방 접속자에게 전달하도록 만든다  -- 주석처리 
-// socket.on(`welcome`,()=>{
-//     console.log(`someone joined`);
-// })
-
-//RTC code 
-function makeConnection(){
-    //peerConnection을 각각의 브라우저에 생성함 
-    myPeerConnection = new RTCPeerConnection();
-    console.log(`makeConnection`);
-    console.log(myPeerConnection);
-
-    //icecandidate 이벤트 리스너 등록 
-    myPeerConnection.addEventListener(`icecandidate`,handleIce);
-
-    //myPeerConnection에 영상, 음성 트랙을 추가함 : P2P 연결 
-    //>>>>> Error : myStream = undefined : async랑 await 제대로 안써줘서 myStream이 초기화되기 전에 가져옴 
-    myStream.getTracks().forEach(track => myPeerConnection.addTrack(track, myStream)); 
-
-}
-
-socket.on(`welcome`,async()=>{
-    console.log(`welcome 이벤트처리!!`);
-    const offer = await myPeerConnection.createOffer(); //다른 사용자를 초대하기 위한 초대장 (내가 누구인지를 알려주는 내용 포함)
-    console.log(`offer 생성`);
-    console.log(offer);
-    myPeerConnection.setLocalDescription(offer); //myPeerConnection에 내 초대장의 위치 정보를 연결해주는 과정 
-    console.log(`sent the offer`);
-    //offer 이벤트 등록 
-    socket.emit(`offer`,offer,roomName);
+socket.on("welcome", async () => {
+    const offer = await myPeerConnection.createOffer(); // 다른 사용자를 초대하기 위한 초대장!! (내가 누구인지를 알려주는 내용이 들어있음!)
+    myPeerConnection.setLocalDescription(offer); // myPeerConnection에 내 초대장의 위치 정보를 연결해 주는 과정 https://developer.mozilla.org/ko/docs/Web/API/RTCPeerConnection/setLocalDescription
+    console.log("sent the offer");
+    socket.emit("offer", offer, roomName);
 })
 
-//offer 이벤트 처리 
-socket.on(`offer`, async (offer)=>{
-    console.log(`received the offer`);
-    console.log(offer);
-    
-    makeConnection();
-    
-    console.log(myPeerConnection); // = undefined 
-
-
-
-    //>>>> Error : myPeerConnection = undefined 
-    //다른 브라우저의 위치를 myPeerConnection에 연결해 주는 과정 
-    myPeerConnection.setRemoteDescription(offer); //받은 offer를 remote에 위치시킴 
-
-    //offer를 수신하고 나서 브라우저의 정보를 담은 answer를 만든다 
+socket.on("offer", async (offer) => {
+    console.log("received the offer");
+    myPeerConnection.setRemoteDescription(offer); // 다른 브라우저의 위치를 myPeerConnection에 연결해 주는 과정
     const answer = await myPeerConnection.createAnswer();
+    myPeerConnection.setLocalDescription(answer); // 현재 브라우저에서 생성한 answer를 현재 브라우저의 myPeerConnection의 LocalDescription으로 등록!!
+    socket.emit("answer", answer, roomName);
+    console.log("sent the answer");
+})
 
-    //현재 브라우저에서 생성한 answer를 현재 브라우저의 LocalDescription으로 등록 
-    myPeerConnection.setLocalDescription(answer);
-
-    //answer 이벤트를 발생시켜 서버로 answer를 보낸다 
-    socket.emit(`anwer`,answer,roomName);
-
-});
-
-//브라우저에서 answer 이벤트 처리 , answer를 ReomteDescription에 넣어줌 
-socket.on(`answer`,answer=>{
-    console.log(`received the answer`);
+socket.on("answer", answer => {
+    console.log("received the answer");
     myPeerConnection.setRemoteDescription(answer);
 });
 
-// data의 candidate 부분을 roomName의 모든 사용자들에게 전송하기 위함 
-function handleIce(data){
-    socket.emit(`ice`,data.candidate,roomName);
-}
-
-//ice 이벤트 처리 , myPeerConnection에 수신한 candidate를 추가함 
-socket.on(`ice`,ice=>{
+socket.on("ice", ice => {
+    console.log("received candidate");
     myPeerConnection.addIceCandidate(ice);
 })
 
-//버튼에 이벤트 등록 
-muteBtn.addEventListener("click",handleMuteClick);
-cameraBtn.addEventListener("click",handleCameraClick);
-//카메라 변경 적용 
-camerasSelect.addEventListener("input",handleCameraChange);
+// RTC code
 
+function makeConnection() {
+    myPeerConnection = new RTCPeerConnection(); // peerConnection을 각각의 브라우저에 생성 https://developer.mozilla.org/ko/docs/Web/API/RTCPeerConnection 참조
+    //icecandidate 이벤트 등록 
+    myPeerConnection.addEventListener("icecandidate", handleIce);
+    //addStream 이벤트 등록 , 다른 사람의 스트림 정보를 받아와서 처리할 내용 (handleAddStream 함수)
+    myPeerConnection.addEventListener("addstream", handleAddStream);
+    myStream.getTracks().forEach(track => myPeerConnection.addTrack(track, myStream)); // 영상과 음성 트랙을 myPeerConnection에 추가해줌 -> Peer-to-Peer 연결!!
+}
 
+function handleIce(data){
+    console.log("sent candidate");
+    socket.emit("ice", data.candidate, roomName);
+}
+
+function handleAddStream(data){
+    // 뷰페이저에 다른 사람의 스트림을 받아와서 표시 (다른 사람 화면 표시)
+    const peersFace = document.getElementById("peersFace");
+    peersFace.srcObject = data.stream;
+}
 
