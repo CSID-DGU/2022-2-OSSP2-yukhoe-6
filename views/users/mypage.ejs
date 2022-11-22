@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head') %>
+    <link rel="stylesheet"  type="text/css" href="/css/users/mypage.css">
+  </head>
+
+  <body>
+    <%- include('../partials/nav') %>
+    
+	<fieldset class="ueserInformation">
+		
+		<div class="content"> 
+			<div> <img src="/img/users/mypage/user.PNG"width="200px" height="220px"></div>
+      
+			<div>
+				<div>
+				<label class="id ePlaceholder text" title="nick name">name
+					<input class="form-control text" type="text" id="name" name="name" value="<%= user.username %>">
+				</label>
+				</div>
+
+				<div>
+				<label class="id ePlaceholder text" title="nick name">nicknames
+					<input class="form-control text" type="text" id="name" name="name" value="<%= user.name %>">
+				</label>
+				</div>
+
+				<div>			
+				<label class="id ePlaceholder text" title="nick name">email
+					<input class="form-control text" type="text" id="name" name="name" value="<%= user.email %>">
+				</label>
+				</div>
+			</div>
+
+			<div>
+				<% if(isAuthenticated && currentUser.id == user.id){ %>
+				<a class="edit_button" href="/users/<%= user.username %>/edit">회원 정보 수정하기</a>
+				<% } %>
+			</div>
+		</div>
+
+	</fieldset>
+
+
+	<div class="study">	
+		<div class= "studing_text">
+			<img src="/img/users/mypage/studing_text.png" style= "width:130px; height:40px;">
+		</div>
+
+
+		<div class="study_room" style="top: 500px;">
+			<div class="studyRoom_content1"> <img src="/img/users/mypage/studyRoom1.png"width="350px" height="420px"></div>
+			<div class="studyRoom_content2"> <img src="/img/users/mypage/studyRoom2.png"width="350px" height="420px"></div>
+			<div class="studyRoom_content3"> <img src="/img/users/mypage/studyRoom3.png"width="350px" height="420px"></div>
+		</div>
+
+
+		<div class="createStudy_room">
+			<div class="studyRoom_content1"> <img src="/img/users/mypage/studyRoom1.png"width="350px" height="420px"></div>
+			<div class="studyRoom_content2"> <img src="/img/users/mypage/studyRoom2.png"width="350px" height="420px"></div>
+			<div class="studyRoom_content3"> <img src="/img/users/mypage/studyRoom3.png"width="350px" height="420px"></div>
+		</div>
+	</div>
+
+</body>
+</html>
+

@@ -63,7 +63,7 @@
 
         <div class="col-2">
           <% if(isAuthenticated){ %>
-            <a class="btn btn-secondary" href="/posts/new<%= getPostQueryString() %>">New</a>
+            <a class="btn btn-primary" href="/posts/new<%= getPostQueryString() %>">New</a>
           <% } %>
         </div>
 
@@ -115,7 +115,7 @@
               </select>
               <input minLength="3" type="text" name="searchText" value="<%= searchText %>">
               <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                <button class="btn btn-outline-primary" type="submit">Search</button>
               </div>
             </div>
           </div>

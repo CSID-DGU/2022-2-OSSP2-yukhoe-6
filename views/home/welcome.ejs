@@ -2,18 +2,44 @@
 <html>
   <head>
     <%- include('../partials/head') %>
+    <link rel="stylesheet"  type="text/css" href="/css/mainPage/slide.css">
+    <link rel="stylesheet"  type="text/css" href="/css/mainPage/mainPage.css">
   </head>
+
   <body>
     <%- include('../partials/nav') %>
 
-    <div class="container mb-3">
-
-      <div class="jumbotron">
-        <h1>Coogle</h1>
-        <P>WELCOME TO COOGLE</p>
-        <p><a href="/studies">move to Study Room</a></p>
-      </div>
-
+    <div class="carousel" aria-label="Gallery"  style="top:70px; height:350px; padding-top: 0px;">
+      <ol class="carousel__viewport" style="top:0px; height:350px; padding-top: 0px;">
+        <li id="carousel__slide1"tabindex="0" class="carousel__slide">
+          <div class="carousel__snapper" ></div>
+            <img src="/img/mainPage/notice1.PNG" style="width:100%;height:100%;">
+            <a href="#carousel__slide3" class="carousel__prev">Go to last slide</a>
+            <a href="#carousel__slide2" class="carousel__next">Go to next slide</a>
+          
+        </li>
+        <li id="carousel__slide2" tabindex="0" class="carousel__slide">
+          <div class="carousel__snapper" ></div>
+          <img src="/img/mainPage/notice2.PNG" style="width:100%;height:100%;">
+          <a href="#carousel__slide1" class="carousel__prev">Go to previous slide</a>
+          <a href="#carousel__slide3" class="carousel__next">Go to next slide</a>
+        </li>
+        <li id="carousel__slide3" tabindex="0" class="carousel__slide">
+          <div class="carousel__snapper" ></div>
+          <img src="/img/mainPage/notice3.PNG" style="width:100%;height:100%;">
+          <a href="#carousel__slide2" class="carousel__prev">Go to previous slide</a>
+          <a href="#carousel__slide1" class="carousel__next">Go to next slide</a>
+        </li>
+      </ol>
     </div>
+
+    <div class="study_room">
+      <div class="studyRoom_content"> <img src="/img/mainPage/studyRoom1.png"width="400px" height="420px"></div>
+      <div class="studyRoom_content"> <img src="/img/mainPage/studyRoom2.png"width="400px" height="420px"></div>
+      <div class="studyRoom_content"> <img src="/img/mainPage/studyRoom3.png"width="400px" height="420px"></div>
+    </div>
+
+
+    
   </body>
 </html>
