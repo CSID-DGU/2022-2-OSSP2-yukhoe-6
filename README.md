@@ -41,6 +41,11 @@ https://ssocoit.tistory.com/category/%23%20%ED%95%99%EC%8A%B5%20%EB%82%B4%EC%9A%
 - 채팅과 화상회의 화면 합치기
 - 채팅에 유저정보 보여주기 -> 웹소켓 세션과 http 세션이 
 
+- 로그인 해야만 studyroom 페이지로넘어감
+- 방이름 입력, hidden form으로 로그인 한 닉네임 받아서 방생성함 
+- 여러명 webRTC로 화상채팅, 채팅 
+
+
  
 <<<<<<< HEAD
 >>>>>>> jidam
