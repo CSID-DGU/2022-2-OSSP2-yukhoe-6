@@ -29,7 +29,15 @@ html(lang="en")
                         option(value="device") Face Camera
                     //- 다른 사람의 stream을 띄울 공간 
                     video#peersFace(autoplay, playsinline, width="400", height="400")
-            
+            div#room 
+                h3
+                ul
+                form#name
+                    input(placeholder="nickname", required, type="text")
+                    button Save
+                form#msg
+                    input(placeholder="message", required, type="text")
+                    button Send
         //- 프론트엔드에 웹소켓 설치
         script(src="/socket.io/socket.io.js") 
         script(src="/public/js/clientServer.js")

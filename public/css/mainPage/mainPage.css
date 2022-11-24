@@ -1,0 +1,23 @@
+html{width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:sans-serif;}
+body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:sans-serif;overflow-y: scroll;}
+.study{
+    top:300px;
+ }
+
+ .study_room{
+    flex-wrap: nowrap;
+    overflow: hidden; 
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    top:100px;
+ }
+
+ .studyRoom{
+    position:absolute; 
+    display: flex;
+    left: 30px;
+    right: 30px;
+    z-index: 100;
+ }

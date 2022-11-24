@@ -8,17 +8,22 @@ const cameraBtn = document.getElementById("camera");
 const camerasSelect = document.getElementById("cameras");
 
 
-const call = document.getElementById("call");
 
+const call = document.getElementById("call");
+const welcome = document.getElementById("welcome");
+const form = welcome.querySelector("form");
+const room = document.getElementById("room");
+
+call.hidden = true;
+room.hidden = true;
 call.hidden = true;
 
 
 // stream받기 : stream은 비디오와 오디오가 결합된 것
 let myStream;
-
+let roomName;
 let muted = false; // 처음에는 음성을 받음
 let cameraOff = false; // 처음에는 영상을 받음
-let roomName;
 let myPeerConnection; // 누군가 getMedia함수를 불렀을 때와 똑같이 stream을 공유하기 위한 변수
 let myDataChannel; //데이터채널 저장용 변수 
 
@@ -119,14 +124,56 @@ camerasSelect.addEventListener("input", handleCameraChange);
 
 // Welcome Form (join a room)
 
-const welcome = document.getElementById("welcome");
-const welcomeForm = welcome.querySelector("form");
+///////////////////방과 닉네임 이름 표시 코드 /////////////////////////////
+function addMessage(message){
+    const ul = room.querySelector("ul");
+    const li = document.createElement("li");
+    li.innerText = message;
+    ul.appendChild(li);
+}
+function handleMessageSubmit(event){
+    event.preventDefault();
+    const input = room.querySelector("#msg input");
+    console.log(input)
+    const value = input.value;
+    socket.emit("new_message", input.value, roomName, ()=>{
+        addMessage('You:'+value);
+    });
+    input.value = "";
+}
+function handleNicknameSubmit(event){
+    event.preventDefault();
+    const input = room.querySelector("#name input");
+    socket.emit("nickname", input.value);
+}
 
 
+// 서버는 back-end에서 function을 호출하지만 function은 front-end에서 실행됨!!
+
+form.addEventListener("submit", handleWelcomeSubmit);
+
+socket.on("welcome", (user) => {
+    addMessage(`${user} arrived!`);
+})
+
+socket.on("bye", (left) => {
+    addMessage(`${left} left ㅠㅠ`);
+})
+
+socket.on("new_message", addMessage);
+///////////////////////////////////////////////////////////////////////
 async function initCall(){
     // 방 입력란은 숨기고 화면 표시란은 보여지게 한다
     welcome.hidden = true;
+    room.hidden = false;
     call.hidden = false;
+    const h3 = room.querySelector("h3");
+    h3.innerText=roomName; //저장한 방 이름을 pug의 요소에 전달함
+    const msgForm = room.querySelector("#msg");
+    const nameForm = room.querySelector("#name");
+    msgForm.addEventListener("submit", handleMessageSubmit);
+    nameForm.addEventListener("submit", handleNicknameSubmit);
+
     
     await getMedia();
     makeConnection();
@@ -135,8 +182,8 @@ async function initCall(){
 //클라이언트가 방 이름 입력해서 접속 -> 
 async function handleWelcomeSubmit(event){
     event.preventDefault();
-    const input = welcomeForm.querySelector("input");
-
+    
+    const input = form.querySelector("input");
     await initCall();
 
     //join_room 이벤트 발생시킴, 
@@ -145,7 +192,7 @@ async function handleWelcomeSubmit(event){
     input.value = "";
 }
 
-welcomeForm.addEventListener("submit", handleWelcomeSubmit);
+//welcomeForm.addEventListener("submit", handleWelcomeSubmit);
 
 
 // Socket Code

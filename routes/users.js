@@ -22,11 +22,11 @@ router.post('/', function(req, res){
   });
 });
 
-// show
+// mypage
 router.get('/:username', util.isLoggedin, checkPermission, function(req, res){
   User.findOne({username:req.params.username}, function(err, user){
     if(err) return res.json(err);
-    res.render('users/show', {user:user});
+    res.render('users/mypage', {user:user});
   });
 });
 
