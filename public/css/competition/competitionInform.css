@@ -1,0 +1,23 @@
+.title{
+    font-size: 14px;
+    font-weight: bold;
+    
+
+  }
+   .text{
+    text-decoration-line: none;
+    /*font-family: KoPubDotum;*/
+    letter-spacing: 3px;
+    color: #707070;
+ 
+  }
+  
+  @font-face {
+    font-family : 'KoPubDotum';
+    src : url(/font/KoPubDotumBold.ttf),
+        url(/font/KoPubDotumBold.ttf),
+        url(/font/KoPubDotumBold.ttf),
+  }
+ 
+  /*font URL: https://github.com/adrinerDP/font-kopub/blob/master/kopub.css*/
+  @import "//cdn.jsdelivr.net/npm/font-kopub@1.0/kopubbatang.min.css";

@@ -1,5 +1,5 @@
 <header id="menu">
-  <a  href="/" class="logo"><img src="/img/logo/coogleLogo.png"width="150px" height="60px"></a>
+  <a  href="/" class="logo" style= "top:-5px;"><img src="/img/logo/coogleLogo.png"width="150px" height="60px"></a>
   
   <ul class ="category">
     <li style= "width:193px;">
@@ -31,11 +31,11 @@
     </li>
     
     <% if(isAuthenticated){ %>
-      <li style= "width:60px;"><a href="/logout"><img src="/img/logo/login.png" width="40px" height="45px"></a></li>
-      <li style= "width:100px;"><a href="/users/<%= currentUser.username %>"><img src="/img/logo/user.png" width="40px" height="40px"></a></li>      
+      <li style= "width:60px; top:-5px;"><a href="/logout"><img src="/img/logo/login.png" width="40px" height="45px"></a></li>
+      <li style= "width:100px;top:-5px;"><a href="/users/<%= currentUser.username %>"><img src="/img/logo/user.png" width="40px" height="40px"></a></li>      
     <% } else { %>
-      <li style= "width:60px;"><a href="/login"><img src="/img/logo/login.png" width="40px" height="45px"></a></li>
-      <li style= "width:100px;"><a href="/login" ><img src="/img/logo/user.png" width="40px" height="40px"></a></li>
+      <li style= "width:60px;top:-5px;"><a href="/login"><img src="/img/logo/login.png" width="40px" height="45px"></a></li>
+      <li style= "width:100px;top:-5px;"><a href="/login" ><img src="/img/logo/user.png" width="40px" height="40px"></a></li>
     <% } %>
 
   </ul>

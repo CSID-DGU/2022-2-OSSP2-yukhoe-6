@@ -7,60 +7,60 @@
 
   <body>
     <%- include('../partials/nav') %>
-    
-	<fieldset class="ueserInformation">
+	<div class="wrap" style="top:120px;">
 		
-		<div class="content"> 
-			<div> <img src="/img/users/mypage/user.PNG"width="200px" height="220px"></div>
+		<div class="content" style="top:120px; width:250px; height:320px;"> 
+			<div style="margin: auto; text-align: center;margin-bottom:20px;"> <img src="/img/users/mypage/user.PNG"width="80px" height="80px"></div>
       
-			<div>
-				<div>
-				<label class="id ePlaceholder text" title="nick name">name
-					<input class="form-control text" type="text" id="name" name="name" value="<%= user.username %>">
-				</label>
+			<div style="margin-left: 10px; ">
+				<div class="text" style="color: #4d4d4d; font-weight: bold;">name: 
+					<label class="text deadLine" > <%= user.username %></label>
 				</div>
 
-				<div>
-				<label class="id ePlaceholder text" title="nick name">nicknames
-					<input class="form-control text" type="text" id="name" name="name" value="<%= user.name %>">
-				</label>
+				<div class="text" style="color: #4d4d4d; font-weight: bold;">nicknames:
+					<label class="text deadLine" > <%= user.name %></label>
 				</div>
 
-				<div>			
-				<label class="id ePlaceholder text" title="nick name">email
-					<input class="form-control text" type="text" id="name" name="name" value="<%= user.email %>">
-				</label>
+				<div class="text" style="color: #4d4d4d; font-weight: bold; margin-bottom:25px;">email:
+					<label class="text deadLine" ><%= user.email %></label>
 				</div>
 			</div>
 
-			<div>
+			<div class="text button " style="margin-left: 20px; text-align: center; ">
 				<% if(isAuthenticated && currentUser.id == user.id){ %>
-				<a class="edit_button" href="/users/<%= user.username %>/edit">회원 정보 수정하기</a>
+				<a  style="  background-color: #707070; color: #fff;  font-size: 15px;" 
+				href="/users/<%= user.username %>/edit">회원 정보 수정하기</a>
 				<% } %>
 			</div>
 		</div>
+	
 
-	</fieldset>
+
+		<div style=" display: inline;">	
+			<div class="study" style="top:120px; width:75%;">	
+				<div class= "studing_text">
+					<img src="/img/users/mypage/studing_text.png" style= "width:130px; height:40px;">
+				</div>
 
 
-	<div class="study">	
-		<div class= "studing_text">
-			<img src="/img/users/mypage/studing_text.png" style= "width:130px; height:40px;">
+				<div class="study_room" style="top: 500px;">
+					<div class="studyRoom_content1"> <img src="/img/users/mypage/studyRoom1.png"width="350px" height="420px"></div>
+					<div class="studyRoom_content2"> <img src="/img/users/mypage/studyRoom2.png"width="350px" height="420px"></div>
+					<div class="studyRoom_content3"> <img src="/img/users/mypage/studyRoom3.png"width="350px" height="420px"></div>
+				</div>
+
+
+				<div class="createStudy_room">
+					<div class="studyRoom_content1"> <img src="/img/users/mypage/studyRoom1.png"width="350px" height="420px"></div>
+					<div class="studyRoom_content2"> <img src="/img/users/mypage/studyRoom2.png"width="350px" height="420px"></div>
+					<div class="studyRoom_content3"> <img src="/img/users/mypage/studyRoom3.png"width="350px" height="420px"></div>
+				</div>
+			</div>
 		</div>
 
-
-		<div class="study_room" style="top: 500px;">
-			<div class="studyRoom_content1"> <img src="/img/users/mypage/studyRoom1.png"width="350px" height="420px"></div>
-			<div class="studyRoom_content2"> <img src="/img/users/mypage/studyRoom2.png"width="350px" height="420px"></div>
-			<div class="studyRoom_content3"> <img src="/img/users/mypage/studyRoom3.png"width="350px" height="420px"></div>
-		</div>
+	</div>
 
 
-		<div class="createStudy_room">
-			<div class="studyRoom_content1"> <img src="/img/users/mypage/studyRoom1.png"width="350px" height="420px"></div>
-			<div class="studyRoom_content2"> <img src="/img/users/mypage/studyRoom2.png"width="350px" height="420px"></div>
-			<div class="studyRoom_content3"> <img src="/img/users/mypage/studyRoom3.png"width="350px" height="420px"></div>
-		</div>
 	</div>
 
 </body>
