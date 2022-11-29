@@ -1,263 +1,575 @@
-// app.js
+//닉네임 내 세션에서 닉네임 가져와서 사용하게하고 
+//방 새로 만드는거는 이렇게 방이름 넣어서 하면되고 
+//방 db 만들어서 거기다 추가하고
+//이미 있는방은 누르면 그 방으로 들어가게하면되고 
+//내가 이미 들어가있는 방들 표시되게 
 
-const socket = io(); // io function은 알아서 socket.io를 실행하고 있는 서버를 찾을 것이다!
+//let myPeerConnection;
 
-const myFace = document.getElementById("myFace");
-const muteBtn = document.getElementById("mute");
-const cameraBtn = document.getElementById("camera");
-const camerasSelect = document.getElementById("cameras");
+//>>>>>
+screenId = ""
 
+const socket = io();
 
+//>>>>>> 배열만듬 
+let peerConnectionObjArr = [];
 
-const call = document.getElementById("call");
-const welcome = document.getElementById("welcome");
-const form = welcome.querySelector("form");
-const room = document.getElementById("room");
+const myFace = document.querySelector("#myFace");
+const muteBtn = document.querySelector("#mute");
+const muteIcon = muteBtn.querySelector(".muteIcon");
+const unMuteIcon = muteBtn.querySelector(".unMuteIcon");
+const cameraBtn = document.querySelector("#camera");
+const cameraIcon = cameraBtn.querySelector(".cameraIcon");
+const unCameraIcon = cameraBtn.querySelector(".unCameraIcon");
+const camerasSelect = document.querySelector("#cameras");
 
-call.hidden = true;
-room.hidden = true;
-call.hidden = true;
+const call = document.querySelector("#call");
+const welcome = document.querySelector("#welcome");
 
+const HIDDEN_CN = "hidden";
 
-// stream받기 : stream은 비디오와 오디오가 결합된 것
 let myStream;
-let roomName;
-let muted = false; // 처음에는 음성을 받음
-let cameraOff = false; // 처음에는 영상을 받음
-let myPeerConnection; // 누군가 getMedia함수를 불렀을 때와 똑같이 stream을 공유하기 위한 변수
-let myDataChannel; //데이터채널 저장용 변수 
+let muted = true;
+unMuteIcon.classList.add(HIDDEN_CN);
+let cameraOff = false;
+unCameraIcon.classList.add(HIDDEN_CN);
+let roomName = "";
+let nickname = "";
+let peopleInRoom = 1;
 
-async function getCameras(){
-    try {
-        const devices = await navigator.mediaDevices.enumerateDevices(); // 장치 리스트 가져오기
-        const cameras = devices.filter(device => device.kind === "videoinput"); // 비디오인풋만 가져오기
-        const currentCamera = myStream.getVideoTracks()[0]; // 비디오 트랙의 첫 번째 track 가져오기 : 이게 cameras에 있는 label과 같다면 그 label은 선택된 것이다!
 
-        cameras.forEach(camera => {
-            const option = document.createElement("option"); // 새로운 옵션 생성
-            option.value = camera.deviceId; // 카메라의 고유 값을 value에 넣기
-            option.innerText = camera.label; // 사용자가 선택할 때는 label을 보고 선택할 수 있게 만들기
-            if(currentCamera.label === camera.label) { // 현재 선택된 카메라 체크하기
-                option.selected = true;
-            }
-            camerasSelect.appendChild(option); // 카메라의 정보들을 option항목에 넣어주기
-        })
-    } catch (e) {
-        console.log(e);
-    }
+
+// //화면에 대한 미디어 스트림 얻기 
+// navigator.mediaDevices.getDisplayMedia({
+//   audio : true;
+// })
+
+
+
+
+let pcObj = {
+  // remoteSocketId: pc
+};
+
+async function getCameras() {
+  try {
+    //videoinput인 device를 가져와서 카메라 선택 
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const cameras = devices.filter((device) => device.kind === "videoinput");
+    const currentCamera = myStream.getVideoTracks()[0];
+    cameras.forEach((camera) => {
+      const option = document.createElement("option");
+      option.value = camera.deviceId;
+      option.innerText = camera.label;
+      option.id = "camera";
+
+      if (currentCamera.label == camera.label) {
+        option.selected = true;
+      }
+
+      //카메라선택차에 추가해줌 
+      camerasSelect.appendChild(option);
+
+      // //>>>>>화면공유
+      //getScreens();
+
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-// https://developer.mozilla.org/ko/docs/Web/API/MediaDevices/getUserMedia 사용 : 유저의 유저미디어 string을 받기위함
-async function getMedia(deviceId){
-    const initialConstraints = { // initialConstraints는 deviceId가 없을 때 실행
-        audio: true,
-        video: {facingMode: "user"}, // 카메라가 전후면에 달려있을 경우 전면 카메라의 정보를 받음 (후면의 경우 "environment")
-    };
-    const cameraConstraints = { // CameraConstraints는 deviceId가 있을 때 실행
-        audio: true,
-        video: {deviceId: {exact: deviceId}}, // exact를 쓰면 받아온 deviceId가 아니면 출력하지 않는다
-    };
+async function getMedia(deviceId, id) {
+  
+  console.log(`getMedia 진입`);
 
-    try {
-        myStream = await navigator.mediaDevices.getUserMedia(
-            deviceId ? cameraConstraints : initialConstraints
-        )
-        myFace.srcObject = myStream;
-        if (!deviceId) { // 처음 딱 1번만 실행! 우리가 맨 처음 getMedia를 할 때만 실행됨!!
-            await getCameras();
-        }
-        
-        
-    } catch (e) {
-        console.log(e);
+  //초기
+  const initialConstraints = {
+    audio: true,
+    video: { facingMode: "user" },
+  };
+  //카메라 가져왔을때 deviceId로 cameraConstraint 의 video 필드 설정 
+  const cameraConstraints = {
+    audio: true,
+    video: { deviceId: { exact: deviceId } },
+  };
+
+  try {
+    //constraint로 stream 얻기 - 인자로 전달한 deviceId가 있으면 cameraConstraints 아니면 initialConstraints임 
+    myStream = await navigator.mediaDevices.getUserMedia( 
+      //카메라선택했으면 
+      id === "camera" ? cameraConstraints : initialConstraints
+    );
+    if (id==="screen"){ //스크린선택했으면 
+      myStream = await navigator.mediaDevices.getDisplayMedia({
+        cursor : true,
+        audio : true,
+        video : true
+      });
     }
+
+    // stream을 mute하는 것이 아니라 HTML video element를 mute한다.
+    myFace.srcObject = myStream;
+    
+    myFace.muted = true;
+
+    if (!deviceId) {
+      // mute default 음소거로시작 
+      myStream 
+        .getAudioTracks()
+        .forEach((track) => (track.enabled = false));
+
+      await getCameras();
+      await  getScreens();
+    }
+  } catch (error) {
+    console.log(error); 
+    //>>>>> screen share 선택하면 overConstrained error : 존재하지 않는 기기 타입을 찾는 constraints 전달할경우 
+  }
 }
 
+//mute클릭 
 function handleMuteClick() {
-    myStream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
-    if(!muted) {
-        muteBtn.innerText = "Unmute";
-        muted = true;
-    }
-    else {
-        muteBtn.innerText = "Mute";
-        muted = false;
-    }
+  myStream //
+    .getAudioTracks()
+    .forEach((track) => (track.enabled = !track.enabled)); 
+  if (muted) { //음소거->해제
+    unMuteIcon.classList.remove(HIDDEN_CN);
+    muteIcon.classList.add(HIDDEN_CN);
+    muted = false;
+  } else {//해제->음소거 
+    muteIcon.classList.remove(HIDDEN_CN);
+    unMuteIcon.classList.add(HIDDEN_CN);
+    muted = true;
+  }
 }
 
+//카메라 활성화 비활성화 
 function handleCameraClick() {
-    myStream.getVideoTracks().forEach(track => track.enabled = !track.enabled);
-    if(cameraOff) {
-        cameraBtn.innerText = "Turn Camera Off";
-        cameraOff = false;
-    }
-    else {
-        cameraBtn.innerText = "Turn Camera On";
-        cameraOff = true;
-    }
+  console.log(`카메라끔`);
+  myStream //
+    .getVideoTracks()
+    .forEach((track) => (track.enabled = !track.enabled));
+  if (cameraOff) {
+    cameraIcon.classList.remove(HIDDEN_CN);
+    unCameraIcon.classList.add(HIDDEN_CN);
+    cameraOff = false;
+  } else {
+    unCameraIcon.classList.remove(HIDDEN_CN);
+    cameraIcon.classList.add(HIDDEN_CN);
+    cameraOff = true;
+  }
 }
 
-
+//카메라 변경 
 async function handleCameraChange() {
-    // getMedia로 바꾼 카메라로 스트림 변경 
-    await getMedia(camerasSelect.value);
+  try {
+    console.log(`카메라 변경 시도`);
+    const id = camerasSelect.options[camerasSelect.selectedIndex].id;
 
-    // 변경된 내용을 peer에게도 알려주기위함 
-    if (myPeerConnection){
-        const videoTrack = myStream.getVideoTracks()[0];
+    //>>>>>여기서 호출하면서 문제발생하는걸로 예상 
+    //camerasSelect의 value를 인자로 전달함 , camerasSelect는 뷰페이저의 #cameras
+    //getMedia 안에서 constraint를 설정함 
+    await getMedia(camerasSelect.value,id);
+    console.log(`getMedia 탈출`);
 
-        //sender의 track.kind가 video인 부분을 replaceTrack으로 바꿔줌 
-        const videoSender = myPeerConnection
-            .getSenders()
-            .find(sender=>sender.track.kind=="video");
-        videoSender.replaceTrack(videoTrack);
+    //카메라->화면공유 로 변경이 안되니까 화면변경해도 계속 카메라로보임 
+    //getMedia 진입 -> 탈출 성공 
+
+    // if (myPeerConnection) {
+    //   const videosender = myPeerConnection
+    //     .getSenders()
+    //     .find((sender) => sender.track.kind === "video");
+    //   const videoTrack = myStream.getVideoTracks()[0];
+    //   videosender.replaceTrack(videoTrack);
+    // }
+
+
+    if (peerConnectionObjArr.length > 0) {
+      console.log(`if진입`);
+      const newVideoTrack = myStream.getVideoTracks()[0];
+      peerConnectionObjArr.forEach((peerConnectionObj) => {
+        const peerConnection = peerConnectionObj.connection;
+        const peerVideoSender = peerConnection
+          .getSenders()
+          .find((sender) => sender.track.kind == "video");
+        peerVideoSender.replaceTrack(newVideoTrack);
+        console.log(`peerConnectionObjArr에대해 변경성공`);
+      });
+      console.log(`카메라 변경 시도 성공`);
     }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
+//음량, 화면, 카메라선택 버튼에 이벤트리스너 등록 
 muteBtn.addEventListener("click", handleMuteClick);
 cameraBtn.addEventListener("click", handleCameraClick);
-
-// 카메라 변경 확인
 camerasSelect.addEventListener("input", handleCameraChange);
 
 
 
-// Welcome Form (join a room)
+/////////////////////////////////// prototype
+// Screen Sharing
 
-///////////////////방과 닉네임 이름 표시 코드 /////////////////////////////
-function addMessage(message){
-    const ul = room.querySelector("ul");
-    const li = document.createElement("li");
-    li.innerText = message;
-    ul.appendChild(li);
-}
-function handleMessageSubmit(event){
-    event.preventDefault();
-    const input = room.querySelector("#msg input");
-    console.log(input)
-    const value = input.value;
-    socket.emit("new_message", input.value, roomName, ()=>{
-        addMessage('You:'+value);
-    });
-    input.value = "";
-}
-function handleNicknameSubmit(event){
-    event.preventDefault();
-    const input = room.querySelector("#name input");
-    socket.emit("nickname", input.value);
-}
+let captureStream = null;
+
+// //>>>>>화면공유
+// async function startCapture() {
+//   try {
+//     captureStream = await navigator.mediaDevices.getDisplayMedia({
+//       video: true,
+//       audio: true,
+//     });
 
 
-// 서버는 back-end에서 function을 호출하지만 function은 front-end에서 실행됨!!
+//     const screenVideo = document.querySelector("#screen");
+//     screenVideo.srcObject = captureStream;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
 
-form.addEventListener("submit", handleWelcomeSubmit);
 
-socket.on("welcome", (user) => {
-    addMessage(`${user} arrived!`);
-})
 
-socket.on("bye", (left) => {
-    addMessage(`${left} left ㅠㅠ`);
-})
 
-socket.on("new_message", addMessage);
-///////////////////////////////////////////////////////////////////////
-async function initCall(){
-    // 방 입력란은 숨기고 화면 표시란은 보여지게 한다
-    welcome.hidden = true;
-    room.hidden = false;
-    call.hidden = false;
-    const h3 = room.querySelector("h3");
-    h3.innerText=roomName; //저장한 방 이름을 pug의 요소에 전달함
-    const msgForm = room.querySelector("#msg");
-    const nameForm = room.querySelector("#name");
-    msgForm.addEventListener("submit", handleMessageSubmit);
-    nameForm.addEventListener("submit", handleNicknameSubmit);
+async function getScreens() {
+ 
+    //스크린을가져와서 screen에 저장 
+  const screen = await navigator.mediaDevices.getUserMedia({
+    video: { mediaSource: "screen" }
+  });
+  screenId = screen.id; //screen.id 얻어옴 
 
-    
-    await getMedia();
-    makeConnection();
+  //뷰페이저의 카메라셀렉트에 screen share를 선택할 수 있게 추가해줌 
+  const option = document.createElement("option");
+  option.value = screenId;
+  option.id = "screen";
+  option.innerText = "Screen Share";
+  camerasSelect.appendChild(option);
+
+ 
+
+
 }
 
-//클라이언트가 방 이름 입력해서 접속 -> 
-async function handleWelcomeSubmit(event){
-    event.preventDefault();
-    
-    const input = form.querySelector("input");
-    await initCall();
 
-    //join_room 이벤트 발생시킴, 
-    socket.emit("join_room", input.value, ); // 서버로 input value를 보내는 과정!! initCall 함수도 같이 보내준다!
-    roomName = input.value; // 방에 참가했을 때 나중에 쓸 수 있도록 방 이름을 변수에 저장
-    input.value = "";
+
+
+
+
+// Welcome Form (choose room)
+
+call.classList.add(HIDDEN_CN);
+// welcome.hidden = true;
+
+const welcomeForm = welcome.querySelector("form");
+
+async function initCall() {
+  welcome.hidden = true;
+  call.classList.remove(HIDDEN_CN);
+  //미디어스트림 
+  await getMedia();
+  //makeConnections();
 }
 
-//welcomeForm.addEventListener("submit", handleWelcomeSubmit);
+
+//입력해서 들어갈
+async function handleWelcomeSubmit(event) {
+  event.preventDefault();
+
+  if (socket.disconnected) {
+    socket.connect();
+  }
+
+  //방이름, 닉네임
+  const welcomeRoomName = welcomeForm.querySelector("#roomName");
+  const welcomeNickname = welcomeForm.querySelector("#nickname");
+  const nicknameContainer = document.querySelector("#userNickname");
+  roomName = welcomeRoomName.value;
+  welcomeRoomName.value = "";
+  nickname = welcomeNickname.value;
+  welcomeNickname.value = "";
+  nicknameContainer.innerText = nickname;
+  //입력폼에 입력한거 받아서 join_room 하기 
+  socket.emit("join_room", roomName, nickname);
+}
+
+//입장하면 handleWelcomeSubmit 호출 
+welcomeForm.addEventListener("submit", handleWelcomeSubmit);
+
+// Chat Form
+
+//뷰페이저 채팅 
+const chatForm = document.querySelector("#chatForm");
+const chatBox = document.querySelector("#chatBox");
+
+const MYCHAT_CN = "myChat";
+const NOTICE_CN = "noticeChat";
+
+//채팅 입력하면 handleChatSubmit 
+chatForm.addEventListener("submit", handleChatSubmit);
 
 
-// Socket Code
+//채팅입력 
+function handleChatSubmit(event) {
 
-socket.on("welcome", async () => {
-    
-    //offer를 만드는 peer가 DataChannel 만듬 
-    myDataChannel = myPeerConnection.createDataChannel(`chat`);
-    //메세지를 받으면 이벤트처리 (콘솔에출력)
-    myDataChannel.addEventListener(`message`,event=>console.log(event.data));
-    console.log(`made data channel`);
+  event.preventDefault();
 
-    const offer = await myPeerConnection.createOffer(); // 다른 사용자를 초대하기 위한 초대장!! (내가 누구인지를 알려주는 내용이 들어있음!)
-    myPeerConnection.setLocalDescription(offer); // myPeerConnection에 내 초대장의 위치 정보를 연결해 주는 과정 https://developer.mozilla.org/ko/docs/Web/API/RTCPeerConnection/setLocalDescription
-    console.log("sent the offer");
-    socket.emit("offer", offer, roomName);
-})
+//메세지가져와서 chat emit 함 
+  const chatInput = chatForm.querySelector("input");
+  const message = chatInput.value;
+  chatInput.value = "";
+  socket.emit("chat", `${nickname}: ${message}`, roomName);
+  writeChat(`You: ${message}`, MYCHAT_CN);
+}
 
-socket.on("offer", async (offer) => {
+//뷰페이저에 채팅 추가함 
+function writeChat(message, className = null) {
+  const li = document.createElement("li");
+  const span = document.createElement("span");
+  span.innerText = message;
+  li.appendChild(span);
+  li.classList.add(className);
+  chatBox.prepend(li);
+}
 
-    //offer를 받는 쪽에서는 새로운 dataChannel이 있을 때 eventListener 추가함 
-    myPeerConnection.addEventListener(`datachannel`,event=>{
-        myDataChannel = event.channel;
-        myDataChannel.addEventListener(`message`,event=>console.log(event.data)); //메세지 받을 때 이벤트처리 (콘솔에출력)
-    });
+// Leave Room 방 나갈때 
 
+const leaveBtn = document.querySelector("#leave");
 
+function leaveRoom() {
+  socket.disconnect();
 
-    console.log("received the offer");
-    myPeerConnection.setRemoteDescription(offer); // 다른 브라우저의 위치를 myPeerConnection에 연결해 주는 과정
-    const answer = await myPeerConnection.createAnswer();
-    myPeerConnection.setLocalDescription(answer); // 현재 브라우저에서 생성한 answer를 현재 브라우저의 myPeerConnection의 LocalDescription으로 등록!!
-    socket.emit("answer", answer, roomName);
-    console.log("sent the answer");
-})
+  call.classList.add(HIDDEN_CN);
+  welcome.hidden = false;
 
-socket.on("answer", answer => {
-    console.log("received the answer");
-    myPeerConnection.setRemoteDescription(answer);
+  peerConnectionObjArr = [];
+  peopleInRoom = 1;
+  nickname = "";
+
+  myStream.getTracks().forEach((track) => track.stop());
+  const nicknameContainer = document.querySelector("#userNickname");
+  nicknameContainer.innerText = "";
+
+  myFace.srcObject = null;
+  clearAllVideos();
+  clearAllChat();
+}
+
+function removeVideo(leavedSocketId) {
+  const streams = document.querySelector("#streams");
+  const streamArr = streams.querySelectorAll("div");
+  streamArr.forEach((streamElement) => {
+    if (streamElement.id === leavedSocketId) {
+      streams.removeChild(streamElement);
+    }
+  });
+}
+
+function clearAllVideos() {
+  const streams = document.querySelector("#streams");
+  const streamArr = streams.querySelectorAll("div");
+  streamArr.forEach((streamElement) => {
+    if (streamElement.id != "myStream") {
+      streams.removeChild(streamElement);
+    }
+  });
+}
+
+function clearAllChat() {
+  const chatArr = chatBox.querySelectorAll("li");
+  chatArr.forEach((chat) => chatBox.removeChild(chat));
+}
+
+leaveBtn.addEventListener("click", leaveRoom);
+
+// Modal code 
+//?
+const modal = document.querySelector(".modal");
+const modalText = modal.querySelector(".modal__text");
+const modalBtn = modal.querySelector(".modal__btn");
+
+function paintModal(text) {
+  modalText.innerText = text;
+  modal.classList.remove(HIDDEN_CN);
+
+  modal.addEventListener("click", removeModal);
+  modalBtn.addEventListener("click", removeModal);
+  document.addEventListener("keydown", handleKeydown);
+}
+
+function removeModal() {
+  modal.classList.add(HIDDEN_CN);
+  modalText.innerText = "";
+}
+
+function handleKeydown(event) {
+  if (event.code === "Escape" || event.code === "Enter") {
+    removeModal();
+  }
+}
+
+// Socket code
+
+//방꽉차서 입장 X 
+socket.on("reject_join", () => {
+  // Paint modal
+  paintModal("Sorry, The room is already full.");
+
+  // Erase names
+  const nicknameContainer = document.querySelector("#userNickname");
+  nicknameContainer.innerText = "";
+  roomName = "";
+  nickname = "";
 });
 
-socket.on("ice", ice => {
-    console.log("received candidate");
-    myPeerConnection.addIceCandidate(ice);
-})
+//방입장 
+socket.on("accept_join", async (userObjArr) => {
+  await initCall();
+
+  const length = userObjArr.length;
+  if (length === 1) {
+    return;
+  }
+
+  writeChat("Notice!", NOTICE_CN);
+  for (let i = 0; i < length - 1; ++i) {
+    try {
+      const newPC = createConnection(
+        userObjArr[i].socketId,
+        userObjArr[i].nickname
+      );
+      //>>>>>>>>>>>>>>> 배열에추가 
+      peerConnectionObjArr.push(newPC);
+      console.log(`!!!rtcConnection배열!!!`);
+      console.log(peerConnectionObjArr);
+      const offer = await newPC.createOffer();
+      await newPC.setLocalDescription(offer);
+      socket.emit("offer", offer, userObjArr[i].socketId, nickname);
+      writeChat(`__${userObjArr[i].nickname}__`, NOTICE_CN);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  writeChat("is in the room.", NOTICE_CN);
+});
+
+//offer , answer, ice
+socket.on("offer", async (offer, remoteSocketId, remoteNickname) => {
+  try {
+    const newPC = createConnection(remoteSocketId, remoteNickname);
+    await newPC.setRemoteDescription(offer);
+    const answer = await newPC.createAnswer();
+    await newPC.setLocalDescription(answer);
+    socket.emit("answer", answer, remoteSocketId);
+    writeChat(`notice! __${remoteNickname}__ joined the room`, NOTICE_CN);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+socket.on("answer", async (answer, remoteSocketId) => {
+  await pcObj[remoteSocketId].setRemoteDescription(answer);
+});
+
+socket.on("ice", async (ice, remoteSocketId) => {
+  await pcObj[remoteSocketId].addIceCandidate(ice);
+});
+
+//chat, leave_room
+
+socket.on("chat", (message) => {
+  writeChat(message);
+});
+
+socket.on("leave_room", (leavedSocketId, nickname) => {
+  removeVideo(leavedSocketId);
+  writeChat(`notice! ${nickname} leaved the room.`, NOTICE_CN);
+  --peopleInRoom;
+  sortStreams();
+});
+
 
 // RTC code
+function createConnection(remoteSocketId, remoteNickname) {
+  const myPeerConnection = new RTCPeerConnection({
+    iceServers: [
+      {
+        urls: [
+          "stun:stun.l.google.com:19302",
+          "stun:stun1.l.google.com:19302",
+          "stun:stun2.l.google.com:19302",
+          "stun:stun3.l.google.com:19302",
+          "stun:stun4.l.google.com:19302",
+        ],
+      },
+    ],
+  });
+  
+  myPeerConnection.addEventListener("icecandidate", (event) => {
+    handleIce(event, remoteSocketId);
+  });
+  myPeerConnection.addEventListener("addstream", (event) => {
+    handleAddStream(event, remoteSocketId, remoteNickname);
+  });
+  // myPeerConnection.addEventListener(
+  //   "iceconnectionstatechange",
+  //   handleConnectionStateChange
+  // );
+  myStream //
+    .getTracks()
+    .forEach((track) => myPeerConnection.addTrack(track, myStream));
 
-function makeConnection() {
-    myPeerConnection = new RTCPeerConnection(); // peerConnection을 각각의 브라우저에 생성 https://developer.mozilla.org/ko/docs/Web/API/RTCPeerConnection 참조
-    //icecandidate 이벤트 등록 
-    myPeerConnection.addEventListener("icecandidate", handleIce);
-    //addStream 이벤트 등록 , 다른 사람의 스트림 정보를 받아와서 처리할 내용 (handleAddStream 함수)
-    myPeerConnection.addEventListener("addstream", handleAddStream);
-    myStream.getTracks().forEach(track => myPeerConnection.addTrack(track, myStream)); // 영상과 음성 트랙을 myPeerConnection에 추가해줌 -> Peer-to-Peer 연결!!
+  pcObj[remoteSocketId] = myPeerConnection;
+
+  ++peopleInRoom;
+  sortStreams();
+  return myPeerConnection;
 }
 
-function handleIce(data){
-    console.log("sent candidate");
-    socket.emit("ice", data.candidate, roomName);
+function handleIce(event, remoteSocketId) {
+  if (event.candidate) {
+    socket.emit("ice", event.candidate, remoteSocketId);
+  }
 }
 
-function handleAddStream(data){
-    // 뷰페이저에 다른 사람의 스트림을 받아와서 표시 (다른 사람 화면 표시)
-    const peersFace = document.getElementById("peersFace");
-    peersFace.srcObject = data.stream;
+function handleAddStream(event, remoteSocketId, remoteNickname) {
+  const peerStream = event.stream;
+  paintPeerFace(peerStream, remoteSocketId, remoteNickname);
 }
 
+function paintPeerFace(peerStream, id, remoteNickname) {
+  const streams = document.querySelector("#streams");
+  const div = document.createElement("div");
+  div.id = id;
+  const video = document.createElement("video");
+  video.autoplay = true;
+  video.playsInline = true;
+  video.width = "400";
+  video.height = "400";
+  video.srcObject = peerStream;
+  const nicknameContainer = document.createElement("h3");
+  nicknameContainer.id = "userNickname";
+  nicknameContainer.innerText = remoteNickname;
+
+  div.appendChild(video);
+  div.appendChild(nicknameContainer);
+  streams.appendChild(div);
+  sortStreams();
+}
+
+function sortStreams() {
+  const streams = document.querySelector("#streams");
+  const streamArr = streams.querySelectorAll("div");
+  streamArr.forEach((stream) => (stream.className = `people${peopleInRoom}`));
+}
+/*
+function handleConnectionStateChange(event) {
+  console.log(`${pcObjArr.length - 1} CS: ${event.target.connectionState}`);
+  console.log(`${pcObjArr.length - 1} ICS: ${event.target.iceConnectionState}`);
+  if (event.target.iceConnectionState === "disconnected") {
+  }
+}
+*/
