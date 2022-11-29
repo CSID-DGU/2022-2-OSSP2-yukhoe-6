@@ -15,7 +15,8 @@ html(lang="en")
         main
             div#welcome 
                 form
-                    input#roomName(type="text", required, placeholder="Room Name")
+                    h3 입장하시겠습니까?
+                    input#roomName(type="hidden", required, value=`${room}`,placeholder="Room Name")
                     input#nickname(type="hidden", required, value=`${nickName}` ,placeholder="Your Nickname")
                     button Enter Room
 
@@ -53,3 +54,4 @@ html(lang="en")
 
         script(src="/socket.io/socket.io.js")
         script(src="/public/js/clientServer.js")
+

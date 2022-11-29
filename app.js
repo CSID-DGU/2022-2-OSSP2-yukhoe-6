@@ -7,10 +7,11 @@ var session = require('express-session');
 var passport = require('./config/passport');
 var util = require('./util');
 var app = express();
+var cookieParser = require('cookie-parser');
 
 app.use("/public", express.static(__dirname + "/public"));
 app.set("views", __dirname + "/views"); // 디렉토리 설정
-
+app.use(cookieParser());
 
 
 
@@ -53,10 +54,12 @@ app.use(session({secret:'MySecret', resave:true, saveUninitialized:true}));
 app.use(passport.initialize()); //passport 초기화 
 app.use(passport.session()); //passport랑 session 연결 
 
+
+var current_user;
 // Custom Middlewares
 app.use(function(req,res,next){
-  res.locals.isAuthenticated = req.isAuthenticated();
-  res.locals.currentUser = req.user;
+  res.locals.isAuthenticated = req.isAuthenticated(); //로그인이 되어있는지 확인하는 
+  res.locals.currentUser = req.user; //해당 로그인되어 있는 유저 
   res.locals.util = util;
   next();
 });
@@ -72,7 +75,9 @@ app.use(`/competitions`,require(`./routes/competitionRouter`));
 app.use('/studies',require('./routes/studyRoom'));
 
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
 
 // server.js
 
@@ -125,33 +130,10 @@ wsServer.on("connection", socket => {
 
 
 
-  //  //지성 
-  //  socket.on("enter_room", (roomName, done) => {
-  //      // console.log(socket.rooms); // 현재 들어가있는 방을 표시 (기본적으로 User와 Server 사이에 private room이 있다!)
-  //       socket.join(roomName);
-  //       // console.log(socket.rooms);  // 앞은 id, 뒤는 현재 들어가있는 방
-  //       done();
-  //      socket.to(roomName).emit("welcome", socket.nickname) // welcome 이벤트를 roomName에 있는 모든 사람들에게 emit한 것
-  //   });
-  //  socket.on("disconnecting", () => { // 클라이언트가 서버와 연결이 끊어지기 전에 마지막 굿바이 메시지를 보낼 수 있다!
-  //       socket.rooms.forEach(room => socket.to(room).emit("bye", socket.nickname)); // 방안에 있는 모두에게 보내기 위해 forEach 사용!
-  //   })
-  //  socket.on("new_message", (msg, room, done) => { // 메세지랑 done 함수를 받을 것
-  //      socket.to(room).emit("new_message", `${socket.nickname}: ${msg}`); // new_message 이벤트를 emit한다! 방금 받은 메시지가 payload가 된다!
-  //      done(); // done은 프론트엔드에서 코드를 실행할 것!! (백엔드에서 작업 다 끝나고!!)
-  //  });
-  //  socket.on("nickname", nickname => socket["nickname"] = nickname);
-  //  //지성
-
-
-
-
     //join_room 이벤트 처리 
     socket.on("join_room", (roomName,nickname) => {
 
         //-- 
-
-
         myRoomName = roomName;
         myNickName = nickname;
 
@@ -239,7 +221,6 @@ wsServer.on("connection", socket => {
   
 
       let isRoomEmpty = false;
-      
 
       for (let i = 0; i < roomObjArr.length; ++i) {
         //방목록에 방 있는경우 
@@ -269,4 +250,5 @@ wsServer.on("connection", socket => {
     });
 
 });
+
 
