@@ -19,7 +19,7 @@ const call = document.querySelector("#call");
 const welcome = document.querySelector("#welcome");
 
 const HIDDEN_CN = "hidden";
-
+call.hidden = true;
 let myStream;
 let muted = true;
 unMuteIcon.classList.add(HIDDEN_CN);
@@ -203,12 +203,38 @@ async function handleWelcomeSubmit(event) {
   welcomeNickname.value = "";
   nicknameContainer.innerText = nickname;
   //입력폼에 입력한거 받아서 join_room 하기 
+  call.hidden = false;
   socket.emit("join_room", roomName, nickname);
 }
 
 //입장하면 handleWelcomeSubmit 호출 
 welcomeForm.addEventListener("submit", handleWelcomeSubmit);
+//방입장 
+socket.on("accept_join", async (userObjArr) => {
+  await initCall();
 
+  const length = userObjArr.length;
+  if (length === 1) {
+    return;
+  }
+
+  writeChat("Notice!", NOTICE_CN);
+  for (let i = 0; i < length - 1; ++i) {
+    try {
+      const newPC = createConnection(
+        userObjArr[i].socketId,
+        userObjArr[i].nickname
+      );
+      const offer = await newPC.createOffer();
+      await newPC.setLocalDescription(offer);
+      socket.emit("offer", offer, userObjArr[i].socketId, nickname);
+      writeChat(`__${userObjArr[i].nickname}__`, NOTICE_CN);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  writeChat("is in the room.", NOTICE_CN);
+});
 // Chat Form
 
 //뷰페이저 채팅 
@@ -335,32 +361,6 @@ socket.on("reject_join", () => {
   nickname = "";
 });
 
-//방입장 
-socket.on("accept_join", async (userObjArr) => {
-  await initCall();
-
-  const length = userObjArr.length;
-  if (length === 1) {
-    return;
-  }
-
-  writeChat("Notice!", NOTICE_CN);
-  for (let i = 0; i < length - 1; ++i) {
-    try {
-      const newPC = createConnection(
-        userObjArr[i].socketId,
-        userObjArr[i].nickname
-      );
-      const offer = await newPC.createOffer();
-      await newPC.setLocalDescription(offer);
-      socket.emit("offer", offer, userObjArr[i].socketId, nickname);
-      writeChat(`__${userObjArr[i].nickname}__`, NOTICE_CN);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-  writeChat("is in the room.", NOTICE_CN);
-});
 
 //offer , answer, ice
 socket.on("offer", async (offer, remoteSocketId, remoteNickname) => {

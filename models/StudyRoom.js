@@ -2,13 +2,12 @@ var mongoose = require('mongoose');
 
 //스터디룸 스키마
 var studyRoomSchema = mongoose.Schema({ 
-  title : {type:String, required:true},
-  //user와 공모전 연결 
+  title : {type:String, required:[true,'스터디방 이름을 입력해주세요!'], unique:true},
+  //user와 스터디룸 연결 
   leader : {type:mongoose.Schema.Types.ObjectId, ref:'user',required:true},
   date : {type:Date, default:Date.now},
-  capacity : {type:Number},
-  NumOfPeo : {type:Number, default:1},
-  content : {type:String, required:true},
+  maximum : {type:Number,required:true, default:2, min:2, max:5},
+  content : {type:String, required:[true,'스터디 설명을 작성해주세요!']},
 });
 
 // model & export

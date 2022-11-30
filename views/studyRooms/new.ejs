@@ -1,0 +1,20 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>스터디 방 생성 </h1>
+    <!-- 1. 절대경로
+    2. 맨앞에 /를 써주면 / 이전은 localhost:3000 -->
+    <form action="/studies/new/submit" method="post">
+        <!-- localhost3000/competitions/create/submit -->
+        스터디방 이름 : <input type="text" name="title"> <br>
+        인원수 : <input type="number" name="deadLine"> <br>
+        방내용 : <input type="text" name="content"> <br>
+        <button type="submit">완료</button>
+    </form>
+</body>
+</html>

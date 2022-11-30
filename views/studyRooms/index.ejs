@@ -1,29 +1,50 @@
+<!-- views/contacts/index.ejs -->
+
 <!DOCTYPE html>
 <html>
   <head>
     <%- include('../partials/head') %>
-    <link rel="stylesheet"  type="text/css" href="/css/mainPage/slide.css">
-    <link rel="stylesheet"  type="text/css" href="/css/mainPage/mainPage.css">
   </head>
-
   <body>
     <%- include('../partials/nav') %>
-    
-    Welcome to StudyRoom 
-    <div id="welcome">
-        <form action="#">
-            <input type="text" required="true" placeholder="room name"> 
-            <button type="submit">Enter Room</button>
-        </form>
+
+
+    <div class="container mb-3">
+
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb p-1 pl-2 pr-2">
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item"><a href="/posts">community</a></li>
+        </ol>
+      </nav>
+    <div class="studyroom studyroom-index">
+      <h2>Study Room</h2>
+      <table>
+        <tbody>
+      <tr>
+        <% if(rooms == null || rooms.length == 0){ %>
+          <h2>현재 생성된 스터디방이 없습니다</h2> <br> <% } %>
+        <% rooms.forEach(function(room) { %> <!-- 3 -->
+          
+            스터디방 이름: <%= room.title %> 
+          <br>
+          
+            스터디 리더: <%= room.leader ? room.leader.username : "" %>
+          <br>
+          
+            최대 인원수: <%= room.maximum %>
+          <br>
+          스터디방 정보:  <%= room.content %>
+           <br>
+           <a href="/studies/<%= room._id %>">참여하기</a>
+           <hr><hr>
+        <% }) %>
+        </tr>
+      </tbody>
+      </table>
+      <a href="/studies/new">스터디방 만들기</a>
+
     </div>
-    
-
-    <!-- 프론트에 웹소켓 설치  -->
-    <script src="/socket.io/socket.io.js"></script>
-    <!-- <script src="client/clientServer.js"></script> -->
-    <script src="/public/js/clientServer.js"></script>
-       
-
-
-</body>
+  </div>
+  </body>
 </html>
