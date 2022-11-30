@@ -186,17 +186,12 @@ async function handleCameraChange() {
 
 
     if (peerConnectionObjArr.length > 0) {
-      console.log(`if진입`);
-      const newVideoTrack = myStream.getVideoTracks()[0];
+      var videosender;
       peerConnectionObjArr.forEach((peerConnectionObj) => {
-        const peerConnection = peerConnectionObj.connection;
-        const peerVideoSender = peerConnection
-          .getSenders()
-          .find((sender) => sender.track.kind == "video");
-        peerVideoSender.replaceTrack(newVideoTrack);
-        console.log(`peerConnectionObjArr에대해 변경성공`);
+         videosender = peerConnectionObj.getSenders().find((sender)=> sender.track.kind==="video");
+      const videoTrack = myStream.getVideoTracks()[0];
+      videosender.replaceTrack(videoTrack);
       });
-      console.log(`카메라 변경 시도 성공`);
     }
   } catch (error) {
     console.log(error);
@@ -267,6 +262,7 @@ call.classList.add(HIDDEN_CN);
 const welcomeForm = welcome.querySelector("form");
 
 async function initCall() {
+  console.log(`initcall`);
   welcome.hidden = true;
   call.classList.remove(HIDDEN_CN);
   //미디어스트림 
@@ -494,6 +490,7 @@ socket.on("leave_room", (leavedSocketId, nickname) => {
 
 // RTC code
 function createConnection(remoteSocketId, remoteNickname) {
+  console.log(`createConnection`);
   const myPeerConnection = new RTCPeerConnection({
     iceServers: [
       {
