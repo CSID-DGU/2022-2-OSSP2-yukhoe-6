@@ -1,5 +1,11 @@
-html{width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:sans-serif;}
-body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:sans-serif;}
+html{width:100%;height:100%;margin:0px;padding:0px;font-family:sans-serif;}
+body {width:100%;height:100%;margin:0px;padding:0px;;font-family:sans-serif;overflow-y: scroll;}
+
+.containerGrid{
+  display: grid;
+	grid-template-columns: 350px 1000px;
+}
+
 
 .wrap{
   height:100%;
@@ -14,7 +20,7 @@ body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:
   margin: 0px 20px 25px 100px;
   padding: 15px 20px 15px 20px;
   border-radius: 15px;
-  border: solid 2px #707070;
+  /*border: solid 2px #707070;*/
 
  }
 
@@ -43,6 +49,7 @@ body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:
 }
 
 .button{
+  width:200px;
   height: 40px;
   right:20px;
   border-radius: 15px;
@@ -80,16 +87,28 @@ body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:
 
  /*font URL: https://github.com/adrinerDP/font-kopub/blob/master/kopub.css*/
  @import "//cdn.jsdelivr.net/npm/font-kopub@1.0/kopubbatang.min.css";
-.study{
-    position:fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    top:-200px;
-
+ .study{
+  position:relative;
+  display: flex;
+  margin-left: 100px;
+  margin-bottom: 50px;
+  justify-content: center;
+  align-items: center;
 }
+ .study_room{
+  display: flex;
 
+  /*
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:flex-end;*/
+}
+ /*
+
+
+
+*/
+/*
 .studing_text{
     position:fixed;
     display: flex;
@@ -145,4 +164,4 @@ body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:
     align-items: center;
 
     transform: translate(370px, 10000px);
- }
+ }*/

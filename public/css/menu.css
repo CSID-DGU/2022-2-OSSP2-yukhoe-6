@@ -12,14 +12,10 @@ html,body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-fa
     justify-content: space-between;
     align-items: center;
     z-index: 10000; 
-    background:#fff;
-    border-bottom: dotted 0.1px #4d4d4d;
+    background:none;
+    /*border-bottom: dotted 0.1px #4d4d4d;*/
 }
 
-#menu:hover{
-    background:#fff;
-    height:280px;
-}
 /*
 menu .logo{
     color: #4d4d4d;

@@ -7,10 +7,16 @@
 
   <body>
     <%- include('../partials/nav') %>
-	<div class="wrap" style="top:120px;">
-		
-		<div class="content" style="top:120px; width:250px; height:320px;"> 
-			<div style="margin: auto; text-align: center;margin-bottom:20px;"> <img src="/img/users/mypage/user.PNG"width="80px" height="80px"></div>
+
+	<div class="wrap" style="top:100px;">
+		<div class="container mb-3" style="margin-left:120px; color: #4d4d4d; position:relative;">
+			<h2 class="mb-3"><%= user.username %>'s Room</h2>
+		</div>
+
+	<div class="containerGrid">
+		<div class="content" style="top:120px; width:250px; height:320px; "> 
+
+			<div style="margin: auto; text-align: center; margin-bottom:20px;"> <img src="/img/users/mypage/user.PNG"width="205px" height="205px"></div>
       
 			<div style="margin-left: 10px; ">
 				<div class="text" style="color: #4d4d4d; font-weight: bold;">name: 
@@ -34,34 +40,23 @@
 			</div>
 		</div>
 	
+		<div class="study" style="top:15px; width:75%; display: inline;">	
 
-
-		<div style=" display: inline;">	
-			<div class="study" style="top:120px; width:75%;">	
-				<div class= "studing_text">
-					<img src="/img/users/mypage/studing_text.png" style= "width:130px; height:40px;">
+				<div class="studing_text" style="color: #4d4d4d; font-weight: bold;">
+					<h5>참여했던 스터디</h5>
 				</div>
 
-
-				<div class="study_room" style="top: 500px;">
-					<div class="studyRoom_content1"> <img src="/img/users/mypage/studyRoom1.png"width="350px" height="420px"></div>
-					<div class="studyRoom_content2"> <img src="/img/users/mypage/studyRoom2.png"width="350px" height="420px"></div>
-					<div class="studyRoom_content3"> <img src="/img/users/mypage/studyRoom3.png"width="350px" height="420px"></div>
+				<div class="study_room" style=" ">
+					<div class="studyRoom_content1 " style="height:320px; width:250px; margin-left: 10px;"> <img src="/img/users/mypage/studyRoom1.png"width="250px" height="320px"></div>
+					<div class="studyRoom_content2" style="height:320px; width:250px; margin-left: 10px;"> <img src="/img/users/mypage/studyRoom2.png" width="250px" height="320px"></div>
+					<div class="studyRoom_content3" style="height:320px; width:250px; margin-left: 10px;"> <img src="/img/users/mypage/studyRoom3.png" width="250px" height="320px"></div>
 				</div>
-
-
-				<div class="createStudy_room">
-					<div class="studyRoom_content1"> <img src="/img/users/mypage/studyRoom1.png"width="350px" height="420px"></div>
-					<div class="studyRoom_content2"> <img src="/img/users/mypage/studyRoom2.png"width="350px" height="420px"></div>
-					<div class="studyRoom_content3"> <img src="/img/users/mypage/studyRoom3.png"width="350px" height="420px"></div>
-				</div>
-			</div>
 		</div>
-
+	</div>
 	</div>
 
 
-	</div>
+
 
 </body>
 </html>
