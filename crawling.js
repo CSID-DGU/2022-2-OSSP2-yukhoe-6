@@ -38,7 +38,7 @@ var crawl = getHtml()
     //console.log(ulList);
 
     const data = ulList.filter(n => n.title);
-    console.log(data);
+    //console.log(data);
     return data;
   });
   // .then(res => log(res));
