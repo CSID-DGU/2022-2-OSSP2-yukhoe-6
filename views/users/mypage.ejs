@@ -7,61 +7,56 @@
 
   <body>
     <%- include('../partials/nav') %>
-    
-	<fieldset class="ueserInformation">
-		
-		<div class="content"> 
-			<div> <img src="/img/users/mypage/user.PNG"width="200px" height="220px"></div>
+
+	<div class="wrap" style="top:100px;">
+		<div class="container mb-3" style="margin-left:120px; color: #4d4d4d; position:relative;">
+			<h2 class="mb-3"><%= user.username %>'s Room</h2>
+		</div>
+
+	<div class="containerGrid">
+		<div class="content" style="top:120px; width:250px; height:320px; "> 
+
+			<div style="margin: auto; text-align: center; margin-bottom:20px;"> <img src="/img/users/mypage/user.PNG"width="205px" height="205px"></div>
       
-			<div>
-				<div>
-				<label class="id ePlaceholder text" title="nick name">name
-					<input class="form-control text" type="text" id="name" name="name" value="<%= user.username %>">
-				</label>
+			<div style="margin-left: 10px; ">
+				<div class="text" style="color: #4d4d4d; font-weight: bold;">name: 
+					<label class="text deadLine" > <%= user.username %></label>
 				</div>
 
-				<div>
-				<label class="id ePlaceholder text" title="nick name">nicknames
-					<input class="form-control text" type="text" id="name" name="name" value="<%= user.name %>">
-				</label>
+				<div class="text" style="color: #4d4d4d; font-weight: bold;">nicknames:
+					<label class="text deadLine" > <%= user.name %></label>
 				</div>
 
-				<div>			
-				<label class="id ePlaceholder text" title="nick name">email
-					<input class="form-control text" type="text" id="name" name="name" value="<%= user.email %>">
-				</label>
+				<div class="text" style="color: #4d4d4d; font-weight: bold; margin-bottom:25px;">email:
+					<label class="text deadLine" ><%= user.email %></label>
 				</div>
 			</div>
 
-			<div>
+			<div class="text button " style="margin-left: 20px; text-align: center; ">
 				<% if(isAuthenticated && currentUser.id == user.id){ %>
-				<a class="edit_button" href="/users/<%= user.username %>/edit">회원 정보 수정하기</a>
+				<a  style="  background-color: #707070; color: #fff;  font-size: 15px;" 
+				href="/users/<%= user.username %>/edit">회원 정보 수정하기</a>
 				<% } %>
 			</div>
 		</div>
+	
+		<div class="study" style="top:15px; width:75%; display: inline;">	
 
-	</fieldset>
+				<div class="studing_text" style="color: #4d4d4d; font-weight: bold;">
+					<h5>참여했던 스터디</h5>
+				</div>
 
-
-	<div class="study">	
-		<div class= "studing_text">
-			<img src="/img/users/mypage/studing_text.png" style= "width:130px; height:40px;">
-		</div>
-
-
-		<div class="study_room" style="top: 500px;">
-			<div class="studyRoom_content1"> <img src="/img/users/mypage/studyRoom1.png"width="350px" height="420px"></div>
-			<div class="studyRoom_content2"> <img src="/img/users/mypage/studyRoom2.png"width="350px" height="420px"></div>
-			<div class="studyRoom_content3"> <img src="/img/users/mypage/studyRoom3.png"width="350px" height="420px"></div>
-		</div>
-
-
-		<div class="createStudy_room">
-			<div class="studyRoom_content1"> <img src="/img/users/mypage/studyRoom1.png"width="350px" height="420px"></div>
-			<div class="studyRoom_content2"> <img src="/img/users/mypage/studyRoom2.png"width="350px" height="420px"></div>
-			<div class="studyRoom_content3"> <img src="/img/users/mypage/studyRoom3.png"width="350px" height="420px"></div>
+				<div class="study_room" style=" ">
+					<div class="studyRoom_content1 " style="height:320px; width:250px; margin-left: 10px;"> <img src="/img/users/mypage/studyRoom1.png"width="250px" height="320px"></div>
+					<div class="studyRoom_content2" style="height:320px; width:250px; margin-left: 10px;"> <img src="/img/users/mypage/studyRoom2.png" width="250px" height="320px"></div>
+					<div class="studyRoom_content3" style="height:320px; width:250px; margin-left: 10px;"> <img src="/img/users/mypage/studyRoom3.png" width="250px" height="320px"></div>
+				</div>
 		</div>
 	</div>
+	</div>
+
+
+
 
 </body>
 </html>

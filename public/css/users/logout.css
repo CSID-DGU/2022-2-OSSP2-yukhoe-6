@@ -1,0 +1,57 @@
+html,body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:sans-serif;}
+.square{
+    height:100%;
+    width:100%; 
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -10000; 
+}
+.container{
+    height:100%;
+    width:100%; 
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1; 
+}
+
+.logout{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate(220px, -115px);
+}
+.unlockImg{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate(100px, -35px);
+}
+.logout_text{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate(100px, 65px);
+}
+
+.yes_button{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate(40px, 105px);
+    z-index: 5; 
+}
+.no_button{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate(160px, 105px);
+}

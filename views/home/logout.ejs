@@ -10,8 +10,8 @@
   
   <div class="square">
     <img src="/img/login/logout/square.png" style= "width:680PX; height:480PX;">
-   </div>
-   <div class="container">
+  
+    <div class="container">
       <div class="logout">
         <img src="/img/login/logout/Log Out.png" style= "width:370px; height:60px;">
       </div>
@@ -21,15 +21,19 @@
       <div class="logout_text">
         <img src="/img/login/logout/logoutText.png" style= "width:450px; height:55px;">
       </div>
-        <div class="yes_button">
-          <a href="/index.html"></a><img src="/img/login/logout/yes_button.png" style= "width:130px; height:27px;"></a>
-        </div>
-    
-        <div class="no_button">
-          <a href="/index.html"><img src="/img/login/logout/no_button.png" style= "width:130px; height:27px;"></a>
-        </div>
-    </div>
 
+      <form class="yes_button" action="/logout" method="post">
+          <input type="image" src="/img/login/logout/yes_button.png" style= "width:130px; height:27px;"  value="Submit">
+      </form>
+
+      <div class="no_button">
+        <a href="/"><img src="/img/login/logout/no_button.png" style= "width:130px; height:27px;"></a>
+      </div>
+    </div>
+  
+  </div>
+
+  
 
 
 </body>

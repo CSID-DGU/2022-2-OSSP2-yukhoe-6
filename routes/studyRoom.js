@@ -25,36 +25,28 @@ router.get(`/`,util.isLoggedin,function(req,res){
     ////// res.render(`studyRooms/index`,{nickName:req.user.username});  
     //res.render('competitions/index',{competitions:comp});
 });
-router.get(`/`,util.isLoggedin,function(req,res){
-   
-    res.render(`studyRooms/show.pug`,{nickName:req.user.username});  
+router.get(`/create`, util.isLoggedin,function(req,res){
+    console.log("스터디방 입력폼");
+    res.render(`studyRooms/new`);  
     //res.render('competitions/index',{competitions:comp});
 });
 
-//스터디방 참여하기
+
 //req.params.id로 접근가능 
 router.get(`/:id`,function(req,res){
     console.log(`자세히보기 접근`);
-    //find로 검색해서 하나만 찾아도 [] 리스트에 담아옴 
-    StudyRoom.find({_id:req.params.id})
-    .populate('leader') //relationship이 있는 필드 생성 
-    .exec(function(err,room){
-        if (err){
-            console.log(`공모전 개별 데이터 불러오는 과정에서 예외발생`);
-        }
-        console.log(`확인한 개별 데이터`);
-        console.log(room);
-
-        res.render(`studyRooms/show.pug`,{studyroom: room, nickName:req.user.username});  
-    });
+   
+    Promise.all([
+        StudyRoom.findOne({_id:req.params.id}).populate({ path: 'leader', select: 'username' }),
+      ])
+      .then(([room]) => {
+        res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
+      })
+      .catch((err) => {
+        return res.json(err);
+      });
 });
 
-
-       
-router.get(`/new`,util.isLoggedin,function(req,res){
-    res.render(`studyRooms/new`,{nickName:req.user.username});  
-    //res.render('competitions/index',{competitions:comp});
-});
 
   router.post('/new/submit',util.isLoggedin,function(req,res){
     console.log(`스터디룸 생성`)
@@ -64,13 +56,14 @@ router.get(`/new`,util.isLoggedin,function(req,res){
     req.body.leader = req.user._id;
     console.log(req.body);
     var roomName = req.body.title;
-
+    
     StudyRoom.create(req.body,function(err,studyroom){
         if (err){
             console.log(`스터디룸 db 생성중 예외발생`);
             throw err;
         }
         console.log(`스터디룸 db 생성완`);
+        console.log("방이름 "+ roomName);
         res.redirect(`/studies`);
     });
 });
