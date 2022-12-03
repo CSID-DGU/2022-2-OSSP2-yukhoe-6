@@ -16,3 +16,17 @@ $(function(){
 		}, 5000);
 	})
 });
+
+$(function(){
+    // 스크롤 시 header fade-in
+    $(document).on('scroll', function(){
+        if($(window).scrollTop() > 100){
+            $("#menu").removeClass("deactive");
+            $("#menu").addClass("active");
+        }else{
+            $("#menu").removeClass("active");
+            $("#menu").addClass("deactive");
+        }
+    })
+
+});
