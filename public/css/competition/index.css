@@ -1,9 +1,6 @@
 html{width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:sans-serif;}
-<<<<<<< HEAD
 body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:sans-serif; overflow-y: scroll;}
-=======
-body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:sans-serif;}
->>>>>>> a6ca1dd699e537287b626e64006860db6238f3ad
+
 .wrap{
     height:100%;
     width:100%; 
@@ -12,7 +9,7 @@ body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:
 
 
   }
-<<<<<<< HEAD
+
 .createButton{
   width:180px;  
   background-color: #707070; 
@@ -25,9 +22,7 @@ body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:
   float:right;  
   margin-right: 5px;
 }
-=======
 
->>>>>>> a6ca1dd699e537287b626e64006860db6238f3ad
 .title{
     font-size: 20px;
     font-weight: 1000;
@@ -48,12 +43,9 @@ body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:
     right:20px;
     border-radius: 8px;
     border: solid 3px #707070;
-   
-<<<<<<< HEAD
+
     padding: 5px 7px 5px 7px;
-=======
-    padding: 5px 10px 5px 10px;
->>>>>>> a6ca1dd699e537287b626e64006860db6238f3ad
+
     display: inline;
     justify-content: center;
     text-align: center;
@@ -65,12 +57,7 @@ body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:
     right:20px;
     border-radius: 8px;
     border: solid 3px #707070;
-   
-<<<<<<< HEAD
-    padding: 5px 7px 5px 7px;
-=======
-    padding: 5px 10px 5px 10px;
->>>>>>> a6ca1dd699e537287b626e64006860db6238f3ad
+  
     display: inline;
     justify-content: center;
     text-align: center;

@@ -3,7 +3,7 @@ body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:
 .notice{
    background-color:#d7edff; 
    width:100%; 
-   height:67%; 
+   height:62%; 
    position:absolute; 
    display: flex;
    top:-60px;
