@@ -250,8 +250,11 @@ wsServer.on("connection", socket => {
 
     //방에 join
     socket.join(roomName);
-    //방의 user들에게 accept_join emit함 
+    //새로 연결된 브라우저에게 accept_join emit함 
     socket.emit("accept_join", targetRoomObj.users);
+
+    //방의 모든 유저들에게 각자의 배열에 방 유저들을 추가할 수 있는 코드를 만들어주자
+
 
     //--
     });

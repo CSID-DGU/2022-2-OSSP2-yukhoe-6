@@ -165,6 +165,8 @@ function handleCameraClick() {
 async function handleCameraChange() {
   try {
     console.log(`카메라 변경 시도`);
+
+    //카메라 id 받아옴 
     const id = camerasSelect.options[camerasSelect.selectedIndex].id;
 
     //>>>>>여기서 호출하면서 문제발생하는걸로 예상 
@@ -185,6 +187,8 @@ async function handleCameraChange() {
     // }
 
 
+    //peerConnectionObjArr의 인원들을 대상으로 카메라 변경함 (정상작동)
+    //나중에들어온애들은 기존에 있던 애들이 peerConnectionObjArr에 포함이 안되고 얘내들 걸 바꿀수가 없음 
     if (peerConnectionObjArr.length > 0) {
       var videosender;
       peerConnectionObjArr.forEach((peerConnectionObj) => {
@@ -431,6 +435,12 @@ socket.on("accept_join", async (userObjArr) => {
   }
 
   writeChat("Notice!", NOTICE_CN);
+  
+
+  //방에 있는 유저들에 대해 peerConnectionObjArr에 추가함 
+
+  console.log(`@@@@@@@@ACCEPT JOIN@@@@@@`);
+
   for (let i = 0; i < length - 1; ++i) {
     try {
       const newPC = createConnection(
@@ -438,10 +448,13 @@ socket.on("accept_join", async (userObjArr) => {
         userObjArr[i].nickname
       );
       //>>>>>>>>>>>>>>> 배열에추가 
+
+      //새로 연결된 브라우저는 본인의 peerConnectionObj에 방에 있는 유저들과의 RTCpeerConnection을 만들어서 추가한다
       peerConnectionObjArr.push(newPC);
       console.log(`!!!rtcConnection배열!!!`);
       console.log(peerConnectionObjArr);
       const offer = await newPC.createOffer();
+      
       await newPC.setLocalDescription(offer);
       socket.emit("offer", offer, userObjArr[i].socketId, nickname);
       writeChat(`__${userObjArr[i].nickname}__`, NOTICE_CN);
@@ -449,6 +462,12 @@ socket.on("accept_join", async (userObjArr) => {
       console.error(err);
     }
   }
+  //test
+  let i =1;
+  peerConnectionObjArr.forEach(users =>{
+    console.log("방에 있는 사람 : "+i);
+    i++;
+  })
   writeChat("is in the room.", NOTICE_CN);
 });
 
