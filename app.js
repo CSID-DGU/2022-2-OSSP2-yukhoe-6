@@ -149,9 +149,6 @@ wsServer.on("connection", socket => {
     //join_room 이벤트 처리 
     socket.on("join_room", (roomName,nickname) => {
 
-        //-- 
-
-
         myRoomName = roomName;
         myNickName = nickname;
 
