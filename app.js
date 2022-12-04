@@ -8,10 +8,12 @@ var passport = require('./config/passport');
 var util = require('./util');
 var app = express();
 var cookieParser = require('cookie-parser');
+var pugParser = require('pug-parser');
 
 app.use("/public", express.static(__dirname + "/public"));
 app.set("views", __dirname + "/views"); // 디렉토리 설정
 app.use(cookieParser());
+
 
 
 
@@ -59,6 +61,7 @@ var current_user;
 // Custom Middlewares
 app.use(function(req,res,next){
   res.locals.isAuthenticated = req.isAuthenticated(); //로그인이 되어있는지 확인하는 
+  
   res.locals.currentUser = req.user; //해당 로그인되어 있는 유저 
   res.locals.util = util;
   next();
@@ -137,6 +140,7 @@ wsServer.on("connection", socket => {
         myRoomName = roomName;
         myNickName = nickname;
 
+        console.log(myRoomName)
         //방이 존재하는지 
         let isRoomExist = false;
         //접속할 방 

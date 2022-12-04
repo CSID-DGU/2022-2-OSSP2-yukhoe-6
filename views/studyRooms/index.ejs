@@ -16,6 +16,28 @@
       <div class="wrap" style="top:25px; width:70%; margin-left:15%; position: relative; display: inline;">
         <% if(rooms == null || rooms.length == 0){ %>
           <h2>현재 생성된 스터디방이 없습니다</h2> <br> <% } %>
+<<<<<<< HEAD
+=======
+        <% rooms.forEach(function(room) { %> <!-- 3 -->
+          
+            스터디방 이름: <%= room.title %> 
+          <br>
+          
+            스터디 리더: <%= room.leader ? room.leader.username : "" %>
+          <br>
+          
+            최대 인원수: <%= room.maximum %>
+          <br>
+          스터디방 정보:  <%= room.content %>
+           <br>
+           <a href="/studies/<%= room._id %>">참여하기</a>
+           <hr><hr>
+        <% }) %>
+        </tr>
+      </tbody>
+      </table>
+      <a href="/studies/create">스터디방 만들기</a>
+>>>>>>> a6ca1dd699e537287b626e64006860db6238f3ad
 
         <!--생성 된 방이 존재한다면-->
 

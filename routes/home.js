@@ -53,6 +53,11 @@ router.post('/login',
 router.get('/logout', function(req, res,next) {
     //홈페이지로 리다이렉트 
     res.render('home/logout');
+<<<<<<< HEAD
+=======
+    }
+    ); 
+>>>>>>> a6ca1dd699e537287b626e64006860db6238f3ad
 });
 
 //logout에서 yes 누르면

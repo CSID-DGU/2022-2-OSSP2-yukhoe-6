@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/User');
 var util = require('../util');
+var StudyRoom = require('../models/StudyRoom');
 
 // New
 router.get('/new', function(req, res){
@@ -24,10 +25,14 @@ router.post('/', function(req, res){
 
 // mypage
 router.get('/:username', util.isLoggedin, checkPermission, function(req, res){
-  User.findOne({username:req.params.username}, function(err, user){
-    if(err) return res.json(err);
-    res.render('users/mypage', {user:user});
-  });
+  Promise.all([
+    User.findOne({username:req.params.username}),
+    StudyRoom.findOne({"leader.username": req.params.username}).sort('date').populate({ path: 'leader', select: 'username' })
+  ])
+  .then(([user, rooms]) => {
+    console.log(rooms);
+    res.render('users/mypage', { user:user, room:rooms});
+  })
 });
 
 // edit

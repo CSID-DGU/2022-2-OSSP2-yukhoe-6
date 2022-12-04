@@ -15,12 +15,13 @@ html(lang="en")
         main
             div#welcome 
                 form
-                    h3 입장하시겠습니까?
-                    input#roomName(type="hidden", required, value=`${room}`,placeholder="Room Name")
+                    input#roomName(type="hidden", required, value=`${room.title}` ,placeholder="Your Nickname")
                     input#nickname(type="hidden", required, value=`${nickName}` ,placeholder="Your Nickname")
                     button Enter Room
+                    
 
             div#call(class="call")
+                h3#roomName 스터디방: #{room.title}
                 div#streamBox
                     div#streams
                         div#myStream(class="people1")
@@ -47,7 +48,7 @@ html(lang="en")
         aside.modal.hidden
             div.modal__box
                 h2.modal__text
-                button.modal__btn OK
+                
 
 
 
