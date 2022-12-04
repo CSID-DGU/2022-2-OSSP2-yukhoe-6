@@ -450,9 +450,9 @@ socket.on("accept_join", async (userObjArr) => {
       //>>>>>>>>>>>>>>> 배열에추가 
 
       //새로 연결된 브라우저는 본인의 peerConnectionObj에 방에 있는 유저들과의 RTCpeerConnection을 만들어서 추가한다
-      peerConnectionObjArr.push(newPC);
-      console.log(`!!!rtcConnection배열!!!`);
-      console.log(peerConnectionObjArr);
+      //peerConnectionObjArr.push(newPC);
+      //console.log(`!!!rtcConnection배열!!!`);
+      //console.log(peerConnectionObjArr);
       const offer = await newPC.createOffer();
       
       await newPC.setLocalDescription(offer);
@@ -539,6 +539,7 @@ function createConnection(remoteSocketId, remoteNickname) {
     .forEach((track) => myPeerConnection.addTrack(track, myStream));
 
   pcObj[remoteSocketId] = myPeerConnection;
+  peerConnectionObjArr.push(myPeerConnection);
 
   ++peopleInRoom;
   sortStreams();
