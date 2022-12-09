@@ -4,7 +4,15 @@
 //이미 있는방은 누르면 그 방으로 들어가게하면되고 
 //내가 이미 들어가있는 방들 표시되게 
 
+//let myPeerConnection;
+
+//>>>>>
+screenId = ""
+
 const socket = io();
+
+//>>>>>> 배열만듬 
+let peerConnectionObjArr = [];
 
 const myFace = document.querySelector("#myFace");
 const muteBtn = document.querySelector("#mute");
@@ -19,7 +27,7 @@ const call = document.querySelector("#call");
 const welcome = document.querySelector("#welcome");
 
 const HIDDEN_CN = "hidden";
-call.hidden = true;
+
 let myStream;
 let muted = true;
 unMuteIcon.classList.add(HIDDEN_CN);
@@ -28,6 +36,16 @@ unCameraIcon.classList.add(HIDDEN_CN);
 let roomName = "";
 let nickname = "";
 let peopleInRoom = 1;
+
+
+
+// //화면에 대한 미디어 스트림 얻기 
+// navigator.mediaDevices.getDisplayMedia({
+//   audio : true;
+// })
+
+
+
 
 let pcObj = {
   // remoteSocketId: pc
@@ -38,11 +56,12 @@ async function getCameras() {
     //videoinput인 device를 가져와서 카메라 선택 
     const devices = await navigator.mediaDevices.enumerateDevices();
     const cameras = devices.filter((device) => device.kind === "videoinput");
-    const currentCamera = myStream.getVideoTracks();
+    const currentCamera = myStream.getVideoTracks()[0];
     cameras.forEach((camera) => {
       const option = document.createElement("option");
       option.value = camera.deviceId;
       option.innerText = camera.label;
+      option.id = "camera";
 
       if (currentCamera.label == camera.label) {
         option.selected = true;
@@ -50,15 +69,21 @@ async function getCameras() {
 
       //카메라선택차에 추가해줌 
       camerasSelect.appendChild(option);
+
+      // //>>>>>화면공유
+      //getScreens();
+
     });
   } catch (error) {
     console.log(error);
   }
 }
 
-async function getMedia(deviceId) {
+async function getMedia(deviceId, id) {
+  
+  console.log(`getMedia 진입`);
 
-    //초기
+  //초기
   const initialConstraints = {
     audio: true,
     video: { facingMode: "user" },
@@ -70,13 +95,22 @@ async function getMedia(deviceId) {
   };
 
   try {
-    //constraint로 stream 얻기 
-    myStream = await navigator.mediaDevices.getUserMedia(
-      deviceId ? cameraConstraints : initialConstraints
+    //constraint로 stream 얻기 - 인자로 전달한 deviceId가 있으면 cameraConstraints 아니면 initialConstraints임 
+    myStream = await navigator.mediaDevices.getUserMedia( 
+      //카메라선택했으면 
+      id === "camera" ? cameraConstraints : initialConstraints
     );
+    if (id==="screen"){ //스크린선택했으면 
+      myStream = await navigator.mediaDevices.getDisplayMedia({
+        cursor : true,
+        audio : true,
+        video : true
+      });
+    }
 
     // stream을 mute하는 것이 아니라 HTML video element를 mute한다.
     myFace.srcObject = myStream;
+    
     myFace.muted = true;
 
     if (!deviceId) {
@@ -86,9 +120,11 @@ async function getMedia(deviceId) {
         .forEach((track) => (track.enabled = false));
 
       await getCameras();
+      await  getScreens();
     }
   } catch (error) {
-    console.log(error);
+    console.log(error); 
+    //>>>>> screen share 선택하면 overConstrained error : 존재하지 않는 기기 타입을 찾는 constraints 전달할경우 
   }
 }
 
@@ -110,6 +146,7 @@ function handleMuteClick() {
 
 //카메라 활성화 비활성화 
 function handleCameraClick() {
+  console.log(`카메라끔`);
   myStream //
     .getVideoTracks()
     .forEach((track) => (track.enabled = !track.enabled));
@@ -127,15 +164,37 @@ function handleCameraClick() {
 //카메라 변경 
 async function handleCameraChange() {
   try {
-    await getMedia(camerasSelect.value);
+    console.log(`카메라 변경 시도`);
+
+    //카메라 id 받아옴 
+    const id = camerasSelect.options[camerasSelect.selectedIndex].id;
+
+    //>>>>>여기서 호출하면서 문제발생하는걸로 예상 
+    //camerasSelect의 value를 인자로 전달함 , camerasSelect는 뷰페이저의 #cameras
+    //getMedia 안에서 constraint를 설정함 
+    await getMedia(camerasSelect.value,id);
+    console.log(`getMedia 탈출`);
+
+    //카메라->화면공유 로 변경이 안되니까 화면변경해도 계속 카메라로보임 
+    //getMedia 진입 -> 탈출 성공 
+
+    // if (myPeerConnection) {
+    //   const videosender = myPeerConnection
+    //     .getSenders()
+    //     .find((sender) => sender.track.kind === "video");
+    //   const videoTrack = myStream.getVideoTracks()[0];
+    //   videosender.replaceTrack(videoTrack);
+    // }
+
+
+    //peerConnectionObjArr의 인원들을 대상으로 카메라 변경함 (정상작동)
+    //나중에들어온애들은 기존에 있던 애들이 peerConnectionObjArr에 포함이 안되고 얘내들 걸 바꿀수가 없음 
     if (peerConnectionObjArr.length > 0) {
-      const newVideoTrack = myStream.getVideoTracks()[0];
+      var videosender;
       peerConnectionObjArr.forEach((peerConnectionObj) => {
-        const peerConnection = peerConnectionObj.connection;
-        const peerVideoSender = peerConnection
-          .getSenders()
-          .find((sender) => sender.track.kind == "video");
-        peerVideoSender.replaceTrack(newVideoTrack);
+         videosender = peerConnectionObj.getSenders().find((sender)=> sender.track.kind==="video");
+      const videoTrack = myStream.getVideoTracks()[0];
+      videosender.replaceTrack(videoTrack);
       });
     }
   } catch (error) {
@@ -154,21 +213,50 @@ camerasSelect.addEventListener("input", handleCameraChange);
 // Screen Sharing
 
 let captureStream = null;
-//?
-async function startCapture() {
-  try {
-    captureStream = await navigator.mediaDevices.getDisplayMedia({
-      video: true,
-      audio: true,
-    });
+
+// //>>>>>화면공유
+// async function startCapture() {
+//   try {
+//     captureStream = await navigator.mediaDevices.getDisplayMedia({
+//       video: true,
+//       audio: true,
+//     });
 
 
-    const screenVideo = document.querySelector("#screen");
-    screenVideo.srcObject = captureStream;
-  } catch (error) {
-    console.error(error);
-  }
+//     const screenVideo = document.querySelector("#screen");
+//     screenVideo.srcObject = captureStream;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+
+
+
+
+async function getScreens() {
+ 
+    //스크린을가져와서 screen에 저장 
+  const screen = await navigator.mediaDevices.getUserMedia({
+    video: { mediaSource: "screen" }
+  });
+  screenId = screen.id; //screen.id 얻어옴 
+
+  //뷰페이저의 카메라셀렉트에 screen share를 선택할 수 있게 추가해줌 
+  const option = document.createElement("option");
+  option.value = screenId;
+  option.id = "screen";
+  option.innerText = "Screen Share";
+  camerasSelect.appendChild(option);
+
+ 
+
+
 }
+
+
+
+
+
 
 // Welcome Form (choose room)
 
@@ -178,10 +266,12 @@ call.classList.add(HIDDEN_CN);
 const welcomeForm = welcome.querySelector("form");
 
 async function initCall() {
+  console.log(`initcall`);
   welcome.hidden = true;
   call.classList.remove(HIDDEN_CN);
   //미디어스트림 
   await getMedia();
+  //makeConnections();
 }
 
 
@@ -203,38 +293,12 @@ async function handleWelcomeSubmit(event) {
   welcomeNickname.value = "";
   nicknameContainer.innerText = nickname;
   //입력폼에 입력한거 받아서 join_room 하기 
-  call.hidden = false;
   socket.emit("join_room", roomName, nickname);
 }
 
 //입장하면 handleWelcomeSubmit 호출 
 welcomeForm.addEventListener("submit", handleWelcomeSubmit);
-//방입장 
-socket.on("accept_join", async (userObjArr) => {
-  await initCall();
 
-  const length = userObjArr.length;
-  if (length === 1) {
-    return;
-  }
-
-  writeChat("Notice!", NOTICE_CN);
-  for (let i = 0; i < length - 1; ++i) {
-    try {
-      const newPC = createConnection(
-        userObjArr[i].socketId,
-        userObjArr[i].nickname
-      );
-      const offer = await newPC.createOffer();
-      await newPC.setLocalDescription(offer);
-      socket.emit("offer", offer, userObjArr[i].socketId, nickname);
-      writeChat(`__${userObjArr[i].nickname}__`, NOTICE_CN);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-  writeChat("is in the room.", NOTICE_CN);
-});
 // Chat Form
 
 //뷰페이저 채팅 
@@ -361,6 +425,51 @@ socket.on("reject_join", () => {
   nickname = "";
 });
 
+//방입장 
+socket.on("accept_join", async (userObjArr) => {
+  await initCall();
+
+  const length = userObjArr.length;
+  if (length === 1) {
+    return;
+  }
+
+  writeChat("Notice!", NOTICE_CN);
+  
+
+  //방에 있는 유저들에 대해 peerConnectionObjArr에 추가함 
+
+  console.log(`@@@@@@@@ACCEPT JOIN@@@@@@`);
+
+  for (let i = 0; i < length - 1; ++i) {
+    try {
+      const newPC = createConnection(
+        userObjArr[i].socketId,
+        userObjArr[i].nickname
+      );
+      //>>>>>>>>>>>>>>> 배열에추가 
+
+      //새로 연결된 브라우저는 본인의 peerConnectionObj에 방에 있는 유저들과의 RTCpeerConnection을 만들어서 추가한다
+      //peerConnectionObjArr.push(newPC);
+      //console.log(`!!!rtcConnection배열!!!`);
+      //console.log(peerConnectionObjArr);
+      const offer = await newPC.createOffer();
+      
+      await newPC.setLocalDescription(offer);
+      socket.emit("offer", offer, userObjArr[i].socketId, nickname);
+      writeChat(`__${userObjArr[i].nickname}__`, NOTICE_CN);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  //test
+  let i =1;
+  peerConnectionObjArr.forEach(users =>{
+    console.log("방에 있는 사람 : "+i);
+    i++;
+  })
+  writeChat("is in the room.", NOTICE_CN);
+});
 
 //offer , answer, ice
 socket.on("offer", async (offer, remoteSocketId, remoteNickname) => {
@@ -400,6 +509,7 @@ socket.on("leave_room", (leavedSocketId, nickname) => {
 
 // RTC code
 function createConnection(remoteSocketId, remoteNickname) {
+  console.log(`createConnection`);
   const myPeerConnection = new RTCPeerConnection({
     iceServers: [
       {
@@ -413,6 +523,7 @@ function createConnection(remoteSocketId, remoteNickname) {
       },
     ],
   });
+  
   myPeerConnection.addEventListener("icecandidate", (event) => {
     handleIce(event, remoteSocketId);
   });

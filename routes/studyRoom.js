@@ -9,6 +9,7 @@ var passport = require(`../config/passport`);
 //공용으로 사용하는 함수들 
 var util = require('../util');
 const { REPL_MODE_SLOPPY } = require('repl');
+const { session } = require('../config/passport');
 
 var enterRoomName;
 
@@ -19,7 +20,7 @@ router.get(`/`,util.isLoggedin,function(req,res){
     .sort('-date')
     .exec(function(err, rooms){
       if(err) return res.json(err);
-      res.render('studyRooms/index', {rooms:rooms});
+      res.render('studyRooms/show.pug', {rooms:rooms});
     });
     ///var rooms = [];
     ////// res.render(`studyRooms/index`,{nickName:req.user.username});  
@@ -40,7 +41,7 @@ router.get(`/:id`,function(req,res){
         StudyRoom.findOne({_id:req.params.id}).populate({ path: 'leader', select: 'username' }),
       ])
       .then(([room]) => {
-        res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
+        res.render('studyRooms/enterRoom', { room:room , nickName:req.user.username});
       })
       .catch((err) => {
         return res.json(err);
