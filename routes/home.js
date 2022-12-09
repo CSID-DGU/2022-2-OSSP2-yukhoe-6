@@ -51,19 +51,25 @@ router.post('/login',
 
 // Logout
 router.get('/logout', function(req, res,next) {
-  //세션 데이터 삭제 
-  req.session.destroy( 
-  
-    //예외처리 
-    function (err) {
-      if (err) {  
-          throw(err);
-      }
-
     //홈페이지로 리다이렉트 
-    res.redirect('/');
-    }
-    ); 
+    res.render('home/logout');
 });
+
+//logout에서 yes 누르면
+router.post('/logout',
+  function(req,res,next){
+    req.session.destroy( 
+  
+      //예외처리 
+      function (err) {
+        if (err) {  
+            throw(err);
+        }
+  
+      //홈페이지로 리다이렉트 
+      res.redirect('/');
+      }
+      );
+  });   
 
 module.exports = router;

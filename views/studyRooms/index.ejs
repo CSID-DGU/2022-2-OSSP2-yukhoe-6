@@ -2,28 +2,51 @@
 <html>
   <head>
     <%- include('../partials/head') %>
-    <link rel="stylesheet"  type="text/css" href="/css/mainPage/slide.css">
-    <link rel="stylesheet"  type="text/css" href="/css/mainPage/mainPage.css">
+    <link rel="stylesheet"  type="text/css" href="/css/studyRoom/index.css">
   </head>
 
   <body>
     <%- include('../partials/nav') %>
-    
-    Welcome to StudyRoom 
-    <div id="welcome">
-        <form action="#">
-            <input type="text" required="true" placeholder="room name"> 
-            <button type="submit">Enter Room</button>
-        </form>
+
+    <div style="position: relative; top:50px;">
+      <h2   style="font-weight: bold; color: #707070; margin-left: 20%;">Study Room</h2>
+      <hr  style=" margin-top: 20px; margin-bottom: 35px; margin-left: 15% ; display: block; width: 70%; ">
     </div>
-    
 
-    <!-- 프론트에 웹소켓 설치  -->
-    <script src="/socket.io/socket.io.js"></script>
-    <!-- <script src="client/clientServer.js"></script> -->
-    <script src="/public/js/clientServer.js"></script>
-       
+      <div class="wrap" style="top:25px; width:70%; margin-left:15%; position: relative; display: inline;">
+        <% if(rooms == null || rooms.length == 0){ %>
+          <h2>현재 생성된 스터디방이 없습니다</h2> <br> <% } %>
 
+        <!--생성 된 방이 존재한다면-->
 
-</body>
+        <% rooms.forEach(function(room) { %> <!-- 3 -->
+
+          <div class="contentBlock" style="width:250px; height:320p; margin-left: 20px;">
+
+            <div class="text" style="color: #4d4d4d; font-weight: bold;">스터디방 이름:
+              <label class="text deadLine" > <%= room.title %></label>
+            </div>
+
+            <div class="text" style="color: #4d4d4d; font-weight: bold;">스터디 리더:
+              <label class="text deadLine" >  <%= room.leader ? room.leader.username : "" %></label>
+            </div>
+
+            <div class="text" style="color: #4d4d4d; font-weight: bold;">최대 인원수:
+              <label class="text deadLine" > <%= room.maximum %></label>
+            </div>
+
+            <div class="text" style="color: #4d4d4d; font-weight: bold;">스터디방 정보:
+              <label class="text deadLine" >  <%= room.content %></label>
+            </div>
+            
+            <div class="text" style="color: #4d4d4d; font-weight: bold; margin-bottom: 20px;">
+                <a class="text button" style="color: #fff; text-decoration: none;width:135px;  background-color: #707070; float:right; " href="/studies/<%= room._id %>">참여하기</a>   
+            </div>
+        </div>
+
+      <% }) %>
+
+      <a href="/studies/new">스터디방 만들기</a>
+  </div>
+  </body>
 </html>

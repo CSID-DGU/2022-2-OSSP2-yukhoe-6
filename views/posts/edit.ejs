@@ -3,10 +3,10 @@
   <head>
     <%- include('../partials/head') %>
   </head>
-  <body>
+  <body style="overflow-y: scroll;">
     <%- include('../partials/nav') %>
 
-    <div class="container mb-3">
+    <div class="container mb-3" style="position:relative;top:150px;">
 
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb p-1 pl-2 pr-2">
@@ -58,8 +58,8 @@
         <% } %>
 
         <div>
-          <a class="btn btn-primary" href="/posts/<%= post._id %><%= getPostQueryString() %>">Back</a>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <a class="btn btn-secondary" href="/posts/<%= post._id %><%= getPostQueryString() %>">Back</a>
+          <button type="submit" class="btn btn-secondary">Submit</button>
         </div>
 
       </form>
