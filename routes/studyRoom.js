@@ -20,7 +20,7 @@ router.get(`/`,util.isLoggedin,function(req,res){
     .sort('-date')
     .exec(function(err, rooms){
       if(err) return res.json(err);
-      res.render('studyRooms/show.pug', {rooms:rooms});
+      res.render('studyRooms/show.pug', {rooms:rooms, nickName:req.user.username});
     });
     ///var rooms = [];
     ////// res.render(`studyRooms/index`,{nickName:req.user.username});  
