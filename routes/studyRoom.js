@@ -54,6 +54,8 @@ router.get(`/`,util.isLoggedin,function(req,res){
       
       res.render('studyRooms/index', {rooms : rooms, allRoomArr : allRoomArr});
     });
+
+    
     ///var rooms = [];
     ////// res.render(`studyRooms/index`,{nickName:req.user.username});  
     //res.render('competitions/index',{competitions:comp});
@@ -140,7 +142,18 @@ router.get(`/exit/verify/:time`,util.isLoggedin,function(req,res){
 
 });
 
-
+//랭킹표시하기위함
+router.get(`/rank/rankings`,(req,res)=>{
+  User.find({}).sort(`-time`).exec(function(err,users){
+    if (err){
+      console.log(`유저 목록 가져오는 도중 예외발생`);
+      console.log(err);
+    }
+    else {
+      res.render(`studyRooms/rank`,{users:users});
+    }
+  })
+})
 
 
 module.exports=router;
