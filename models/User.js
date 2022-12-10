@@ -25,6 +25,13 @@ var userSchema = mongoose.Schema({
     type:String,
     match:[/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,'Should be a vaild email address!'],
     trim:true
+  },
+  //공부한 시간 저장
+  time:{
+    type:Number,
+    default:0,
+    //매 30일마다 초기화
+    expires:2592000
   }
 },{
   toObject:{virtuals:true}

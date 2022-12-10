@@ -4,7 +4,20 @@
 //이미 있는방은 누르면 그 방으로 들어가게하면되고 
 //내가 이미 들어가있는 방들 표시되게 
 
+
+
 //let myPeerConnection;
+
+
+
+//DB가져오기 (시간기록용)
+//var User = require(`../../models/User`);  -> show.pug에서 script 태그로 가져옴 XXXXX 
+//------------>>>>> DB를 라우팅할때 던져줘야함 
+
+
+//방에진입하면 시간기록해주기 
+var start;
+var end;
 
 
 
@@ -342,22 +355,79 @@ function writeChat(message, className = null) {
 const leaveBtn = document.querySelector("#leave");
 
 function leaveRoom() {
+
+  //방을 나갈 때 시간 구하기 
+  end = new Date();
+  //방에 머물렀던 시간 (분)
+  var howLong = (end.getTime()-start.getTime())/(1000*60);
+  //소수점 반올림 
+  howLong = Math.round(howLong);
+
+  //DB에 추가해줘야함
+  // User.findOne({username:nickname},function(err,user){
+  //   if (err){
+  //     console.log(`참여 시간 저장을 위해 DB 접근 중 예외 발생`);
+  //     console.log(err);
+  //   } else {
+  //     user.time += howLong;
+  //     user.save((err,modified_user)=>{
+  //       if(err){
+  //         console.log(`유저 시간 수정 도중 예외 발생`)  
+  //         console.log(err);
+  //       } else {
+  //         console.log(`당신의 참여 시간이 ${howLong}만큼 증가했습니다.`);
+  //         alert(`당신의 참여 시간이 ${howLong}만큼 증가했습니다.`);
+  //       }
+  //     })
+  //   }
+  // });
+
+  // let user = document.getElementById(`userData`).value()
+  // let user2 = document.querySelector(`#userData2`);
+  // console.log(user);
+  // console.log(user2);
+
+  // user.time+=howLong;
+  // user.save((err,modified_user)=>{
+  //         if(err){
+  //           console.log(`유저 시간 수정 도중 예외 발생`)  
+  //           console.log(err);
+  //         } else {
+  //           console.log(`당신의 참여 시간이 ${howLong}만큼 증가했습니다.`);
+  //           alert(`당신의 참여 시간이 ${howLong}만큼 증가했습니다.`);
+  //         }
+  //       });
+
+
+
+
+
+
   socket.disconnect();
 
-  call.classList.add(HIDDEN_CN);
-  welcome.hidden = false;
+  // call.classList.add(HIDDEN_CN);
+  // welcome.hidden = false;
 
   peerConnectionObjArr = [];
   peopleInRoom = 1;
+  localStorage.setItem(`username`,nickname);
   nickname = "";
 
-  myStream.getTracks().forEach((track) => track.stop());
-  const nicknameContainer = document.querySelector("#userNickname");
-  nicknameContainer.innerText = "";
+  //추가한부분 시간을 localStorage에 담아서 studies로 보냄
+  //localStorage.setItem(`time`,howLong);
+  console.log(`방에서 공부한 시간 : ${howLong}`);
+  //document.querySelector(`#time`).value = howLong;
+  window.location.href=`/studies/exit/verify/${howLong}`;
 
-  myFace.srcObject = null;
-  clearAllVideos();
-  clearAllChat();
+  // myStream.getTracks().forEach((track) => track.stop());
+  // const nicknameContainer = document.querySelector("#userNickname");
+  // nicknameContainer.innerText = "";
+
+  // myFace.srcObject = null;
+  // clearAllVideos();
+  // clearAllChat();
+
+  
 }
 
 function removeVideo(leavedSocketId) {
@@ -429,6 +499,11 @@ socket.on("reject_join", () => {
 
 //방입장 
 socket.on("accept_join", async (userObjArr) => {
+  //방에 들어갈 때 현재 시간 구하기 
+  
+  start = new Date();
+  console.log(`입장시간 : ${start.getDate()}`);
+
   await initCall();
 
   const length = userObjArr.length;
@@ -501,11 +576,15 @@ socket.on("chat", (message) => {
   writeChat(message);
 });
 
+//다른 사람이 방을 나갔을 때 
 socket.on("leave_room", (leavedSocketId, nickname) => {
   removeVideo(leavedSocketId);
   writeChat(`notice! ${nickname} leaved the room.`, NOTICE_CN);
   --peopleInRoom;
   sortStreams();
+
+  
+
 });
 
 

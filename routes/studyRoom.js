@@ -4,6 +4,9 @@ var util = require('../util');
 var http = require("http");
 var StudyRoom = require('../models/StudyRoom');
 
+//user
+var User = require(`../models/User`);
+
 
 
 //인원수출력하기위함
@@ -22,7 +25,27 @@ var enterRoomName;
 
 
 router.get(`/`,util.isLoggedin,function(req,res){
-    
+  
+    // if (document.localStorage.getItem(`time`)){
+    //   User.findOne({username:req.user.username},(err,user)=>{
+    //         if (err){
+    //           console.log(`시간 변경중 에러발생`);
+    //           console.log(err);
+    //         } else {
+    //           user.time+=localStorage.getItem(`time`);
+    //           user.save((err,modified_user)=>{
+    //             if (err){
+    //               console.log(`시간 변경중 에러발생2`);
+    //               console.log(err);
+    //             } else{
+    //               alert(`스터디룸에서 ${localStorage.getItem("time")}만큼 공부했어요!\n이번 달 총 공부시간은 ${modified_user.time}입니다!`);
+    //               res.redirect(`/studies`);
+    //             }
+    //           })
+    //         }
+    //       })
+    // }
+
     StudyRoom.find({})
     .populate('leader') // 1
     .sort('-date')
@@ -44,14 +67,16 @@ router.get(`/create`, util.isLoggedin,function(req,res){
 
 //req.params.id로 접근가능 
 router.get(`/:id`,function(req,res){
-    console.log(`자세히보기 접근`);
+    console.log(`방 입장하기 위해 이동`);
    
     Promise.all([
         //leader의 username에 해당하는 user를 populate로 user 객체로 만들어서 필드로 가져옴 
         StudyRoom.findOne({_id:req.params.id}).populate({ path: 'leader', select: 'username' }),
+        User.findOne({username:req.user.username}),
       ])
-      .then(([room]) => {
-        res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
+      .then(([room,user]) => {
+        //res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
+        res.render('studyRooms/show.pug', { room:room , nickName:req.user.username, user:user});
       })
       .catch((err) => {
         return res.json(err);
@@ -79,4 +104,43 @@ router.get(`/:id`,function(req,res){
         res.redirect(`/studies`);
     });
 });
+
+
+
+router.get(`/exit/verify/:time`,util.isLoggedin,function(req,res){
+
+  User.findOne({username:req.user.username},(err,user)=>{
+    if (err){
+      console.log(`시간 변경중 에러발생`);
+      console.log(err);
+      
+    } else {
+      //localStroage is not defined
+      //console.log(req.params.time); 
+      const addTime = new Number(req.params.time);
+      user.time+=addTime;
+      user.save((err,modified_user)=>{
+        if (err){
+          console.log(`시간 변경중 에러발생2`);
+          console.log(err);
+          console.log(user.time);
+          console.log(addTime);
+          console.log(req.params.time);
+          
+        } else{
+          //alert(`스터디룸에서 ${localStorage.getItem("time")}만큼 공부했어요!\n이번 달 총 공부시간은 ${modified_user.time}입니다!`);
+          res.redirect(`/studies`);
+        }
+      })
+    }
+  })
+  // console.log(`ddd`);
+  // res.redirect(`/studies`)
+
+
+});
+
+
+
+
 module.exports=router;

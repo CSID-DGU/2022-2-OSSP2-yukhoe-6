@@ -57,6 +57,8 @@ html(lang="en")
                                     i(class="fas fa-video fa-2x cameraIcon")
                                     i(class="fas fa-video-slash fa-2x unCameraIcon")
                         div#controlers__column
+                            //- form(action="/exit/verify" method="get")
+                            //-     input#time(name="time" type="hidden")
                             button#leave Leave
                 div#chatRoom
                     ul#chatBox
@@ -68,8 +70,15 @@ html(lang="en")
                 h2.modal__text
                 button.modal__btn OK
 
+        //테스트
+        div#userData(hidden="true" value=`${user}`)
+        div#userData2(hidden="true" value=`hello`)
+        
+
 
 
 
         script(src="/socket.io/socket.io.js")
+        //- script(src="../../models/User")
         script(src="/public/js/clientServer.js")
+        
