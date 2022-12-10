@@ -5,7 +5,7 @@ var bcrypt = require('bcryptjs');
 var userSchema = mongoose.Schema({
   username:{
     type:String,
-    required:[true,'Username is required!'],
+    required:[true,'username을 입력해주세요!'],
     match:[/^.{4,12}$/,'Should be 4-12 characters!'],
     trim:true,
     unique:true
@@ -25,7 +25,8 @@ var userSchema = mongoose.Schema({
     type:String,
     match:[/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,'Should be a vaild email address!'],
     trim:true
-  }
+  },
+  studyrooms : {type : [String]}
 },{
   toObject:{virtuals:true}
 });

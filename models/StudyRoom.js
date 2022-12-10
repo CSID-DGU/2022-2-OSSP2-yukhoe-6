@@ -2,12 +2,11 @@ var mongoose = require('mongoose');
 
 //스터디룸 스키마
 var studyRoomSchema = mongoose.Schema({ 
-  _id : { type: String, unique:true },
-  title : {type:String, required:[true,'스터디방 이름을 입력해주세요!']},
+  title : {type:String, required:[true,'스터디방 이름을 입력해주세요!'], unique:true},
   //user와 스터디룸 연결 
   leader : {type:mongoose.Schema.Types.ObjectId, ref:'user',required:true},
   date : {type:Date, default:Date.now},
-  maximum : {type:Number,required:true, default:2, min:2, max:5},
+  maximum : {type:Number,required:[true,'인원수를 입력해주세요!'], default:2, min:1, max:[5,'최대인원수는 5명입니다!']},
   content : {type:String, required:[true,'스터디 설명을 작성해주세요!']},
 });
 

@@ -17,6 +17,50 @@ app.use(cookieParser());
 
 
 
+//roomObjArr 현재 사람이 들어가있어서 생성된방 
+let roomObjArr = [
+  // {
+  //   roomName,
+  //   currentNum,
+  //   users: [
+  //     {
+  //       socketId,
+  //       nickname,
+  //     },
+  //   ],
+  // },
+];
+
+//DB
+var StudyRoom = require('./models/StudyRoom.js');
+
+//DB상의 전체방 
+let allRoomArr = [
+  // [방이름,인원수=초기값0]
+]
+
+StudyRoom.find(function(error,studyRooms){
+  if (error){console.log(error);}
+  else {
+    studyRooms.forEach(room=>{
+      allRoomArr.push([room.title,0])
+    })
+    
+  }
+})
+
+
+module.exports = allRoomArr;
+
+
+
+
+
+
+//스터디룸 목록에서 현재 참여인원을 출력하기 위해 배열을 모듈화해서 밖으로뺌
+//let roomObjArr = require("./public/js/roomObjArr.js");
+
+
 
 //mongodb와 node.js 연동
 mongoose
@@ -75,6 +119,8 @@ app.use('/users', require('./routes/users'));
 app.use('/comments', util.getPostQueryString, require('./routes/comments'));
 app.use('/files', require('./routes/files'));
 app.use(`/competitions`,require(`./routes/competitionRouter`));
+
+//스터디룸 roomObjArr전달 ?
 app.use('/studies',require('./routes/studyRoom'));
 
 
@@ -87,6 +133,8 @@ app.use('/studies',require('./routes/studyRoom'));
 const http = require(`http`);
 const WebSocket = require(`ws`);
 const {Server} = require(`socket.io`);
+const { forEach } = require('pug-parser/lib/inline-tags');
+const { all } = require('./routes/home');
 
 //import { instrument } from "@socket.io/admin-ui";
 
@@ -99,18 +147,18 @@ const wsServer = new Server(httpServer);
 httpServer.listen(3000, handleListen); // 서버는 ws, http 프로토콜 모두 이해할 수 있게 된다!
 
 //방목록 
-let roomObjArr = [
-  // {
-  //   roomName,
-  //   currentNum,
-  //   users: [
-  //     {
-  //       socketId,
-  //       nickname,
-  //     },
-  //   ],
-  // },
-];
+// let roomObjArr = [
+//   // {
+//   //   roomName,
+//   //   currentNum,
+//   //   users: [
+//   //     {
+//   //       socketId,
+//   //       nickname,
+//   //     },
+//   //   ],
+//   // },
+// ];
 
 
 //방 최대인원 
@@ -184,6 +232,13 @@ wsServer.on("connection", socket => {
     //방 인원수 1증가 
     ++targetRoomObj.currentNum;
 
+    //>>>>>추가
+    allRoomArr.forEach(room=>{
+      if (room[0]===targetRoomObj.roomName){
+        room[1]+=1;
+      }
+    })
+
     //방에 join
     socket.join(roomName);
     //새로 연결된 브라우저에게 accept_join emit함 
@@ -239,6 +294,13 @@ wsServer.on("connection", socket => {
           //방에 유저목록 업데이트 해주고 유저수 1명 줄임 
           roomObjArr[i].users = newUsers;
           --roomObjArr[i].currentNum;
+          
+          //>>>>>추가 
+          allRoomArr.forEach(room=>{
+            if (roomObjArr[i].roomName===room[0]){
+              room[1]-=1;
+            }
+          })
   
           //0명되면 빈방 
           if (roomObjArr[i].currentNum == 0) {
