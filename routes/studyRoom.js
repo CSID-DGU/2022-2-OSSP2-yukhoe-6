@@ -4,24 +4,32 @@ var util = require('../util');
 var http = require("http");
 var StudyRoom = require('../models/StudyRoom');
 
+
+
+//인원수출력하기위함
+let allRoomArr = require("../app.js");
+
+
 //로그인 
 var passport = require(`../config/passport`);
 //공용으로 사용하는 함수들 
 var util = require('../util');
 const { REPL_MODE_SLOPPY } = require('repl');
 const { session } = require('../config/passport');
+const { forEach } = require('pug-parser/lib/inline-tags');
 
 var enterRoomName;
 
 
 router.get(`/`,util.isLoggedin,function(req,res){
+    
     StudyRoom.find({})
     .populate('leader') // 1
     .sort('-date')
     .exec(function(err, rooms){
       if(err) return res.json(err);
       
-      res.render('studyRooms/index', {rooms :rooms});
+      res.render('studyRooms/index', {rooms : rooms, allRoomArr : allRoomArr});
     });
     ///var rooms = [];
     ////// res.render(`studyRooms/index`,{nickName:req.user.username});  
@@ -49,6 +57,7 @@ router.get(`/:id`,function(req,res){
         return res.json(err);
       });
 });
+
 
 
   router.post('/new/submit',util.isLoggedin,function(req,res){
