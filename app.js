@@ -14,7 +14,18 @@ app.use("/public", express.static(__dirname + "/public"));
 app.set("views", __dirname + "/views"); // 디렉토리 설정
 app.use(cookieParser());
 
-
+let roomObjArr = [
+  // {
+  //   roomName,
+  //   currentNum,
+  //   users: [
+  //     {
+  //       socketId,
+  //       nickname,
+  //     },
+  //   ],
+  // },
+];
 
 
 
@@ -75,6 +86,8 @@ app.use('/users', require('./routes/users'));
 app.use('/comments', util.getPostQueryString, require('./routes/comments'));
 app.use('/files', require('./routes/files'));
 app.use(`/competitions`,require(`./routes/competitionRouter`));
+
+//스터디룸 roomObjArr전달 ?
 app.use('/studies',require('./routes/studyRoom'));
 
 
@@ -99,18 +112,18 @@ const wsServer = new Server(httpServer);
 httpServer.listen(3000, handleListen); // 서버는 ws, http 프로토콜 모두 이해할 수 있게 된다!
 
 //방목록 
-let roomObjArr = [
-  // {
-  //   roomName,
-  //   currentNum,
-  //   users: [
-  //     {
-  //       socketId,
-  //       nickname,
-  //     },
-  //   ],
-  // },
-];
+// let roomObjArr = [
+//   // {
+//   //   roomName,
+//   //   currentNum,
+//   //   users: [
+//   //     {
+//   //       socketId,
+//   //       nickname,
+//   //     },
+//   //   ],
+//   // },
+// ];
 
 
 //방 최대인원 

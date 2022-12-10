@@ -1,5 +1,17 @@
 @import "reset.css";
 
+#welcome {
+  color : whitesmoke;
+  font-size: 20px;
+  text-shadow: #212121 3px 3px 3px;
+}
+
+#welcome h2 {
+  font-size : 30px;
+}
+
+
+
 :root {
   --black-color: #212121;
 

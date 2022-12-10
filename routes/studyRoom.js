@@ -20,7 +20,8 @@ router.get(`/`,util.isLoggedin,function(req,res){
     .sort('-date')
     .exec(function(err, rooms){
       if(err) return res.json(err);
-      res.render('studyRooms/show.pug', {rooms:rooms, nickName:req.user.username});
+      
+      res.render('studyRooms/index', {rooms :rooms});
     });
     ///var rooms = [];
     ////// res.render(`studyRooms/index`,{nickName:req.user.username});  
@@ -38,10 +39,11 @@ router.get(`/:id`,function(req,res){
     console.log(`자세히보기 접근`);
    
     Promise.all([
+        //leader의 username에 해당하는 user를 populate로 user 객체로 만들어서 필드로 가져옴 
         StudyRoom.findOne({_id:req.params.id}).populate({ path: 'leader', select: 'username' }),
       ])
       .then(([room]) => {
-        res.render('studyRooms/enterRoom', { room:room , nickName:req.user.username});
+        res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
       })
       .catch((err) => {
         return res.json(err);
