@@ -79,10 +79,10 @@ app.use('/studies',require('./routes/studyRoom'));
 
 
 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
-
-// server.js
+// // server.js
 
 const http = require(`http`);
 const WebSocket = require(`ws`);
@@ -112,6 +112,7 @@ let roomObjArr = [
   // },
 ];
 
+
 //방 최대인원 
 const MAXIMUM = 4;
 
@@ -131,16 +132,15 @@ wsServer.on("connection", socket => {
    let myNickName = null;
    //--
 
-
-
     //join_room 이벤트 처리 
     socket.on("join_room", (roomName,nickname) => {
 
         //-- 
+
+
         myRoomName = roomName;
         myNickName = nickname;
 
-        console.log(myRoomName)
         //방이 존재하는지 
         let isRoomExist = false;
         //접속할 방 
@@ -186,8 +186,11 @@ wsServer.on("connection", socket => {
 
     //방에 join
     socket.join(roomName);
-    //방의 user들에게 accept_join emit함 
+    //새로 연결된 브라우저에게 accept_join emit함 
     socket.emit("accept_join", targetRoomObj.users);
+
+    //방의 모든 유저들에게 각자의 배열에 방 유저들을 추가할 수 있는 코드를 만들어주자
+
 
     //--
     });
@@ -225,6 +228,7 @@ wsServer.on("connection", socket => {
   
 
       let isRoomEmpty = false;
+      
 
       for (let i = 0; i < roomObjArr.length; ++i) {
         //방목록에 방 있는경우 
@@ -254,5 +258,3 @@ wsServer.on("connection", socket => {
     });
 
 });
-
-

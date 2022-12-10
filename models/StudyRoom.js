@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 
 //스터디룸 스키마
 var studyRoomSchema = mongoose.Schema({ 
-  title : {type:String, required:[true,'스터디방 이름을 입력해주세요!'], unique:true},
+  _id : { type: String, unique:true },
+  title : {type:String, required:[true,'스터디방 이름을 입력해주세요!']},
   //user와 스터디룸 연결 
   leader : {type:mongoose.Schema.Types.ObjectId, ref:'user',required:true},
   date : {type:Date, default:Date.now},
