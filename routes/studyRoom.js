@@ -92,6 +92,7 @@ router.get(`/:id`,function(req,res){
             req.flash('errors', util.parseError(err));
             return res.redirect('/studies/create');
         }
+        allRoomArr.push([roomName,0]);
         console.log(`스터디룸 db 생성완`);
         console.log("방이름 "+ roomName);
         res.redirect(`/studies`);

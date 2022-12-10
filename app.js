@@ -221,6 +221,7 @@ wsServer.on("connection", socket => {
       };
       // 방 목록에 넣음 
       roomObjArr.push(targetRoomObj);
+      //allRoomArr.push([roomName,0]);
     }
 
 
