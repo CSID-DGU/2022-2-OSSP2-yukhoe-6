@@ -65,8 +65,9 @@ router.get(`/:id`,function(req,res){
         User.findOne({username:req.user.username}),
       ])
       .then(([room,user]) => {
-        //res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
-        res.render('studyRooms/show.pug', { room:room , nickName:req.user.username, user:user});
+        //user.studyrooms.push(room.title);
+        //user.save();
+        res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
       })
       .catch((err) => {
         return res.json(err);
