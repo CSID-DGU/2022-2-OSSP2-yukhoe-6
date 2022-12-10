@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var competitionSchema = mongoose.Schema({ 
   title : {type:String, required:true},
   //user와 공모전 연결 
-  author : {type:mongoose.Schema.Types.ObjectId, ref:'user',required:true},
+  author : {type:mongoose.Schema.Types.ObjectId, ref:'user',required:true, default:"default"},
   date : {type:Date, default:Date.now},
   deadLine : {type:Date},
   viewCount : {type:Number, default:0},

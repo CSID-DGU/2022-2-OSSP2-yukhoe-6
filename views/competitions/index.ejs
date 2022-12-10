@@ -48,7 +48,7 @@
 
                 <div class="text" style="color: #4d4d4d; font-weight: bold; margin-bottom: 20px;">URL:
                     <label class="text url noLineButton"> <a calss="noLineButton" style="color: #707070; text-decoration: none; margin-bottom: 20px;" href="<%= competition.url %>"><%= competition.url %></a></label>
-                    <% if(isAuthenticated&&competition.author.name==currentUser.name){ %>
+                    <% if(isAuthenticated&&competition.author.username==currentUser.username){ %>
                         <div>
                         <a class="text button" style="color: #fff; text-decoration: none;width:135px;  background-color: #707070; float:right; " href="<%= competition.url %>">내용 자세히보기</a>    
                         <form action="/competitions/edit/<%= competition._id %>" method="post">
