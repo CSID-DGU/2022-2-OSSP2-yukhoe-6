@@ -4,16 +4,12 @@
 //이미 있는방은 누르면 그 방으로 들어가게하면되고 
 //내가 이미 들어가있는 방들 표시되게 
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 67124af477889b733bb88142592c405d02752551
 //let myPeerConnection;
 
 
 
-<<<<<<< HEAD
 //DB가져오기 (시간기록용)
 //var User = require(`../../models/User`);  -> show.pug에서 script 태그로 가져옴 XXXXX 
 //------------>>>>> DB를 라우팅할때 던져줘야함 
@@ -25,8 +21,6 @@ var end;
 
 
 
-=======
->>>>>>> 67124af477889b733bb88142592c405d02752551
 //>>>>>
 screenId = ""
 
@@ -505,14 +499,11 @@ socket.on("reject_join", () => {
 
 //방입장 
 socket.on("accept_join", async (userObjArr) => {
-<<<<<<< HEAD
   //방에 들어갈 때 현재 시간 구하기 
   
   start = new Date();
   console.log(`입장시간 : ${start.getDate()}`);
 
-=======
->>>>>>> 67124af477889b733bb88142592c405d02752551
   await initCall();
 
   const length = userObjArr.length;

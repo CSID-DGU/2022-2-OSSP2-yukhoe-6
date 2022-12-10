@@ -7,11 +7,11 @@ var User = require('../models/User');
 
 
 //인원수출력하기위함
-let allRoomArr = require("../app.js");
+//let allRoomArr = require("../app.js");
 
 
 //user
-var User = require(`../models/User`);
+//var User = require(`../models/User`);
 
 
 
@@ -31,31 +31,7 @@ var enterRoomName;
 
 
 router.get(`/`,util.isLoggedin,function(req,res){
-<<<<<<< HEAD
-  
-    // if (document.localStorage.getItem(`time`)){
-    //   User.findOne({username:req.user.username},(err,user)=>{
-    //         if (err){
-    //           console.log(`시간 변경중 에러발생`);
-    //           console.log(err);
-    //         } else {
-    //           user.time+=localStorage.getItem(`time`);
-    //           user.save((err,modified_user)=>{
-    //             if (err){
-    //               console.log(`시간 변경중 에러발생2`);
-    //               console.log(err);
-    //             } else{
-    //               alert(`스터디룸에서 ${localStorage.getItem("time")}만큼 공부했어요!\n이번 달 총 공부시간은 ${modified_user.time}입니다!`);
-    //               res.redirect(`/studies`);
-    //             }
-    //           })
-    //         }
-    //       })
-    // }
-
-=======
     
->>>>>>> 67124af477889b733bb88142592c405d02752551
     StudyRoom.find({})
     .populate('leader') // 1
     .sort('-date')
@@ -86,21 +62,11 @@ router.get(`/:id`,function(req,res){
     Promise.all([
         //leader의 username에 해당하는 user를 populate로 user 객체로 만들어서 필드로 가져옴 
         StudyRoom.findOne({_id:req.params.id}).populate({ path: 'leader', select: 'username' }),
-<<<<<<< HEAD
         User.findOne({username:req.user.username}),
       ])
       .then(([room,user]) => {
         //res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
         res.render('studyRooms/show.pug', { room:room , nickName:req.user.username, user:user});
-=======
-        User.findOne({username:req.user.username})
-      ])
-      .then(([room, user]) => {
-        user.studyrooms.push(room.title);
-        user.save();
-        
-        res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
->>>>>>> 67124af477889b733bb88142592c405d02752551
       })
       .catch((err) => {
         return res.json(err);
