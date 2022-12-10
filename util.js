@@ -11,7 +11,10 @@ util.parseError = function(errors){
     }
   }
   else if(errors.code == '11000' && errors.errmsg.indexOf('username') > 0) {
-    parsed.username = { message:'This username already exists!' };
+    parsed.username = { message:'이미 존재하는 아이디입니다!' };
+  }
+  else if(errors.code == '11000' && errors.errmsg.indexOf('title')>0){
+    parsed.title = { message:'이미 존재하는 이름입니다!' };
   }
   else {
     parsed.unhandled = JSON.stringify(errors);
