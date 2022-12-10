@@ -15,9 +15,10 @@ html(lang="en")
         main
             div#welcome 
                 form
-                    input#roomName(type="text", required, placeholder="Room Name")
-                    input#nickname(type="hidden", required, value=`${nickName}` ,placeholder="Your Nickname")
-                    button Enter Room
+                    
+                    input#roomName(type="hidden", required, value=`${rooms.roomName}`)
+                    input#nickname(type="hidden", required, value=`${nickName}`)
+                    button 입장하기
 
             div#call(class="call")
                 div#streamBox
