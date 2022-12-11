@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head') %>
+    <link rel="stylesheet"  type="text/css" href="/css/competition/create.css">
+  </head>
+
+  <body>
+    <%- include('../partials/nav') %>
+    <div style="margin-top: 30px;">
+        <h2 style="font-weight: bold; color: #707070; margin-left: 20%;">공모전 작성하기</h2>
+    </div>
+
+    <!-- 1. 절대경로
+    2. 맨앞에 /를 써주면 / 이전은 localhost:3000 -->
+    <div class="wrap">
+        <div class="square">
+            <form class="form" action="/competitions/create/submit" method="post">
+                <!-- localhost3000/competitions/create/submit -->
+                <div class="text">내용:      
+                    <input class="input" type="text" name="title"><br>
+                </div>
+
+                <div class="text">마감일:     
+                    <input class="input" type="date" name="deadLine"><br>
+                </div>
+
+                <div style="display: inline;">
+                    <div class="text" style="margin-bottom: 5px;">내용</div>
+                    <div class="text">
+                        <textarea class="input" style="width:400px; height:150px; border: solid 2px #707070; border-radius: 7px;" type="text" name="content"></textarea>
+                    </div>
+                </div>
+
+                <div class="text">공모전 url:   
+                    <input class="input" type="text" name="url"><br>
+                </div>
+                
+                <div style="justify-content: center; text-align: center; text-decoration: none; margin-top: 20px;">
+                    <input  class="button" type="submit" style= "width:200px; height:40px; left: -60px; margin: auto;" value="제출하기"><br>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--div class="wrap">
+            <form class="form" action="/competitions/create/submit" method="post">
+                <div class="text">내용:     
+                    <input class="input" type="text" name="title"><br>
+                </div>
+
+                <div class="text">마감일:     
+                    <input class="input" type="date" name="deadLine"><br>
+                </div>
+
+                <div style="display: inline;">
+                    <div class="text">내용</div>
+                    <div class="text">
+                        <input class="input" style="width:200px; height:60px; border: solid 2px #707070; border-radius: 7px;" type="text" name="content"><br>
+                    </div>
+                </div>
+
+                <div class="text">공모전 url:     
+                    <input class="input" type="text" name="url"><br>
+                </div>
+                
+                <div>
+                    <input  class="button" type="submit" style= "width:200px; height:40px; margin: auto;" value="Submit"><br>
+                </div>
+            </form>
+     </div-->
+</body>
+</html>

@@ -1,0 +1,165 @@
+.square{
+    height:100%;
+    width:100%; 
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -10000; 
+  }
+  .container{
+    height:100%;
+    width:100%; 
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1; 
+  }
+  .user-form{
+    height:100%;
+    width:100%; 
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2; 
+  }
+  .login_decoration_image{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(167px, -7px);
+  }
+  
+  .login_text{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(147px, -130px);
+  }
+  .Username_Text{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-93px, -63px);
+    z-index: 10000; 
+  
+  }
+  
+  .id_input{
+    position:fixed;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-31px, -40px);
+  }
+  
+  .id {
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(67px, -37px);
+  }
+  .idLine {
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-31px, -23px);
+  }
+  .id-invalid-feedback{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-15px, 28px);
+  }
+  .Password_Text{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-93px, 20px);
+  }
+  
+  .pw_input{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-31px, 43px);
+  }
+  
+  .password{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(67px, 43px);
+  }
+  .pwLine{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-31px, 60px);
+  }
+  .password-invalid-feedback{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-15px, 27px);
+  }
+  
+  .login_button{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transform: translate(-15px, 120px);
+  }
+  
+  .login-invalid-feedback{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-15px, 75px);
+  }
+  .FindPassword{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(45px, 167px);
+  }
+  .Create_Account_Text{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-32px, 158px);
+  }
