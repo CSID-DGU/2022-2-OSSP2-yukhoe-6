@@ -60,19 +60,19 @@ router.get(`/:id`,function(req,res){
     console.log(`방 입장하기 위해 이동`);
    
     Promise.all([
-      //leader의 username에 해당하는 user를 populate로 user 객체로 만들어서 필드로 가져옴 
-      StudyRoom.findOne({_id:req.params.id}).populate({ path: 'leader', select: 'username' }),
-      User.findOne({username:req.user.username}),
-    ])
-    .then(([room, user]) => {
-      user.studyrooms.push(room.title);
-      user.save();
-      
-      res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
-    })
-    .catch((err) => {
-      return res.json(err);
-    });
+        //leader의 username에 해당하는 user를 populate로 user 객체로 만들어서 필드로 가져옴 
+        StudyRoom.findOne({_id:req.params.id}).populate({ path: 'leader', select: 'username' }),
+        User.findOne({username:req.user.username}),
+      ])
+      .then(([room,user_]) => {
+        user_.studyrooms.push(room._id);
+        console.log(room._id);
+        user_.save();
+        res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
+      })
+      .catch((err) => {
+        return res.json(err);
+      });
 });
 
 
@@ -93,6 +93,7 @@ router.get(`/:id`,function(req,res){
             req.flash('errors', util.parseError(err));
             return res.redirect('/studies/create');
         }
+        allRoomArr.push([roomName,0]);
         console.log(`스터디룸 db 생성완`);
         console.log("방이름 "+ roomName);
         res.redirect(`/studies`);

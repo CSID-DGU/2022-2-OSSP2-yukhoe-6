@@ -26,17 +26,15 @@ var userSchema = mongoose.Schema({
     match:[/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,'Should be a vaild email address!'],
     trim:true
   },
-<<<<<<< HEAD
   //공부한 시간 저장
   time:{
     type:Number,
     default:0,
     //매 30일마다 초기화
     expires:2592000
-  }
-=======
-  studyrooms : {type : [String]}
->>>>>>> 67124af477889b733bb88142592c405d02752551
+  },
+  studyrooms : {type : [mongoose.Types.ObjectId]},
+  posts : {type: [mongoose.Types.ObjectId]}
 },{
   toObject:{virtuals:true}
 });
