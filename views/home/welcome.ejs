@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head') %>
+    <link rel="stylesheet"  type="text/css" href="/css/mainPage/slide.css">
+    <link rel="stylesheet"  type="text/css" href="/css/mainPage/mainPage.css">
+  </head>
+
+  <body >
+    <%- include('../partials/nav') %>
+
+      <div class="notice">
+        <img src="/img/mainPage/notice1.PNG" style="width:100%;height:70%; position:absolute; bottom:0px;">
+      </div>
+
+
+
+
+      <div class="study_room" style=" margin-bottom: 30px;">
+        <span style="width:42%; height: 400px; margin-right:12px; border-radius: 10px; border: solid 2px #4d4d4d; padding-top: 30px;">
+          <h5 class="studing_text" style="padding-left: 20px;color: #4d4d4d; font-weight: bold;">누적 공부시간 랭킹</h5>
+          <% for(var i = 0; i < users.length; i++){ %> 
+           
+            <% if(i==0){ %>
+            <div style="background-color:#F6F6F6; padding: 5px;">
+               <span><img src="/img/mainPage/rank.png" style= "width:32PX; height:32PX; margin-right: 20px;"></span>
+              <span style="font-weight:900;"><%=i+1%>위</span>
+              <span style="font-weight:500;">닉네임 : <%= users[i].username %></span>
+              <span style="font-weight:500;">공부시간 : <%= users[i].time %> <br></span>
+            </div>
+            <% } else { %>
+              <% if(i%2==0){ %>
+                <div style="background-color:#F6F6F6; padding: 5px;">
+                  <span style="margin-left: 55px"><%=i+1%>위</span>
+                  <span>닉네임 : <%= users[i].username %></span>
+                  <span>공부시간 : <%= users[i].time %> <br></span>
+                </div>
+                <% } else { %>
+                  <div style="padding: 5px;">
+                    <span style="margin-left: 55px"><%=i+1%>위</span>
+                    <span>닉네임 : <%= users[i].username %></span>
+                    <span>공부시간 : <%= users[i].time %> <br></span>
+                  </div>
+                <% } %>
+            <% } %>
+
+          <% } %>
+        </span>
+        <%#스터디 참여하기%>
+        <span style="width:42%; margin-right:12px; border-radius: 10px; border: solid 2px #4d4d4d;padding-top: 30px;">
+          <h5 class="studing_text" style="padding-left: 20px;color: #4d4d4d; font-weight: 800; margin-bottom: 50px;">스터디 시작하기</h5>
+          <div class="studyRoom_content" style= "text-align:center; margin-bottom: 50px;">
+            <div style= "text-align:center; margin-bottom: 50px;"><img src="/img/mainPage/study.png"width="160px" height="160px"></div>
+            <div class="text button createButton" style=" text-align:center; float:bottom; height: 60px; width: 200px; background-color: #a6bf82; border: solid 3px #a6bf82;color: #4d4d4d;"> 
+              <a class="text " style="height: 60px; width: 200px;color: #fff; text-decoration: none;" href="/studies">스터디 시작하기</a>
+            </div>
+          </div>
+          
+        </span>
+      </div> 
+    
+  
+
+
+      <%#div class="studyRoom_content"> <img src="/img/mainPage/studyRoom1.png"width="400px" height="420px"></div>
+        <div class="studyRoom_content"> <img src="/img/mainPage/studyRoom2.png"width="400px" height="420px"></div>
+        <div class="studyRoom_content"> <img src="/img/mainPage/studyRoom3.png"width="400px" height="420px"></div>
+      </div%>
+
+  </body>
+  </html>
+
+   
+   
