@@ -50,7 +50,12 @@
               %>
             
             <div class="text" style="color: #4d4d4d; font-weight: bold; margin-bottom: 20px;">
-                <a class="text button" style="color: #fff; text-decoration: none;width:135px;  background-color: #707070; float:right; " href="/studies/<%= room._id %>">참여하기</a>   
+                <a class="text button" style="color: #fff; text-decoration: none;width:135px;  background-color: #707070; float:right; " href="/studies/<%= room._id %>">참여하기</a>
+                <!-- 방 삭제 버튼은 로그인 한 사람이 방장일 경우에만 보여아함 -->
+                <% if (room.leader.username===nickName) { %>
+                <a class="text button" style="color: #fff; text-decoration: none;width:135px;  background-color: #707070; float:right; " href="/studies/delete/<%= room._id %>">방 삭제하기</a>
+                <% } %>
+                   
             </div>
         </div>
 

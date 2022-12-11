@@ -38,10 +38,8 @@ router.get(`/`,util.isLoggedin,function(req,res){
     .exec(function(err, rooms){
       if(err) return res.json(err);
       
-      res.render('studyRooms/index', {rooms : rooms, allRoomArr : allRoomArr});
+      res.render('studyRooms/index', {rooms : rooms, allRoomArr : allRoomArr, nickName : req.user.username});
     });
-
-    
     ///var rooms = [];
     ////// res.render(`studyRooms/index`,{nickName:req.user.username});  
     //res.render('competitions/index',{competitions:comp});
@@ -145,6 +143,19 @@ router.get(`/rank/rankings`,(req,res)=>{
       res.render(`studyRooms/rank`,{users:users});
     }
   })
+})
+
+router.get(`/delete/:id`,(req,res)=>{
+  //룸삭제
+  StudyRoom.deleteOne({_id:req.params.id},(err)=>{
+    if (err){
+      console.log(err);
+      console.log(`룸삭제예외`);
+    } else {
+      console.log(`삭제 성공`);
+      res.redirect(`/studies`);
+    }
+  });
 })
 
 
