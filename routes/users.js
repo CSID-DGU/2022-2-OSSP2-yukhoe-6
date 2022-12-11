@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('../models/User');
 var util = require('../util');
 var StudyRoom = require('../models/StudyRoom');
+const { promisifyAll } = require('bluebird');
 
 // New
 router.get('/new', function(req, res){
@@ -75,6 +76,40 @@ router.put('/:username', util.isLoggedin, checkPermission, function(req, res, ne
       });
   });
 });
+
+
+// studyroom
+router.get('/:username/studyroom', util.isLoggedin, checkPermission, function(req, res){
+  var user = req.flash('user')[0];
+  var errors = req.flash('errors')[0] || {};
+  var rooms = [];
+  
+  Promise.all([
+    //leader의 username에 해당하는 user를 populate로 user 객체로 만들어서 필드로 가져옴 
+    User.findOne({username:req.user.username})
+  ])
+  .then(([user_]) => {
+    var studyroom_title = user_.studyrooms;
+
+    studyroom_title.forEach(title_ => {
+      Promise.all([
+        StudyRoom.findOne({_id:title_})
+      ])
+      .then(([room]) =>{
+        console.log( room);
+        rooms.push(room);
+        
+      });
+    });
+    console.log("rooms길이: "+rooms.length);
+      res.render('users/studyroom', { username:req.params.username, rooms:rooms, errors:errors });
+  })
+  .catch((err) => {
+    return res.json(err);
+  });
+  
+});
+
 
 module.exports = router;
 

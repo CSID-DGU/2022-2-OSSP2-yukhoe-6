@@ -32,7 +32,9 @@ var userSchema = mongoose.Schema({
     default:0,
     //매 30일마다 초기화
     expires:2592000
-  }
+  },
+  studyrooms : {type : [mongoose.Types.ObjectId]},
+  posts : {type: [mongoose.Types.ObjectId]}
 },{
   toObject:{virtuals:true}
 });

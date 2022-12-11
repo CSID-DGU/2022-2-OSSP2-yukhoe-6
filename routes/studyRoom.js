@@ -62,9 +62,10 @@ router.get(`/:id`,function(req,res){
         StudyRoom.findOne({_id:req.params.id}).populate({ path: 'leader', select: 'username' }),
         User.findOne({username:req.user.username}),
       ])
-      .then(([room,user]) => {
-        //user.studyrooms.push(room.title);
-        //user.save();
+      .then(([room,user_]) => {
+        user_.studyrooms.push(room._id);
+        console.log(room._id);
+        user_.save();
         res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
       })
       .catch((err) => {
