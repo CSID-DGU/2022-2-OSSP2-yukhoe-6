@@ -54,6 +54,7 @@ let peopleInRoom = 1;
 
 
 
+
 // //화면에 대한 미디어 스트림 얻기 
 // navigator.mediaDevices.getDisplayMedia({
 //   audio : true;
@@ -302,13 +303,18 @@ async function handleWelcomeSubmit(event) {
   const welcomeRoomName = welcomeForm.querySelector("#roomName");
   const welcomeNickname = welcomeForm.querySelector("#nickname");
   const nicknameContainer = document.querySelector("#userNickname");
+  //최대인원 
+  const maximum = welcomeForm.querySelector(`#maximum`).value;
   roomName = welcomeRoomName.value;
   welcomeRoomName.value = "";
   nickname = welcomeNickname.value;
   welcomeNickname.value = "";
   nicknameContainer.innerText = nickname;
+
+
+
   //입력폼에 입력한거 받아서 join_room 하기 
-  socket.emit("join_room", roomName, nickname);
+  socket.emit("join_room", roomName, nickname, maximum);
 }
 
 //입장하면 handleWelcomeSubmit 호출 
@@ -488,13 +494,20 @@ function handleKeydown(event) {
 //방꽉차서 입장 X 
 socket.on("reject_join", () => {
   // Paint modal
-  paintModal("Sorry, The room is already full.");
+  paintModal("방이 꽉 찼습니다. 스터디룸 리스트로 이동합니다.");
 
   // Erase names
   const nicknameContainer = document.querySelector("#userNickname");
   nicknameContainer.innerText = "";
   roomName = "";
   nickname = "";
+
+  
+  //방 꽉 찼다는 메세지 확인하게 3초는 기다렸다가 스터디 목록으로 보냄 
+  setTimeout(()=>{
+    document.location.href=`/`;
+  },3000);
+  
 });
 
 //방입장 
@@ -577,11 +590,20 @@ socket.on("chat", (message) => {
 });
 
 //다른 사람이 방을 나갔을 때 
-socket.on("leave_room", (leavedSocketId, nickname) => {
-  removeVideo(leavedSocketId);
+socket.on("leave_room", (leavedSocketId, nickname, checkReject) => {
+  
+
+  //사람 꽉차서 못드간게 아니고 방에 있다가 나갔을 경우 
+  if (!checkReject){
+    removeVideo(leavedSocketId);
   writeChat(`notice! ${nickname} leaved the room.`, NOTICE_CN);
   --peopleInRoom;
   sortStreams();
+
+  }
+  
+  //아닐 경우는 가만히 
+  
 
   
 
