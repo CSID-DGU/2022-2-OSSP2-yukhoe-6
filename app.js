@@ -290,8 +290,7 @@ wsServer.on("connection", socket => {
     socket.on("disconnecting", () => {
       //내 room의 다른 사용자들에게 leave_room emit함 내 socket.id랑 nickname 보내줌 
       socket.to(myRoomName).emit("leave_room", socket.id, myNickName, checkReject);
-      //다시 초기화 
-      checkReject = false;
+      
   
 
       let isRoomEmpty = false;
@@ -308,11 +307,18 @@ wsServer.on("connection", socket => {
           --roomObjArr[i].currentNum;
           
           //>>>>>추가 
-          allRoomArr.forEach(room=>{
-            if (roomObjArr[i].roomName===room[0]){
-              room[1]-=1;
-            }
-          })
+          //reject_join 이후 방을 나갈 때는 현재 인원수 감소시키면 안됨 
+          if (!checkReject){
+            allRoomArr.forEach(room=>{
+              if (roomObjArr[i].roomName===room[0]){
+                room[1]-=1;
+              }
+            })
+          }
+
+          //다시 초기화 
+          checkReject = false;
+          
   
           //0명되면 빈방 
           if (roomObjArr[i].currentNum == 0) {
