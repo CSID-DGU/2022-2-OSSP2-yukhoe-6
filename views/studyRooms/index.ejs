@@ -30,7 +30,7 @@
 
       <% rooms.forEach(function(room) { %>
         <div class="contentBlock" style="position: relative; width:280px; height:320p; margin-left: 20px; ">
-
+      
           <div class="text" style="color: #4d4d4d; font-weight: bold;">스터디방 이름:
             <label class="text deadLine" > <%= room.title %></label>
           </div>
@@ -57,10 +57,15 @@
           })
           %>
 
-          <div class="text" style="position: absolute;  padding: 8px 20px 8px 20px; bottom: 4px;; width:245px; color: #4d4d4d; font-weight: bold; margin-bottom: 5px; text-align: center;">
+          <div class="text" style="position: absolute;  padding: 8px 20px 8px 20px; bottom: 4px;; width:245px; color: #4d4d4d; font-weight: bold; margin-top: 8px; margin-bottom: 5px; text-align: center;">
             <a class="text button" style="color: #fff; text-decoration: none;width:205px;  background-color: #707070; " href="/studies/<%= room._id %>">참여하기</a>   
-          </div>
-        </div>
+            <% if (room.leader.username== currentUser.username) { %>
+                <a class="text button" style="color: #fff; text-decoration: none;width:205px;  background-color: #a6bf82; " href="/studies/delete/<%= room._id %>">방 삭제하기</a>
+            <% } %>
+           </div>
+          
+           </div>
+
       
         <% }) %>
     </div>

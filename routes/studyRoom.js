@@ -65,10 +65,9 @@ router.get(`/:id`,function(req,res){
       User.findOne({username:req.user.username}),
     ])
     .then(([room, user]) => {
-      user.studyrooms.push(room.title);
-      user.save();
-      console.log(`방 입장하기 위해 이동`);
-      res.render('studyRooms/show.pug', { room:room , nickName:req.user.username});
+        user_.studyrooms.push(room._id);
+        console.log(room._id);
+        user_.save();
     })
     .catch((err) => {
       console.log(`입장실패`);
@@ -148,7 +147,19 @@ router.get(`/rank/rankings`,(req,res)=>{
       res.render(`studyRooms/rank`,{users:users});
     }
   })
-})
+});
 
+router.get(`/delete/:id`,(req,res)=>{
+  //룸삭제
+  StudyRoom.deleteOne({_id:req.params.id},(err)=>{
+    if (err){
+      console.log(err);
+      console.log(`룸삭제예외`);
+    } else {
+      console.log(`삭제 성공`);
+      res.redirect(`/studies`);
+    }
+  });
+})
 
 module.exports=router;

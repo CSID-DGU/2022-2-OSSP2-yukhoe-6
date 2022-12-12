@@ -30,7 +30,7 @@ passport.use('local-login',
           }
           else {
             req.flash('username', username);
-            req.flash('errors', {login:'The username or password is incorrect.'});
+            req.flash('errors', {login:'username 또는 password가 올바르지 않습니다.'});
             return done(null, false);
           }
         });
