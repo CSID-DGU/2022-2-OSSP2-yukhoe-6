@@ -145,7 +145,7 @@
     justify-content: center;
     align-items: center;
     
-    transform: translate(-15px, 75px);
+    transform: translate(25px, 75px);
   }
   .FindPassword{
     position:fixed;
@@ -153,7 +153,7 @@
     justify-content: center;
     align-items: center;
     
-    transform: translate(45px, 167px);
+    transform: translate(55px, 167px);
   }
   .Create_Account_Text{
     position:fixed;
