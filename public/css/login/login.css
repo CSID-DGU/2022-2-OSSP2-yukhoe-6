@@ -139,11 +139,12 @@
     transform: translate(-15px, 120px);
   }
   
-  .login-invalid-feedback{
+  .login-invalid-feedback, d-block{
     position:fixed;
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: left;
     
     transform: translate(25px, 75px);
   }
