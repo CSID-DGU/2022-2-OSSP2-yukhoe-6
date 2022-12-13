@@ -25,7 +25,7 @@
     </div>
 
     <%#회원 탈퇴 수정 필요%>
-    <form class="yes_button" action="/users/delete" method="post">
+    <form class="yes_button" action="/users/<%= user.username %>/delete/submit" method="post">
         <input type="image" src="/img/users/delete/yes_button.png" style= "width:155px; height:37px;"  value="Submit">
     </form>
 

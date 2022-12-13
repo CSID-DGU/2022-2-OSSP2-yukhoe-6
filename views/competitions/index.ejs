@@ -48,7 +48,7 @@
 
                 <div class="text" style="color: #4d4d4d; font-weight: bold; margin-bottom: 20px;">URL:
                     <label class="text url noLineButton"> <a calss="noLineButton" style="color: #707070; text-decoration: none; margin-bottom: 20px;" href="<%= competition.url %>"><%= competition.url %></a></label>
-                    <% if(isAuthenticated&&competition.author.username==currentUser.username){ %>
+                    <% if(isAuthenticated&&(competitions.author==currentUser.username)){ %>
                         <div>
                         <a class="text button" style="color: #fff; text-decoration: none;width:135px;  background-color: #707070; float:right; " href="<%= competition.url %>">내용 자세히보기</a>    
                         <form action="/competitions/edit/<%= competition._id %>" method="post">
@@ -56,10 +56,10 @@
                             style= "color: #fff; text-decoration: none;width:125px;  background-color: #a6bf82; border: solid 3px #a6bf82; float:right; cursor : pointer; margin-right:10px; margin-bottom: 10px;" value="내용 수정하기"><br>
                         </form>
                         </div>
-                      <% } else { %>
+                    <% } else { %>
     
                         <a class="text button" style="color: #fff; text-decoration: none;width:135px;  background-color: #707070; float:right;" href="<%= competition.url %>">내용 자세히보기</a>
-                      <% } %>
+                    <% } %>
                 
                 </div>
 

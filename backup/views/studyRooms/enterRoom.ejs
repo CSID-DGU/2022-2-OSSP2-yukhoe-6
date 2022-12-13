@@ -1,0 +1,62 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="welcome">
+        방이름 : <%= room.roomName %><br>
+        <%= nickName%> 님, 입장하시겠습니까? <br>
+        <form>
+            <input id="roomName" type="hidden" value="<%= room.roomName %>">
+            <input id="nickname" type="hidden" value="<%= nickName %>">
+            <button>입장하기</button>
+        </form>
+
+
+    </div>
+
+    <div id="call">
+        
+            <div id="streamBox">
+                <div id="screen"></div>
+                <div id="streams">
+                    <div id="myStream" class="people1">
+                        <video id="myFace" autoplay playsinline width="400px", height="400px"></video>
+                        <h3 id="userNickname"></h3>
+                    </div>
+                </div>
+                <div id="controllers">
+                    <div id="controllers__column"><select id="cameras"></select></div>
+                    <div id="controllers__column">
+                        <select id="buttons">
+                            <button id="mute">mute</button>
+                            <button id="camera">카메라끄기</button>
+                        </select>
+                    </div>
+                    <div id="controllers_column">
+                        <button id="leave">leave</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="chatRoom">
+                <ul id="chatBox"></ul>
+                <form id="chatForm">
+                    <input required type="text">
+                    <button>send</button>
+                </form>
+            </div>
+        
+
+    </div>
+   
+
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/public/js/clientServer.js"></script>
+</body>
+</html>

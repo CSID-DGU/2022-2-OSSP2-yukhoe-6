@@ -1,0 +1,32 @@
+html{width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:sans-serif; overflow-y: scroll;}
+body {width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;font-family:sans-serif; overflow-y: scroll;}
+.notice{
+   background-color:#d7edff; 
+   width:100%; 
+   height:62%; 
+   position:absolute; 
+   display: flex;
+   top:-60px;
+}
+
+.study{
+    top:300px;
+ }
+
+ .study_room{
+    flex-wrap: nowrap;
+    overflow: hidden; 
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    top: 65%;
+ }
+
+ .studyRoom{
+
+    display: flex;
+    left: 30px;
+    right: 30px;
+    z-index: 100;
+ }
