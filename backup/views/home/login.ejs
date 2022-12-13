@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head') %>
+    <link rel="stylesheet"  type="text/css" href="/css/login/login.css">
+  </head>
+  <body>
+    <%- include('../partials/nav') %>
+    <div class="square">
+      <img src="/img/login/login/square.png" style= "width:680PX; height:480PX;">
+    </div>
+
+    <form class="user-form" action="/login" method="post">
+      <!--div class="login_decoration_image">
+        <img src="/img/login/login/login_decoration_image.png" style= "width:320px; height:463px;">
+      </div-->
+      
+      <div class="login_text">
+        <img src="/img/login/login/login_text.png" style= "width:450px; height:55px;">
+      </div>
+    
+      <div class="Username_Text">
+        <img src="/img/login/login/Username_Text.png" style= "width:110px; height:27px;">
+      </div>
+      <div class="id_input">
+        <input type="text" id="username" name="username" 
+        style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px; width: 220px;height: 27px;" 
+        value="<%= username %>" class="form-control <%= (errors.username)?'is-invalid':'' %>">
+        <% if(errors.username){ %>
+          <span class="id-invalid-feedback" style="color: red;"><%= errors.username %></span>
+        <% } %>
+      </div>
+      <div class="id">
+        <img src="/img/login/login/id.png" style= "width:20px; height:20px;">
+      </div>
+      <div class="idLine">
+        <img src="/img/login/login/line.png" style= "width:232px; height:1px;">
+      </div>
+    
+      <div class="Password_Text">
+        <img src="/img/login/login/Password_Text.png" style= "width:110px; height:27px;">
+      </div>
+      <div class="pw_input">
+        <input type="password" id="password" name="password" 
+        style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px; width: 220px;height: 27px;" 
+        value="" class="form-control <%= (errors.password)?'is-invalid':'' %>">
+        <% if(errors.password){ %>
+          <span class="password-invalid-feedback" style="color: red;"><%= errors.password %></span>
+        <% } %>
+      </div>
+      <div class="password">
+        <img src="/img/login/login/password.png" style= "width:20px; height:20px;">
+      </div>
+      <div class="pwLine">
+        <img src="/img/login/login/line.png" style= "width:232px; height:1px;">
+      </div>
+    
+      <div class="login_button">
+        <input type="image" src="/img/login/login/login_button.png" style= "width:200px; height:40px;" value="Submit">
+      </div>
+    
+      <!--div class="FindPassword">
+        <a href="/login\findPassword\findPassword.html"><img src="/img/login/login/Find_Password_Text.png" style= "width:110px; height:10px;"></a>
+      </div-->
+    
+      <div class="Create_Account_Text">
+        <a href="/users/new"><img src="/img/login/login/Create _Account_Text.png" style= "width:110px; height:10px;"></a>
+      </div>
+
+      <% if(errors.login){ %>
+        <span class="login-invalid-feedback d-block" style="color: red;"><%= errors.login %></span>
+      <% } %>
+    </form>
+
+  </body>
+</html>

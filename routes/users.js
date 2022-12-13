@@ -115,12 +115,18 @@ router.get('/:username/studyroom', util.isLoggedin, checkPermission, function(re
          if (title_ === studyroom_title[studyroom_title.length - 1]){ 
           res.render('users/studyroom', {rooms : rooms, allRoomArr : allRoomArr, nickName : req.user.username});
       }
+      
       })
       .catch((err) => {
         //return res.json(err);
       });
   }
+  
   )
+  if(studyroom_title.length ==0){
+    res.render('users/studyroom', {rooms : rooms, allRoomArr : allRoomArr, nickName : req.user.username});
+
+  }
   
 }).catch((err) => {
   //return res.json(err);

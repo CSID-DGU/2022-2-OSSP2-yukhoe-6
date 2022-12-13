@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+    <html>
+      <head>
+        <%- include('../partials/head') %>
+        <link rel="stylesheet"  type="text/css" href="/css/users/new.css">
+      </head>
+
+      <body>
+        <%- include('../partials/nav') %>
+        <div class="square">
+          <img src="/img/users/new/square.png" style= "width:680PX; height:480PX;">
+        </div>
+    
+
+        <form class="user-form"  action="/studies/new/submit" method="post"> 
+          <div class="Welcome">
+            
+            <h3> 스터디방 만들기</h3>
+          </div>
+        
+
+          <div class="username_text">
+           
+            <label for="">방 제목</label>
+          </div>
+          <div class="username_input">
+            <input type="text" id="title" name="title" 
+            style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px; width: 300px;height: 24px;" 
+            value="<%= studyroom.title %>" class="form-control <%= (errors.title)?'is-invalid':'' %>">
+            <% if(errors.title){ %>
+              <span class="username-invalid-feedback"><%= errors.title.message %></span>
+            <% } %>
+          </div>
+          <div class="username">
+            <img src="/img/users/new/id.png" style= "width:20px; height:20px;">
+          </div>
+          <div class="usernameLine">
+            <img src="/img/users/new/line.png" style= "width:312px; height:1px;">
+          </div>
+
+
+
+          <div class="password_text">
+            <label for="">인원수</label>
+          </div>
+          <div class="password_input">
+            <input type="number" id="maximum" name="maximum", max ="4", min ="2",
+            style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px; width: 300px;height: 24px;" 
+            value="<%= studyroom.maximum %>" class="form-control <%= (errors.maximum)?'is-invalid':'' %>">
+            <% if(errors.maximum){ %>
+              <span class="password-invalid-feedback"  style= "width:512px;"><%= errors.maximum.message %></span>
+            <% } %>
+          </div>
+          <div class="password">
+            <img src="/img/users/new/password.png" style= "width:20px; height:20px;">
+          </div>
+          <div class="passwordLine">
+            <img src="/img/users/new/line.png" style= "width:312px; height:1px;">
+          </div>
+
+
+
+
+
+          <div class="nickname_text">
+            <label for="">방내용</label>
+          </div>
+
+          
+          <div class="nickname_input">
+            <input type="content" id="content" name="content" 
+            style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px; width: 300px;height: 24px;" 
+            value="<%= studyroom.content %>" class="form-control <%= (errors.content)?'is-invalid':'' %>">
+            <% if(errors.content){ %>
+              <span class="nickname-invalid-feedback"><%= errors.content.message %></span>
+            <% } %>
+          </div>
+          <div class="nickname">
+            <img src="/img/users/new/id.png" style= "width:20px; height:20px;">
+          </div>
+          <div class="nicknameLine">
+            <img src="/img/users/new/line.png" style= "width:312px; height:1px;">
+          </div>
+
+          <div class="joinUs_button">
+            <button type="submit">완료</button>
+          </div>
+        
+          <% if(errors.unhandled){ %>
+            <div class="alert alert-danger"><%= errors.unhandled %></div>
+          <% } %>
+        </form>
+    
+  </body>
+</html>

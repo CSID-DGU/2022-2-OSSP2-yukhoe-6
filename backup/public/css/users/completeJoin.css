@@ -1,0 +1,61 @@
+.square{
+    height:100%;
+    width:100%; 
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -10000; 
+  }
+  .container{
+    height:100%;
+    width:100%; 
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1; 
+  }
+  .Welcome{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(130px, -185px);
+  }
+  .text1{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(130px, -185px);
+  }
+  .decoration_image{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(130px, -185px);
+
+  }
+  .text2{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(130px, -185px);
+
+  }
+  .button{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(130px, -185px);
+
+  }

@@ -1,0 +1,49 @@
+
+<div id="menu" style="position: relative;">
+
+<header id="menu">
+
+  <a  href="/" class="logo" style= "top:-5px;"><img src="/img/logo/coogleLogo.png"width="150px" height="60px"></a>
+  
+  
+  <ul class ="category">
+    
+    <li style="width: 150px;">
+      <a href="/studies" class="text studyRoom">스터디룸</a>
+      <!--ul class="submenu "  style= "right:15px;">
+        <li><a href="#"></a></li>
+        <li><a href="#"></a></li>
+        <li><a href="#"></a></li>
+
+      </ul-->
+    </li>
+
+    <li style="width: 150px;">
+      <a href="/competitions" class="text login">공모전</a>
+      <!--ul class="submenu " style= "right:15px;">
+        <li><a href="#"></a></li>
+        <li><a href="#"></a></li>
+        <li><a href="#"></a></li>
+        <li><a href="#"></a></li>
+      </ul-->
+    </li>
+    
+    <li style="width: 150px;">
+      <a href="/posts"  class="text support">커뮤니티</a>
+      <!--ul class="submenu" style= "right:25px;">
+        <li><a href="#">프로젝트 파트너 모집</a></li>
+        <li><a href="#">질의응답</a></li>
+        <li><a href="#">자유게시판</a></li>	
+      </ul-->
+    </li>
+    
+    <% if(isAuthenticated){ %>
+      <li style= "width:60px; top:-5px;"><a href="/logout"><img src="/img/logo/login.png" width="40px" height="45px"></a></li>
+      <li style= "width:100px;top:-5px;"><a href="/users/<%= currentUser.username %>"><img src="/img/logo/user.png" width="40px" height="40px"></a></li>      
+    <% } else { %>
+      <li style= "width:60px;top:-5px;"><a href="/login"><img src="/img/logo/login.png" width="40px" height="45px"></a></li>
+      <li style= "width:100px;top:-5px;"><a href="/login" ><img src="/img/logo/user.png" width="40px" height="40px"></a></li>
+    <% } %>
+
+  </ul>
+</div>
