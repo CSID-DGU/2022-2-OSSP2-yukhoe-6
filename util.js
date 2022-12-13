@@ -28,7 +28,7 @@ util.isLoggedin = function(req, res, next){
     next();
   }
   else {
-    req.flash('errors', {login:'Please login first'});
+    req.flash('errors', {login:'로그인이 되지 않았습니다.'});
     res.redirect('/login');
   }
 }

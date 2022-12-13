@@ -15,6 +15,8 @@ app.set("views", __dirname + "/views"); // 디렉토리 설정
 app.use(cookieParser());
 
 
+var checkReject = false;
+
 
 
 //roomObjArr 현재 사람이 들어가있어서 생성된방 
@@ -162,7 +164,7 @@ httpServer.listen(3000, handleListen); // 서버는 ws, http 프로토콜 모두
 
 
 //방 최대인원 
-const MAXIMUM = 4;
+let max = 4;
 
 //서버는 접속 후 on으로 등록된 이벤트들을 처리함 
 wsServer.on("connection", socket => {
@@ -181,9 +183,13 @@ wsServer.on("connection", socket => {
    //--
 
     //join_room 이벤트 처리 
-    socket.on("join_room", (roomName,nickname) => {
+    socket.on("join_room", (roomName,nickname,maximum) => {
 
         //-- 
+
+        //최대인원 정수로 변환해서 사용하기위함
+        max = Number(maximum);
+        console.log(`최대 인원 : ${max}명인 방에 입장`);
 
 
         myRoomName = roomName;
@@ -199,8 +205,11 @@ wsServer.on("connection", socket => {
       //목록에 있는 방 
       if (roomObjArr[i].roomName === roomName) {
         // Reject join the room   방 꽉참 
-        if (roomObjArr[i].currentNum >= MAXIMUM) {
+        if (roomObjArr[i].currentNum >= max) {
           socket.emit("reject_join");
+          //방인원
+          checkReject = true;
+          
           return;
         }
         // 방 꽉 안참 
@@ -280,7 +289,8 @@ wsServer.on("connection", socket => {
     //연결해제
     socket.on("disconnecting", () => {
       //내 room의 다른 사용자들에게 leave_room emit함 내 socket.id랑 nickname 보내줌 
-      socket.to(myRoomName).emit("leave_room", socket.id, myNickName);
+      socket.to(myRoomName).emit("leave_room", socket.id, myNickName, checkReject);
+      
   
 
       let isRoomEmpty = false;
@@ -297,11 +307,18 @@ wsServer.on("connection", socket => {
           --roomObjArr[i].currentNum;
           
           //>>>>>추가 
-          allRoomArr.forEach(room=>{
-            if (roomObjArr[i].roomName===room[0]){
-              room[1]-=1;
-            }
-          })
+          //reject_join 이후 방을 나갈 때는 현재 인원수 감소시키면 안됨 
+          if (!checkReject){
+            allRoomArr.forEach(room=>{
+              if (roomObjArr[i].roomName===room[0]){
+                room[1]-=1;
+              }
+            })
+          }
+
+          //다시 초기화 
+          checkReject = false;
+          
   
           //0명되면 빈방 
           if (roomObjArr[i].currentNum == 0) {

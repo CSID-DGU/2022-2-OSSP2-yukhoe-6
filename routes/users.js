@@ -4,6 +4,11 @@ var User = require('../models/User');
 var util = require('../util');
 var StudyRoom = require('../models/StudyRoom');
 const { promisifyAll } = require('bluebird');
+var Post = require('../models/Post');
+
+//인원수출력하기위함
+let allRoomArr = require("../app.js");
+const { compareDocumentPosition } = require('domutils');
 
 // New
 router.get('/new', function(req, res){
@@ -20,7 +25,7 @@ router.post('/', function(req, res){
       req.flash('errors', util.parseError(err));
       return res.redirect('/users/new');
     }
-    res.redirect('/');
+    res.redirect('/login');
   });
 });
 
@@ -79,7 +84,7 @@ router.put('/:username', util.isLoggedin, checkPermission, function(req, res, ne
 
 
 // studyroom
-router.get('/:username/studyroom', util.isLoggedin, checkPermission, function(req, res){
+router.get('/:username/studyroom', util.isLoggedin, checkPermission, function(req, res, next){
   var user = req.flash('user')[0];
   var errors = req.flash('errors')[0] || {};
   var rooms = [];
@@ -96,20 +101,82 @@ router.get('/:username/studyroom', util.isLoggedin, checkPermission, function(re
         StudyRoom.findOne({_id:title_})
       ])
       .then(([room]) =>{
-        console.log( room);
-        rooms.push(room);
+        if(room ==null){
+          user_.studyrooms.splice(user_.studyrooms.indexOf(title_), 1);
+          user_.save();
+        }else{
+          rooms.push(room);
+          console.log(room);
+        }
+        console.log("rooms길이: "+rooms.length);
+        //{ username:req.params.username, rooms:rooms, errors:errors }
         
+        
+         if (title_ === studyroom_title[studyroom_title.length - 1]){ 
+          res.render('users/studyroom', {rooms : rooms, allRoomArr : allRoomArr, nickName : req.user.username});
+      }
+      })
+      .catch((err) => {
+        //return res.json(err);
       });
-    });
-    console.log("rooms길이: "+rooms.length);
-      res.render('users/studyroom', { username:req.params.username, rooms:rooms, errors:errors });
-  })
-  .catch((err) => {
-    return res.json(err);
-  });
+  }
+  )
   
+}).catch((err) => {
+  //return res.json(err);
+});
 });
 
+//delete page
+router.get('/:username/delete', util.isLoggedin, checkPermission, function(req, res){
+  Promise.all([
+    User.findOne({username:req.params.username}),
+   
+  ])
+  .then(([user]) => {
+    res.render('users/delete', { user:user});
+  })
+});
+
+//delete submit 
+router.post('/:username/delete/submit', util.isLoggedin, checkPermission, function(req, res){
+
+  Promise.all([
+    User.findOne({username:req.params.username})
+    
+  ])
+  .then(([user]) => {
+    Promise.all([
+      StudyRoom.deleteMany({leader: user._id}),
+      Post.deleteMany({author : user._id}),
+      User.deleteOne({username:req.params.username})
+    ])
+    .then(([err1, err2, err3]) => {
+      if(err1){
+        console.log(err1);
+      }else{
+        console.log(`스터디룸 삭제 성공`);
+      }
+
+      if(err2){
+        console.log(err2);
+      }else{
+        console.log(`게시물 삭제 성공`);
+      }
+
+      if(err1){
+        console.log(err3);
+      }else{
+        console.log(`최종 계정 삭제 성공`);
+      }
+
+      res.redirect('/');
+    })
+    
+  })
+
+  
+});
 
 module.exports = router;
 

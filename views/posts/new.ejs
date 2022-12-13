@@ -11,7 +11,7 @@
       <form action="/posts<%= getPostQueryString() %>" enctype="multipart/form-data" method="post">
 
         <div class="form-group">
-          <label for="title">Title</label>
+          <label for="title">글 제목</label>
           <input type="text" id="title" name="title" value="<%= post.title %>" class="form-control <%= (errors.title)?'is-invalid':'' %>">
           <% if(errors.title){ %>
             <span class="invalid-feedback"><%= errors.title.message %></span>
@@ -19,12 +19,12 @@
         </div>
 
         <div class="form-group">
-          <label for="attachment">Attachment</label>
+          <label for="attachment">파일 첨부</label>
           <input type="file" name="attachment" class="form-control-file" id="attachment">
         </div>
 
         <div class="form-group">
-          <label for="body">Body</label>
+          <label for="body">내용 </label>
           <textarea id="body" name="body" rows="5" class="form-control <%= (errors.body)?'is-invalid':'' %>"><%= post.body %></textarea>
           <% if(errors.body){ %>
             <span class="invalid-feedback"><%= errors.body.message %></span>
@@ -38,8 +38,8 @@
         <% } %>
 
         <div>
-          <a class="btn btn-secondary" href="/posts<%= getPostQueryString() %>">Back</a>
-          <button type="submit" class="btn btn-secondary">Submit</button>
+          <a class="btn btn-secondary" href="/posts<%= getPostQueryString() %>">취소하기</a>
+          <button type="submit" class="btn btn-secondary">작성완료</button>
         </div>
 
       </form>

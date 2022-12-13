@@ -16,7 +16,7 @@
 
         <thead class="thead-light">
           <tr>
-            <th scope="col" class="numId">#</th>
+
             <th scope="col">제목</th>
             <th scope="col" class="views">조회수</th>
             <th scope="col" class="author">글쓴이</th>
@@ -32,7 +32,7 @@
           <% } %>
           <% posts.forEach(function(post) { %>
             <tr>
-              <td class="numId"><%= post.numId %></td>
+            
               <td>
                 <a href="/posts/<%= post._id %><%= getPostQueryString() %>" class="title-container">
                   <div data-search-highlight="title" class="title-ellipsis ellipsis float-left">
