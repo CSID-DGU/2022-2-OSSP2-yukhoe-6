@@ -41,12 +41,15 @@
 
                     <input  class="button" type="submit" style= "width:200px; height:40px; left: 430px;" value="수정완료">
 
-                    <form class="button" action="/competitions/delete/<%= competition._id %>?_method=delete" method="post">
-                        <input type="submit" 
-                        style= "color: #fff; text-decoration: none; width:200px; height:40px; background-color: #a6bf82; border: solid 3px #a6bf82; border-radius: 8px;" value="공모전 삭제하기">
+                    <form class="button" action="/competitions/delete/<%= competition._id %>" method="post">
+                        <input type="submit"  class="button"
+                        style= "color: #fff; text-decoration: none; width:200px; height:40px; background-color: #a6bf82; border: solid 3px #a6bf82; border-radius: 8px;" value="삭제하기">
                     </form>
 
                 </div>
+            </form>
+            <form action="/competitions/delete/<%= competition._id %>" method="post">
+                <button type="submit">삭제</button>
             </form>
         </div>
     </div>

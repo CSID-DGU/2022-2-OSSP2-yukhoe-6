@@ -19,14 +19,14 @@ var util = require('../util');
 
 // /competitions 
 router.get(`/`,function(req,res){
-    console.log(`공모전 리스트`);
+    //console.log(`공모전 리스트`);
     Competition.find({})
     .populate(`author`) //relationship이 형성된 항목의 값을 생성해줌
     .sort('deadLine') //deadLine 역순으로 sort 
     .exec(function(err,comp){ //정렬 후 콜백함수로 처리 comp에 데이터 받아옴 
         if (err) {console.log(`예외발생`);}
-        console.log('db에서 공모전 가져와서 리스트 표시할 때 형태');
-        console.log(comp);
+        //console.log('db에서 공모전 가져와서 리스트 표시할 때 형태');
+        //console.log(comp);
         res.render('competitions/index',{competitions:comp});
     });
 });
@@ -146,7 +146,7 @@ router.put(`/edit/:id`,util.isLoggedin,checkPermission,function(req,res){
 
 
 //공모전 글 삭제 
-router.delete(`/delete/:id`,util.isLoggedin,checkPermission,function(req,res){
+router.post(`/delete/:id`,util.isLoggedin,checkPermission,function(req,res){
     console.log(`공모전 데이터 삭제하기`);
     Competition.deleteOne({_id:req.params.id},function(err){
         if (err){
