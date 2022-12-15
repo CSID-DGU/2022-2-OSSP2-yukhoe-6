@@ -494,7 +494,7 @@ function handleKeydown(event) {
 //방꽉차서 입장 X 
 socket.on("reject_join", () => {
   // Paint modal
-  paintModal("방이 꽉 찼습니다. 스터디룸 리스트로 이동합니다.");
+  paintModal("방이 꽉 찼습니다. \n\n  스터디룸 리스트로 이동합니다.");
 
   // Erase names
   const nicknameContainer = document.querySelector("#userNickname");
