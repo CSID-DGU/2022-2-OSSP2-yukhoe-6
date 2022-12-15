@@ -1,0 +1,129 @@
+  <!DOCTYPE html>
+    <html>
+      <head>
+        <%- include('../partials/head') %>
+        <link rel="stylesheet"  type="text/css" href="/css/users/new.css">
+      </head>
+
+      <body>
+        <%- include('../partials/nav') %>
+        <div class="square">
+          <img src="/img/users/new/square.png" style= "width:680PX; height:500PX;">
+        </div>
+    
+
+        <form class="user-form"  action="/users" method="post"> 
+
+          <div class="Welcome">회원가입</div>
+        
+
+          <div class="username_text">
+            <img src="/img/users/new/Username_Text.png" style= "width:110px; height:27px;">
+          </div>
+          <div class="username_input">
+            <input type="text" id="username" name="username" 
+            style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px; width: 300px;height: 24px;" 
+            value="<%= user.username %>" class="form-control <%= (errors.username)?'is-invalid':'' %>">
+            <% if(errors.username){ %>
+              <span class="username-invalid-feedback"><%= errors.username.message %></span>
+            <% } %>
+          </div>
+          <div class="username">
+            <img src="/img/users/new/id.png" style= "width:20px; height:20px;">
+          </div>
+          <div class="usernameLine">
+            <img src="/img/users/new/line.png" style= "width:312px; height:1px;">
+          </div>
+
+
+
+          <div class="password_text">
+            <img src="/img/users/new/password_text.png" style= "width:110px; height:27px;">
+          </div>
+          <div class="password_input">
+            <input type="password" id="password" name="password" 
+            style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px; width: 300px;height: 24px;" 
+            value="" class="form-control <%= (errors.password)?'is-invalid':'' %>">
+            <% if(errors.password){ %>
+              <span class="password-invalid-feedback"  style= "width:512px;"><%= errors.password.message %></span>
+            <% } %>
+          </div>
+          <div class="password">
+            <img src="/img/users/new/password.png" style= "width:20px; height:20px;">
+          </div>
+          <div class="passwordLine">
+            <img src="/img/users/new/line.png" style= "width:312px; height:1px;">
+          </div>
+
+
+
+          <div class="passwordCh_text">
+            <img src="/img/users/new/passwordCh_text.png" style= "width:140px; height:27px;">
+          </div>
+          <div class="passwordCh_input">
+            <input type="password" id="passwordConfirmation" name="passwordConfirmation" 
+            style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px; width: 300px;height: 24px;" 
+            value="" class="form-control <%= (errors.passwordConfirmation)?'is-invalid':'' %>">
+            <% if(errors.passwordConfirmation){ %>
+              <span class="passwordCh-invalid-feedback"  style= "width:512px;"><%= errors.passwordConfirmation.message %></span>
+            <% } %>
+          </div>
+          </div>
+          <div class="passwordCh">
+            <img src="/img/users/new/checkPw.png" style= "width:20px; height:20px;">
+          </div>
+          <div class="passwordChLine">
+            <img src="/img/users/new/line.png" style= "width:312px; height:1px;">
+          </div>
+
+
+          <div class="nickname_text">
+            <img src="/img/users/new/nickname_text.png" style= "width:105px; height:27px;">
+          </div>
+          <div class="nickname_input">
+            <input type="text" id="name" name="name" 
+            style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px; width: 300px;height: 24px;" 
+            value="<%= user.name %>" class="form-control <%= (errors.name)?'is-invalid':'' %>">
+            <% if(errors.name){ %>
+              <span class="nickname-invalid-feedback"><%= errors.name.message %></span>
+            <% } %>
+          </div>
+          <div class="nickname">
+            <img src="/img/users/new/id.png" style= "width:20px; height:20px;">
+          </div>
+          <div class="nicknameLine">
+            <img src="/img/users/new/line.png" style= "width:312px; height:1px;">
+          </div>
+        
+
+          <div class="email_text">
+            <img src="/img/users/new/email_text.png" style= "width:110px; height:27px;">
+          </div>
+          <div class="email_input">
+            <input type="text" id="email" name="email" 
+            style="border:none;border-right:0px; border-top:0px; boder-left:0px; boder-bottom:0px; width: 300px;height: 24px;" 
+            value="<%= user.email %>" class="form-control <%= (errors.email)?'is-invalid':'' %>">
+            <% if(errors.email){ %>
+              <span class="email-invalid-feedback"><%= errors.email.message %></span>
+            <% } %>
+          </div>
+          </div>
+          <div class="email">
+            <img src="/img/users/new/email.png" style= "width:20px; height:20px;">
+          </div>
+          <div class="emailLine">
+            <img src="/img/users/new/line.png" style= "width:312px; height:1px;">
+          </div>
+        
+
+          <div class="joinUs_button">
+            <input type="image" src="/img/users/new/button.png" style= "width:270px; height:45px;" value="Submit">
+          </div>
+        
+          <% if(errors.unhandled){ %>
+            <div class="alert alert-danger"><%= errors.unhandled %></div>
+          <% } %>
+        </form>
+    
+  </body>
+</html>

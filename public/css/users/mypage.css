@@ -1,0 +1,199 @@
+html{width:100%;height:100%;margin:0px;padding:0px;font-family:sans-serif;}
+body {width:100%;height:100%;margin:0px;padding:0px;;font-family:sans-serif;overflow-y: scroll;}
+
+.containerGrid{
+  display: grid;
+	grid-template-columns: 350px 1000px;
+}
+
+
+.wrap{
+  height:100%;
+  width:100%; 
+  position:relative;
+
+}
+
+ .content{
+
+  /*height: 60px;*/
+  margin: 0px 20px 25px 100px;
+  padding: 15px 20px 15px 20px;
+  border-radius: 15px;
+  /*border: solid 2px #707070;*/
+
+ }
+
+ .ePlaceholder{
+   width: 455px;
+   height: 61px;
+   /*margin: 61px 525px 13px 0;*/
+
+   /*border-radius: 60px;*/
+   /*border: solid 1px #707070;*/
+   
+   border-top: none;
+   border-left: none;
+   border-right: none;
+   border-bottom: none;
+ }
+
+ .text{
+  font-size: 18px;
+  font-weight: 500;
+  text-decoration-line: none;
+  /*font-family: KoPubDotum;*/
+  color: #707070;
+
+
+}
+
+.button{
+  width:200px;
+  height: 40px;
+  right:20px;
+  border-radius: 15px;
+  border: solid 3px #707070;
+  background-color: #707070;
+ 
+  padding: 5px 10px 5px 10px;
+  text-decoration: none;
+
+  z-index: 10000;
+}
+
+/*
+.button:hover{
+  width:200px;
+  height: 40px;
+  right:20px;
+  border-radius: 15px;
+  border: solid 3px #707070;
+ 
+  padding: 5px 10px 5px 10px;
+  display: inline;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+
+}*/
+
+ @font-face {
+   font-family : 'KoPubDotum';
+   src : url(/font/KoPubDotumBold.ttf),
+       url(/font/KoPubDotumBold.ttf),
+       url(/font/KoPubDotumBold.ttf),
+ }
+
+ /*font URL: https://github.com/adrinerDP/font-kopub/blob/master/kopub.css*/
+ @import "//cdn.jsdelivr.net/npm/font-kopub@1.0/kopubbatang.min.css";
+ .study{
+  position:relative;
+  display: flex;
+  margin-left: 100px;
+  margin-bottom: 50px;
+  justify-content: center;
+  align-items: center;
+}
+
+.time{
+  width: 90%;
+  margin-bottom: 25px;
+  /*padding: 15px 20px 15px 20px;*/
+  border-radius: 10px;
+  border: solid 2px #707070;
+
+}
+
+
+ .study_room{
+  display: flex;
+  margin-bottom: 30px;
+
+
+  /*
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:flex-end;*/
+}
+ /*
+
+
+
+*/
+/*스터디보여주기*/
+.wrapStudy{
+  height:100%;
+  width:100%; 
+  position:relative;
+
+}
+
+.titleStudy{
+  font-size: 20px;
+  font-weight: 1000;
+  color: #000;
+  
+
+}
+ .textStudy{
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration-line: none;
+  /*font-family: KoPubDotum;*/
+  color: #707070;
+
+}
+.buttonStudy{
+  height: 40px;
+  right:20px;
+  border-radius: 8px;
+  /*border: solid 3px #707070;*/
+
+ 
+  padding: 5px 10px 5px 10px;
+  display: inline;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+
+.buttonStudy:hover{
+  height: 40px;
+  right:20px;
+  border-radius: 8px;
+ 
+  padding: 5px 10px 5px 10px;
+  display: inline;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+
+.noLineButtonStudy{
+  height: 40px;
+  right:20px;
+  color: #707070;
+  display: inline;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+.noLineButtonStudy:hover{
+  height: 40px;
+  right:20px;
+  color: #707070;
+  display: inline;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+
+
+.contentBlockStudy{
+  margin-bottom: 25px;
+  padding: 15px 20px 15px 20px;
+  border-radius: 15px;
+  border: solid 1px #707070;
+
+}

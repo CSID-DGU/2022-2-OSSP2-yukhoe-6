@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head') %>
+    <link rel="stylesheet"  type="text/css" href="/css/competition/index.css">
+  </head>
+
+  <body>
+    <%- include('../partials/nav') %>
+
+    <div style="margin-top: 30px;">
+        <h2 style="font-weight: bold; color: #707070; margin-left: 20%;">공모전</h2>
+    </div>
+
+    <!--div style="float:right;  margin-right:20%;">
+        <div class="text button createButton" style="width:155px; background-color: #a6bf82; border: solid 3px #a6bf82;color: #4d4d4d;"> 
+            <a class="text" style="color: #fff; text-decoration: none;" href="/competitions/create">공모전 글 쓰기</a>
+        </div> 
+    </div-->
+
+    <div class="wrap" style="top:25px; width:70%;">
+        <!--div style="margin-bottom: 25px; display: inline; right: 20px; float:right;  margin-right: 5px;">
+            <div class="text button" style="width:180px;  background-color: #707070; right: 10px"> <a class="text" style="color: #fff; text-decoration: none;" href="/competitions/create">공모전 글 쓰기</a></div> 
+        </div-->
+
+        <hr  style=" margin-top: 10px; margin-left: -5px; display: block;">
+
+        <% if(competitions == null || competitions.length == 0){ %>
+            <h2>현재 공모전 정보가 없습니다</h2> <br> <% } %>
+        <% competitions.forEach(function(competition){ %>
+            
+            <div class="contentBlock" style="width: 85%; margin-left: 7%;overflow: auto;">
+
+
+                <div>
+                    <label class="title" style="color: #000;margin-bottom: 15px;"><%= competition.title %></label>
+                </div>
+                
+                <div class="text" style="color: #4d4d4d; font-weight: bold;">마감일:
+                    <label class="text deadLine" > <%= competition.deadLine %></label>
+                </div>
+                
+                <div class="text" style="margin:bottom; color: #4d4d4d; font-weight: bold;margin-bottom: 5px;">내용:
+                     <label class="text content" style="width: 100%;display:inline;"> 
+                       <div style="display:inline;"><%= competition.content %></div>
+                    </label>
+                </div>
+
+                <div class="text" style="color: #4d4d4d; font-weight: bold;">
+                    <% if(isAuthenticated&&competition.author.username == currentUser.username){ %>
+                        <div>
+                        <a class="text button" style="color: #fff; text-decoration: none;width:135px;  background-color: #707070; float:right;" href="<%= competition.url %>">URL로 이동</a>    
+                        <form action="/competitions/edit/<%= competition._id %>" method="post">
+                            <input  class="text button" type="submit" 
+                            style= "color: #fff; text-decoration: none;width:125px;  background-color: #a6bf82; border: solid 3px #a6bf82; float:right; cursor : pointer; margin-right:10px; margin-bottom: 3px;" value="내용 수정하기"><br>
+                        </form>
+                        </div>
+                    <% } else { %>
+    
+                        <a class="text button" style="color: #fff; text-decoration: none;width:135px;  background-color: #707070; float:right;" href="<%= competition.url %>">URL로 이동</a>
+                    <% } %>
+                
+                </div>
+
+            </div>
+
+        <% }); %>
+        <div style="float:right;margin-top:20px;margin-right:8%;">
+            <div class="text button createButton" style="width:180px; background-color: #a6bf82; border: solid 3px #a6bf82;color: #4d4d4d;"> 
+            <a class="text" style="color: #fff; text-decoration: none;" href="/competitions/create">공모전 글 쓰기</a>
+        </div> 
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,281 @@
+.square{
+    height:100%;
+    width:100%; 
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -10000; 
+  }
+.user-form{
+    height:100%;
+    width:100%; 
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2; 
+  }
+
+  .Welcome{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 29px; 
+    font-weight: 900; 
+    color: #707070;
+
+    transform: translate(-30px, -197px);
+  }
+
+
+  .username_text{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-123px, -143px);
+    z-index: 10000; 
+  
+  }
+  .username_input{
+    position:fixed;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-21px, -125px);
+  }
+  
+  .username {
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(113px, -122px);
+  }
+  .usernameLine {
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-21px, -108px);
+  }
+  .username-invalid-feedback{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    color: red;
+    
+    transform: translate(-90px, 25px);
+  }
+
+
+  .password_text{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-123px, -73px);
+  }
+  
+  .password_input{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-21px, -55px);
+  }
+  
+  .password{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(113px, -52px);
+  }
+  .passwordLine{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-21px, -38px);
+  }
+  .password-invalid-feedback{
+    position:fixed;
+    display: flex;
+
+    text-align: left;
+    font-size: 11px;
+    color: red;
+
+    transform: translate(100px, 25px);
+  }
+
+
+
+  .passwordCh_text{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-110px, -6px);
+  }
+  
+  .passwordCh_input{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-21px, 12px);
+  }
+  
+  .passwordCh{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(113px, 15px);
+  }
+  .passwordChLine{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-21px, 29px);
+  }
+  .passwordCh-invalid-feedback{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    color: red;
+    
+
+    transform: translate(-75px, 30px);
+  }
+
+
+  .nickname_text{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-123px, 64px);
+    z-index: 10000; 
+  
+  }
+  .nickname_input{
+    position:fixed;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-21px, 80px);
+  }
+
+  .nickname {
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(113px, 83px);
+  }
+  .nicknameLine {
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-21px, 97px);
+  }
+  .nickname-invalid-feedback{
+    position:fixed;
+    display: flex;
+
+    text-align: left;
+    font-size: 11px;
+    color: red;
+    
+
+    transform: translate(-95px, 30px);
+
+  }
+
+
+
+  .email_text{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-123px, 137px);
+  }
+  
+  .email_input{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-21px, 150px);
+  }
+  
+  .email{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(113px, 153px);
+  }
+  .emailLine{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transform: translate(-21px, 165px);
+  }
+  .email-invalid-feedback{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    font-size: 11px;
+    color: red;
+
+
+    transform: translate(-75px, 24px);
+  }
+  .joinUs_button{
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+
+    transform: translate(0px, 205px);
+  }

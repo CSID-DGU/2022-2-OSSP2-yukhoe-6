@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head') %>
+    <link rel="stylesheet"  type="text/css" href="/css/studyRoom/create.css">
+  </head>
+
+  <body>
+    <%- include('../partials/nav') %>
+    <div style="margin-top: 30px;">
+        <h2 style="font-weight: bold; color: #707070; margin-left: 20%;">스터디방 만들기</h2>
+    </div>
+
+    <!-- 1. 절대경로
+    2. 맨앞에 /를 써주면 / 이전은 localhost:3000 -->
+    <div class="wrap">
+        <div class="square">
+            <form class="form" action="/studies/new/submit" method="post">
+                <!-- localhost3000/competitions/create/submit -->
+                
+
+                     <% if(errors.title){ %>
+                      <div class="text">방제목:      
+                        <input class="input" style="margin-bottom: 5px;" type="text" id="title" name="title"  value="<%= studyroom.title %>" class="form-control <%= (errors.title)?'is-invalid':'' %>"><br>
+                        <span class="username-invalid-feedback" style= "margin-bottom: 5px; color: red; font-size:10px;" ><%= errors.title.message %></span>
+                      </div> 
+                      <% } else { %>
+                        <div class="text">방제목:      
+                          <input class="input" style="margin-bottom: 30px;" type="text" id="title" name="title"  value="<%= studyroom.title %>" class="form-control <%= (errors.title)?'is-invalid':'' %>"><br>
+                        </div>   
+                      <% } %>            
+
+                      <% if(errors.title){ %>
+                        <div class="text">인원수:      
+                          <input class ="input"style="margin-bottom: 5px;" type="number" id="maximum" name="maximum", max ="4", min ="2",
+                          value="<%= studyroom.maximum %>" class="form-control <%= (errors.maximum)?'is-invalid':'' %>"><br>
+                          <span class="password-invalid-feedback" style= "margin-bottom: 10px; color: red; font-size:10px;"><%= errors.maximum.message %></span>
+                        </div>
+                        <% } else { %>
+                          <div class="text">인원수:      
+                            <input class ="input" style="margin-bottom: 30px;" type="number" id="maximum" name="maximum", max ="4", min ="2",
+                            value="<%= studyroom.maximum %>" class="form-control <%= (errors.maximum)?'is-invalid':'' %>"><br>
+                          </div>
+                        <% } %>  
+
+                        <% if(errors.title){ %>
+                          <div style="display: inline;">
+                            <div class="text" style="margin-bottom: 5px;">스터디 내용: </div>
+                            <div class="text">
+                              <textarea class="input" type="content" id="content" name="content" 
+                              style="width:400px; height:150px; border: solid 2px #707070; border-radius: 7px;"
+                              class="form-control <%= (errors.content)?'is-invalid':'' %>"><%= studyroom.content %></textarea>
+                            </div>
+                            <span class="password-invalid-feedback" style= "color: red; font-weight:900;font-size:11px; "><%= errors.content.message %></span>
+                          </div>
+                          <% } else { %>
+                            <div style="display: inline;">
+                              <div class="text" style="margin-bottom: 5px;">스터디 내용: </div>
+                              <div class="text">
+                                <textarea class="input" type="content" id="content" name="content" 
+                                style="width:400px; height:150px; border: solid 2px #707070; border-radius: 7px;"
+                                class="form-control <%= (errors.content)?'is-invalid':'' %>"><%= studyroom.content %></textarea>
+                              </div>
+                            </div>
+                          <% } %> 
+
+
+                
+                <div style="justify-content: center; text-align: center; text-decoration: none; margin-top: 20px;">
+                    <input  class="button" type="submit" style= "width:200px; height:40px; left: -60px; margin: auto;" value="제출하기"><br>
+                </div>
+              
+                <% if(errors.unhandled){ %>
+                  <span class="nickname-invalid-feedback" style= "color: red; font-size:10px;"><%= errors.unhandled %></span>
+                <% } %>
+
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

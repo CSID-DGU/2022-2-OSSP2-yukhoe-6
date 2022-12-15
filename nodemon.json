@@ -1,0 +1,11 @@
+<<<<<<< HEAD
+{
+    "ignore": ["src/public/*"],
+    "exec": "babel-node src/app.js"
+}
+=======
+{
+    "ignore": ["src/public/*"],
+    "exec": "babel-node src/app.js"
+}
+>>>>>>> 796597f3bc8762229ca1cecd1364ffcd024947ec
