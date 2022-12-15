@@ -303,8 +303,8 @@ wsServer.on("connection", socket => {
             (user) => user.socketId != socket.id
           );
           //방에 유저목록 업데이트 해주고 유저수 1명 줄임 
-          roomObjArr[i].users = newUsers;
-          --roomObjArr[i].currentNum;
+          //roomObjArr[i].users = newUsers;
+          //--roomObjArr[i].currentNum;
           
           //>>>>>추가 
           //reject_join 이후 방을 나갈 때는 현재 인원수 감소시키면 안됨 
@@ -312,6 +312,10 @@ wsServer.on("connection", socket => {
             allRoomArr.forEach(room=>{
               if (roomObjArr[i].roomName===room[0]){
                 room[1]-=1;
+
+                //방에 유저목록 업데이트 해주고 유저수 1명 줄임 
+              roomObjArr[i].users = newUsers;
+              --roomObjArr[i].currentNum;
               }
             })
           }

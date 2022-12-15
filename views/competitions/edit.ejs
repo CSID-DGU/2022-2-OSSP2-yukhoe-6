@@ -13,7 +13,7 @@
 
     <!-- 1. 절대경로
     2. 맨앞에 /를 써주면 / 이전은 localhost:3000 -->
-    <div class="wrap">
+    <div class="wrap" style="position:relatie;">
         <div class="square">
 
             <form action="/competitions/edit/<%= competition._id %>?_method=put" method="post">
@@ -40,15 +40,15 @@
                 <div style="display:inline; text-decoration: none; margin-top: 20px;">
 
                     <input  class="button" type="submit" style= "width:200px; height:40px; left: 430px;" value="수정완료">
-
-                    <form class="button" action="/competitions/delete/<%= competition._id %>?_method=delete" method="post">
-                        <input type="submit" 
-                        style= "color: #fff; text-decoration: none; width:200px; height:40px; background-color: #a6bf82; border: solid 3px #a6bf82; border-radius: 8px;" value="공모전 삭제하기">
-                    </form>
-
                 </div>
             </form>
         </div>
+    </div>
+    <div  style="position:absolute; top: 609px; left: 565px">
+        <form action="/competitions/delete/<%= competition._id %>?_method=delete" method="post">
+            <input type="submit" 
+            style= "color: #fff; text-decoration: none; width:200px; height:40px; background-color: #a6bf82; border: solid 3px #a6bf82; border-radius: 8px; cursor: pointer;" value="공모전 삭제하기">
+        </form>
     </div>
 
     <!--div class="wrap">

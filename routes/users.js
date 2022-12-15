@@ -31,75 +31,17 @@ router.post('/', function(req, res){
 
 // mypage
 router.get('/:username', util.isLoggedin, checkPermission, function(req, res){
-
-  Promise.all([
-    User.findOne({username:req.params.username}),
-    StudyRoom.findOne({"leader.username": req.params.username}).sort('date').populate({ path: 'leader', select: 'username' }),
-    Post.find({"author":req.user.id})
-  ])
-  .then(([user, rooms,post]) => {
-    console.log(rooms);
-    console.log("작성한 글 목록");
-    console.log(post);
-    res.render('users/mypage', { user:user, room:rooms,post:post});
-
-  })
-});
-
-// edit
-router.get('/:username/edit', util.isLoggedin, checkPermission, function(req, res){
-  var user = req.flash('user')[0];
-  var errors = req.flash('errors')[0] || {};
-  if(!user){
-    User.findOne({username:req.params.username}, function(err, user){
-      if(err) return res.json(err);
-      res.render('users/edit', { username:req.params.username, user:user, errors:errors });
-    });
-  }
-  else {
-    res.render('users/edit', { username:req.params.username, user:user, errors:errors });
-  }
-});
-
-// update
-router.put('/:username', util.isLoggedin, checkPermission, function(req, res, next){
-  User.findOne({username:req.params.username})
-    .select('password')
-    .exec(function(err, user){
-      if(err) return res.json(err);
-
-      // update user object
-      user.originalPassword = user.password;
-      user.password = req.body.newPassword? req.body.newPassword : user.password;
-      for(var p in req.body){
-        user[p] = req.body[p];
-      }
-
-      // save updated user
-      user.save(function(err, user){
-        if(err){
-          req.flash('user', req.body);
-          req.flash('errors', util.parseError(err));
-          return res.redirect('/users/'+req.params.username+'/edit');
-        }
-        res.redirect('/users/'+user.username);
-      });
-  });
-});
-
-
-// studyroom
-router.get('/:username/studyroom', util.isLoggedin, checkPermission, function(req, res, next){
   var user = req.flash('user')[0];
   var errors = req.flash('errors')[0] || {};
   var rooms = [];
   
   Promise.all([
     //leader의 username에 해당하는 user를 populate로 user 객체로 만들어서 필드로 가져옴 
-    User.findOne({username:req.user.username})
+    User.findOne({username:req.user.username}),
+    Post.find({"author":req.user.id})
   ])
-  .then(([user_]) => {
-    var studyroom_title = user_.studyrooms;
+  .then(([user,post]) => {
+    var studyroom_title = user.studyrooms;
 
     studyroom_title.forEach(title_ => {
       Promise.all([
@@ -107,8 +49,8 @@ router.get('/:username/studyroom', util.isLoggedin, checkPermission, function(re
       ])
       .then(([room]) =>{
         if(room ==null){
-          user_.studyrooms.splice(user_.studyrooms.indexOf(title_), 1);
-          user_.save();
+          user.studyrooms.splice(user_.studyrooms.indexOf(title_), 1);
+          user.save();
         }else{
           rooms.push(room);
           console.log(room);
@@ -118,7 +60,7 @@ router.get('/:username/studyroom', util.isLoggedin, checkPermission, function(re
         
         
          if (title_ === studyroom_title[studyroom_title.length - 1]){ 
-          res.render('users/studyroom', {rooms : rooms, allRoomArr : allRoomArr, nickName : req.user.username});
+          res.render('users/mypage', {user:user, post:post, rooms : rooms, allRoomArr : allRoomArr, nickName : req.user.username});
       }
       
       })
@@ -129,24 +71,12 @@ router.get('/:username/studyroom', util.isLoggedin, checkPermission, function(re
   
   )
   if(studyroom_title.length ==0){
-    res.render('users/studyroom', {rooms : rooms, allRoomArr : allRoomArr, nickName : req.user.username});
+    res.render('users/mypage', {user:user, post:post, rooms : rooms, allRoomArr : allRoomArr, nickName : req.user.username});
 
   }
-  
 }).catch((err) => {
   //return res.json(err);
 });
-});
-
-//delete page
-router.get('/:username/delete', util.isLoggedin, checkPermission, function(req, res){
-  Promise.all([
-    User.findOne({username:req.params.username}),
-   
-  ])
-  .then(([user]) => {
-    res.render('users/delete', { user:user});
-  })
 });
 
 //delete submit 

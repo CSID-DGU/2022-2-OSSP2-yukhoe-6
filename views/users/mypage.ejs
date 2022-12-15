@@ -51,8 +51,8 @@
 					</td>
 					
 					<%# 사용자 스터디 및 커뮤니티 이용 정보%>
-					<td>
-						<table>
+					<td style="width:80%;">
+						<table style="width:100%;">
 							<tbody>
 								<%# 참여한 시간 정보%>
 								<tr>
@@ -70,21 +70,60 @@
 								<tr>									
 									<td>
 										<div class="study" style="top: -20px; width:75%; display: inline;">	
-				
-											<div class="studing_text" style="color: #4d4d4d; font-weight: bold; margin-bottom: 5px;">
-												<a  style="  background-color: #707070; color: #fff;  font-size: 15px;" 
-											href="/users/<%= user.username %>/studyroom">참여했던 스터디</a>
+											<h5 class="studing_text" style="color: #4d4d4d; font-weight: bold;">참여한 스터디</h5>
 							
-											</div>
-							
+
+
+
+
 											<div class="study_room" style="flex-wrap: wrap;">
-												<div class="studyRoom_content1 " style="height:320px; width:250px; margin-left: 10px;"> <img src="/img/users/mypage/studyRoom1.png"width="250px" height="320px"></div>
-												<div class="studyRoom_content2" style="height:320px; width:250px; margin-left: 10px;"> <img src="/img/users/mypage/studyRoom2.png" width="250px" height="320px"></div>
-												<div class="studyRoom_content3" style="height:320px; width:250px; margin-left: 10px;"> <img src="/img/users/mypage/studyRoom3.png" width="250px" height="320px"></div>
-												<div class="studyRoom_content1 " style="height:320px; width:250px; margin-left: 10px;"> <img src="/img/users/mypage/studyRoom1.png"width="250px" height="320px"></div>
-												<div class="studyRoom_content2" style="height:320px; width:250px; margin-left: 10px;"> <img src="/img/users/mypage/studyRoom2.png" width="250px" height="320px"></div>
-												<div class="studyRoom_content3" style="height:320px; width:250px; margin-left: 10px;"> <img src="/img/users/mypage/studyRoom3.png" width="250px" height="320px"></div>
-											</div>
+
+								
+												<div style="width:70%; margin-left:19%;top:30px; display: flex;; flex-wrap: wrap;">
+													<% if(rooms == null || rooms.length == 0){ %>
+													<h2>현재 생성된 스터디방이 없습니다</h2> <br> <% } %>
+											
+													<% rooms.forEach(function(room) { %>
+														<div class="contentBlock" style="position: relative; width:280px; height:320p; margin-left: 20px; ">
+														
+															<div class="text" style="color: #4d4d4d; font-weight: bold;">스터디방 이름:
+															<label class="text deadLine" > <%= room.title %></label>
+															</div>
+												
+															<div class="text" style="color: #4d4d4d; font-weight: bold;">스터디 리더:
+															<label class="text deadLine" >  <%= room.leader ? room.leader.username : "" %></label>
+															</div>
+												
+															<div class="text" style="color: #4d4d4d; font-weight: bold;">최대 인원수:
+															<label class="text deadLine" > <%= room.maximum %></label>
+															</div>
+												
+															<div class="text" style="color: #4d4d4d; font-weight: bold;">스터디방 정보:
+															<label class="text deadLine" >  <%= room.content %></label>
+															</div>
+												
+															<% allRoomArr.forEach(r => { 
+															if (r[0]===room.title){ %>
+																<div class="text" style="color: #4d4d4d; font-weight: bold; margin-bottom: 20px;">방 인원:
+																<label class="text deadLine" >  <%= r[1] %></label>
+																</div>      
+												
+															<%  }
+															})
+															%>
+												
+															<div class="text" style="position: absolute;  padding: 8px 20px 8px 20px; bottom: 4px;; width:245px; color: #4d4d4d; font-weight: bold; margin-top: 8px; margin-bottom: 5px; text-align: center;">
+															<a class="text button" style="color: #fff; text-decoration: none;width:205px;  background-color: #707070; " href="/studies/<%= room._id %>">참여하기</a>   
+															<% if (room.leader.username== currentUser.username) { %>
+																<a class="text button" style="color: #fff; text-decoration: none;width:205px;  background-color: #a6bf82; " href="/studies/delete/<%= room._id %>">방 삭제하기</a>
+															<% } %>
+															</div>
+														
+														</div>
+												  <% }) %>
+											  </div>
+										</div>
+
 										</div>
 									</td>
 								</tr>
