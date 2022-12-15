@@ -3,7 +3,7 @@
 #welcome {
   color : whitesmoke;
   font-size: 20px;
-  text-shadow: #212121 3px 3px 3px;
+  /*text-shadow: #212121 3px 3px 3px;*/
 }
 
 #welcome h2 {
@@ -21,7 +21,7 @@
   --controler-background-color: #29434e;
 
   --green-icon-color: #23c552;
-  --red-icon-color: #f85031;
+  --red-icon-color: #990032;
 
   --modal-box-color: #8eacbb;
   --modal-btn-color: #62ccff;
@@ -71,7 +71,9 @@ main {
   /* background-color: #62727b; */
   border: 2px solid var(--header-background-color);
   border-radius: 20px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.35) 2px 2px 3px;
+
+  position: relative;
 
   display: flex;
   flex-direction: column;
@@ -91,7 +93,7 @@ main {
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   outline: none;
 
-  transition: box-shadow 0.3s ease-in-out;
+  /*transition: box-shadow 0.3s ease-in-out;*/
 }
 
 #welcome input::placeholder {
@@ -107,6 +109,9 @@ main {
   width: 80%;
   height: 10%;
   margin-top: 10px;
+  bottom:40px;
+
+  position: absolute;
 
   color: whitesmoke;
   background: none;
@@ -116,18 +121,41 @@ main {
 
   transition: all 0.1s ease-in-out;
 }
+#welcomeMent{
+  position: absolute;
+  left: 110px;
+  top:80px;
 
-#welcome button:hover {
-  background-color: #c8cfdf;
-  color: var(--black-color);
 }
 
+#welcome button:hover {
+  background-color: white;
+  color: var(--black-color);
+}
+/*
+#roomContent {
+  position: absolute;
+  left:130px;
+  top: 160px;
+}*/
+#textTitle{
+  padding-right: 20px;
+  margin-bottom: 10px;
 
+  color: #ffe0a8; 
+  font-weight: 500;
+  font-size: 18px;
+  font-weight: 900;
+  text-decoration-line: none;
+}
+#textContent{
+  padding: 10px;
 
-
-
-
-
+  color: #fff; font-weight: 500;
+  font-size: 18px;
+  font-weight: 400;
+  text-decoration-line: none
+}
 .call {
   width: 100%;
   height: 100%;
@@ -231,9 +259,10 @@ main {
 #streamBox #controlers select {
   padding: 7px 12px;
 
-  color: whitesmoke;
-  background: none;
+  color: #4d4d4d;
+  background: whitesmoke;
   border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
 
   box-shadow: var(--header-background-color) 0px 7px 29px 0px;
 }
@@ -273,15 +302,16 @@ main {
 }
 
 #streamBox #controlers #leave {
-  padding: 5px 10px;
+  padding: 8px 20px 8px 20px;
 
-  font-size: 18px;
-  font-weight: 600;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
 
   background: var(--red-icon-color);
-  color: var(--header-background-color);
 
   transition: all 0.2s ease-in-out;
 }
@@ -369,7 +399,7 @@ main {
   top: 5%;
   right: 1%;
 
-  width: 15%;
+  width: 18%;
   height: 90%;
 
   /* letter-spacing: 1px; */

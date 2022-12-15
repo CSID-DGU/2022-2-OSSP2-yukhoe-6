@@ -19,24 +19,25 @@ html(lang="en")
             div#welcome 
                 form
                     .text                
-                        h2 #{nickName} 님 안녕하세요! 
-                        br 
+                        h2#welcomeMent #{nickName} 님 안녕하세요! 
                         br
-                    table 
+                        br
+                    table#roomContent 
                         tr 
-                            td 방이름
-                            td #{room.title}
-                        tr 
-                            td 방장 
-                            td #{room.leader.username}
-                        tr 
-                            td 
+                            td#textTitle 방이름
+                            td#textContent #{room.title}
+                        tr  
+                            td#textTitle 방장 
+                            td#textContent #{room.leader.username}
+                        tr
+                            td#textTitle 내용
+                            td#textContent #{room.content}
                                 br
                             td 
                                 br
                         
                         tr  
-                            td(colspan="2") 방에 입장하시겠습니까?
+                            td#enterMent(colspan="2")
                     
                     input#roomName(type="hidden", required, value=`${room.title}`)
                     input#nickname(type="hidden", required, value=`${nickName}`)
@@ -64,12 +65,12 @@ html(lang="en")
                         div#controlers__column
                             //- form(action="/exit/verify" method="get")
                             //-     input#time(name="time" type="hidden")
-                            button#leave Leave
+                            button#leave 스터터디 그만하기
                 div#chatRoom
                     ul#chatBox
                     form#chatForm
-                        input(required, type="text", placeholder="Write your chat")
-                        button Send
+                        input(required, type="text", placeholder="보낼 채팅을 입력해주세요.")
+                        button#send(width:120px) 보내기
         aside.modal.hidden
             div.modal__box
                 h2.modal__text

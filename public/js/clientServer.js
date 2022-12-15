@@ -524,7 +524,7 @@ socket.on("accept_join", async (userObjArr) => {
     return;
   }
 
-  writeChat("Notice!", NOTICE_CN);
+  //writeChat("Notice!", NOTICE_CN);
   
 
   //방에 있는 유저들에 대해 peerConnectionObjArr에 추가함 
@@ -547,7 +547,7 @@ socket.on("accept_join", async (userObjArr) => {
       
       await newPC.setLocalDescription(offer);
       socket.emit("offer", offer, userObjArr[i].socketId, nickname);
-      writeChat(`__${userObjArr[i].nickname}__`, NOTICE_CN);
+      //writeChat(`${userObjArr[i].nickname}님 스터디룸에 오신것을 환영합니다!`, NOTICE_CN);
     } catch (err) {
       console.error(err);
     }
@@ -558,7 +558,6 @@ socket.on("accept_join", async (userObjArr) => {
     console.log("방에 있는 사람 : "+i);
     i++;
   })
-  writeChat("is in the room.", NOTICE_CN);
 });
 
 //offer , answer, ice
@@ -569,7 +568,9 @@ socket.on("offer", async (offer, remoteSocketId, remoteNickname) => {
     const answer = await newPC.createAnswer();
     await newPC.setLocalDescription(answer);
     socket.emit("answer", answer, remoteSocketId);
-    writeChat(`notice! __${remoteNickname}__ joined the room`, NOTICE_CN);
+    writeChat(` `, NOTICE_CN);
+    writeChat(`알립니다!`, NOTICE_CN);
+    writeChat(`${remoteNickname}가 스터디에 참여했습니다.`, NOTICE_CN);
   } catch (err) {
     console.error(err);
   }
@@ -596,7 +597,9 @@ socket.on("leave_room", (leavedSocketId, nickname, checkReject) => {
   //사람 꽉차서 못드간게 아니고 방에 있다가 나갔을 경우 
   if (!checkReject){
     removeVideo(leavedSocketId);
-  writeChat(`notice! ${nickname} leaved the room.`, NOTICE_CN);
+    writeChat(` `, NOTICE_CN);
+    writeChat(`알립니다!`, NOTICE_CN);
+    writeChat(`${nickname}가 방을 떠났습니다.`, NOTICE_CN);
   --peopleInRoom;
   sortStreams();
 
